@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Payment & Invoice | Kraapht Bags Ltd</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}.glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}.industrial-shadow{box-shadow:0 20px 40px -20px rgba(26,26,26,0.04);}.blueprint-grid{background-image:radial-gradient(circle,#80756b22 1px,transparent 1px);background-size:24px 24px;}</style>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#30312e","inverse-on-surface":"#f2f1ec","primary-fixed-dim":"#e2c19b","surface-container":"#f0eee9","surface-container-low":"#f5f3ee","primary-container":"#8b704f","on-error":"#ffffff","secondary":"#5f5e5e","outline-variant":"#d1c4b8","surface-variant":"#e4e2dd","outline":"#80756b","surface-dim":"#dbdad5","on-secondary":"#ffffff","background":"#fbf9f4","on-primary":"#ffffff","on-surface-variant":"#4e453c","on-surface":"#1b1c19","inverse-primary":"#e2c19b","primary":"#705838","on-background":"#1b1c19","surface-container-lowest":"#ffffff","error":"#ba1a1a","error-container":"#ffdad6","surface-container-highest":"#e4e2dd","primary-fixed":"#ffddb6","tertiary":"#755717","surface-container-high":"#eae8e3","surface":"#fbf9f4","secondary-container":"#e2dfde","tertiary-fixed-dim":"#e9c176","tertiary-container":"#90702e","on-primary-container":"#fffbff","surface-tint":"#735a3a","on-tertiary-container":"#fffbff","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},"fontSize":{"body-lg":["18px",{"lineHeight":"28px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["72px",{"lineHeight":"80px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]}}}}
+</script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased">
+<nav class="fixed top-0 w-full z-50 bg-surface/80 glass-nav shadow-sm">
+<div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
+  <div class="flex items-center gap-4">
+    <a href="index.html"><img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaKTfPC1T5awlm3zwtU+WsJWgzrFFHPdYYpWB7HbWQenvSp6726hits8kdMxr2tyCOhQmm/DVP8r1SrNfPBNT5Ci+RSF9AJOAMkr4rLp2082G1lS3vzvjYfg9p7VNHOzWSJkHOVsYfI/eGng0fesbUHtdSsNPBTR8+4byB7gfepG+XRtDFzcZDqhw3D8kdZVRe5z3l73FznHJJ4lRBxREUgi5mOQM2zG8N6yNy4ICLtip6iUZiglkH6LCVxlhli/CxPZ5TSEHBERARfQCTgAknoC7e5anGe5psdewUHSi+kEHBGCviAiIgIu3uao2drueXZ69g4XUgK6SWi3uic0UrASMAjiqWthqKNeIvoBJwBkrsdT1DW7ToJQ3rLDhSOpco27cjWZxtEBcV20gJqogBkl49KCZl045kD5O6wXNaTjm9x8+VAq+12e4p8Ak827GOPBUJRAREUgiIgIiICIiAiIgIiICIiCy6et9HUW3nJoGveXkZOVP2P+hLgy4WoClqowQ2RoyQCMHj2FROlvBLfLcpVUy79qS8eFnj19q1jdlt3cR+lBGT9LVR9dNuF+r5L1UTGorHNAl70N2g0YGAABwCkUVMcMcbzItc8spxa14uynhlqJ44IInyyyODGMY3LnOO4AAcSrDf7MZSaqjZmQ+7jA912jtW7eRPk2Zp2mZfb1E193mZmKNw96tI4eWek9HDrzG7fjqx5q+rVdmXEdfJbyS0FqtndupYBU3KoZvh2yGU7eOzuO93WeHQOs3T+Q2lP/R4v+Y/71Y0XFy37Mrzy6eOnDGccKhNyZaFmldLJp6Bz3HJPOyb/AO8tXeyC0lp3Tlmtc1ltcVHJLUPZI5jnHaGznG8legFpv2U3gCzfrT/UXt0uzO7cZbXnvwxmu2Ro/Tfhqn+V6pVmvngmp8hVnTfhqn+V6pVwljZLGY5GhzTxB6V2b5ctXdOWnbLaypb3vGNh6e0qWvNwbQU21jalfkRt6PGVky1NPDLHDJK1r5DhjetY95oW11GY9wkbvjPb1IKZNLJNK6WVxc9xySVwX17XMeWPBa5pwQegr4rC6aeAFnp8DGQT9JX2C2wMrpqyRjXPe7LARuaMelcdOEmy0+f0vWKitVV0nP8AcUbi1jQC/HST0eLCr9xKXqpp3WupY2eJztnGA8E5WJYLRC2nZVVLA+R42mtdwaOjd1qsKwjUbWw7DaQghuB3+70KeBJ1V3oKWQwvly5u4hjc4XZSV1FXhzInh5x3zHN348RVIAc924Fzj5ypjTlFVi4xzmJ8cbc5LhjO7h2qOBy1LbI6bZqaduzG47LmjgD2KMt1K+sq2U7DjaO89Q6SrTqZubNMeotP94KuWaubb6h0rouc2m7PHGN/7lM8C1RQ0VtptoBkTGjvnnifGelY4v1uL9nnXgdewcKDvV29sI442xGNrSScuzkqPhgmmOIopHn9FpKjgXSppKO404c5rXhw72RvEedU2sgfS1UlO/3TDjPX1FW6wU01Lbmxzbnlxds54Z6FAapAF3eR0sbn5kgstsa32rphgYMLd2OwLogoqC2h9Q/YaS4nbf0b9wCyLZ4NpfiWeqFWNSVb6i4vi2jzcR2Wjt6SgsUV2t0snNsqm7R3bwQPnK+XS2U9dGSWhk2O9kA3+frVKVu0xVOqLfzbzl0J2c9nR/HYlnAqk8T4ZnxSDD2HBC2Aqtq6EMro5gMc4zf4x+7CtKUR8MNutEILnMY48Xu3ud/HYu+kr6SrOKedrz1cD8xVMr6mSrqnzyEnaO4dQ6AuNHI6GqilYcOa8EKeBY9R2yOSnfVwsDZWDLwB7odPnX2w3Cijt8FO+ZrJd4LSDxJUvO0OgkaeBaQfmVDpffMXlj0qJ3F/cQ1pc44AGSVD3O5259vqI45mue9hAAad5+ZSVd7xn+Ld6FQkkBERWBERAREQEREBERAREQEREFu0t4Jb5blKqK0t4Jb5blKqlBERAW1OTPXUZhjs17qGxuYMQVMjsAgcGuJ6eo+bx6rXbSwTVVRHT08T5ZpHBrGNGS4noXlt1Y7MeMnpq2Za8uY3jeNdWqCUUVozd7hIdiKKn3sLu13DHiz5uKlNO22tg26+71RqLjO3Dw0nmoW/kMHV1niVE8nej4tPUndNU1klylHfvG8RD8hv2npVuXH2XDH6cP8At1MJlfqzFpv2U3gCzfrT/UW5Fpv2U3gCzfrT/UVuk97FXqPbrR+m/DVP8r1SrdUytgp5Jn+5Y0uKqOm/DVP8r1SrLfgTaKjH5P2hdy+XJU+qqJamodPK4l7jnxeJW2xV4rqMF5/no9zx19R86piyrXWPoaxszclvB7esKbBL6qt+D3dE3julA+gqvK/gxVNPndJFI3zEFUy7UTqGsdEclh3sd1hJRZ9N+Baf5XrFVvUO+8VHjHoCsmm/AtP8r1iq3qDwxUeMegKJ5GC1pc4NaMknAHWrXbLHTQRtfUsE0p4g+5HZjpVes2z7a021w5wfP0K4XTnfa6o5nO3zZxjipoxp7pbKPMYe3I4tibn0bl00t9jqq6KmhgcA8+6cd43dSqamNL0kkte2p2SI4s7+s4xhOBN6k8C1HyfWCrdmtzrhUFpcWRMGXuHoCsmpPAtR8n1gsTR4b3DMfhc7v8WB+9RPAzW0ltt8XOGOKMD4b95+crGn1BQRjEYklxw2W4H0rB1gJe6YSc81sburazv+jCggCSABkngEkF3tNb3fSmfm+b78tAzlVzVPhZ3kNU/YaV9JbWRyDD3EucOrPQoDVXhZ3kNSeRZrZ4NpfiWeqFTLkCLhUh3HnXZ+cq5Wog2ylI/sW+gKv6noHxVTqtjSYpPdEfBd+9IIVWHRoOao/B737VXwCSAASTwAVx0/Ruo6ACQYkkO04dXUFNEfrLGKXr7/AOxWBx2Wk9QyqrqucS3BsTTkRNwfGd/3K0y/g3eIqKNfLlF+FZ5QXFcovwrPKCsL/L+Dd4iqFS++YvLHpV9l/Bu8RVCpt1TET+WPSqwXmu94z/Fu9CoSv9UwvpZWN4uYQPmVBIIOCMEKYPiIikEREBERAREQEREBERAREQW7S3glvluUqsrkl1EbFSjn6SGso5JDzsUjASO1pPA+n0egbP7QXe3x11BS0U0L+BELcg9IIxuKx7+ouq98ezRq0zZ4vd50Rbm1/qOyWCJ1HR0FDUXJw3N5lpbD2u3cexaNFzra/Vr7e6J1RPVStbEI279twG7A6MnzeJX07bsnqs4im3XMLxLzUhTwy1FRHTwRuklkcGsY0ZLieAW7uTzRsOnqcVdWGS3ORvfO4iIH4Le3rP2ceHJ3ouKwQiurmslubxxG9sIPQ3t6z5h23NYOq6r1/Tj4bOn6f0/Vl5ERFhbBab9lN4Asw/1p/qLbF6uVHZ7VU3Svl5qlpozJI7GcAdQ6T0YXlPlO1vW61vQqJWGChp9ptJT59w08XO63HAz4gFs6LVllsmX2jL1WcmHp+9QFhljhu0Mkrwxg2suPAd6VYLxX0clsnZHUxOc5uAA7JKqtNDLUTNhhbtyO4DOFm+0lz/Nv8Rv3rs1zEcikfaS5/m3+I371xNnuQzmldu6nA/ap5Gfpq5shaaWpkDY+LHOO4dYWbe326uoy0VcHOs76M7Y49XnVXlikhfsSxuY7qcMFcFHAtliraOK0wsfUxMc3OWucAc5PQq/epI5rpPJE4PYSMEcDuCw0Tgco3OY9r2HDmkEHqKt1svNLVRtEsjYZukOOAfEVT0SzkXWeltTnc9NHTDO8uJABWDW32np3MhomNexrhtEDDQM7wFWETgXlldQzw7XdEJY4bw5wHzgqDZc4aK9zmLZdSybIOwNwwBvH0qCROBeRUW+ti2edglYfguI9BWO72ntxMoEEbxwxvd5ulU5E4FqoL9DPVPjmAhjP4Nzj6Vz1BNROt0uXwPlLcM3gu49CqSJwLzaPBdN8U30LGhu9K+ompakticx7mZd7lwBwsm0Ai102f7JvoVbp7XX3rUz7Xa6Z1TWTzyCONpALsZJ3kgDcCd/Uq9vNJOVlijoIzz0TKZn6bQ0fSsG6Xunp43MpntmmPAje1vn6Vgap0hqPTAhdfbY+kbMSI3c4x7XEbyMtJGd6glONmU5l5TZZeK5FxfKXyOJLnZcTxPWrtJcKDmyTWQ4I6HjKo6KbEC5RECVhduAcMriikXiW4UPNE91wHLTjDxlUdEUScC4W28UlRA3npmRSgd8HnAz1grjeqqiNunDJ4HSObgBrgSVUVZafQerqiytvMNjqH0LoTMJQ5u9mM7WM54dirbjj5qZjb4VpERXQIiICIiAiIgIiICIiAiIgt2lvBLfLcrNZr1dbO6Q2ytlpudGHhuCHeY9PaqzpbwS3y3KVXnlJe1TLZeY5yySSyulle58jyXOc45LieJJW2ORnSlrpbeNUmPnrjW7TQ94/AsaSzDfHs5J7cePUi31yU/1Btv7X616ydblZr7flp6SS7O60IiLkOmLGuddS22hlra2ZsMEQy5x9HaexLnXUttoZa2tmbDBEMucfR2nsWi9darqtS13woaGI/wAzDn+87rd6PT79P0923+nhu3TXP7fNeaqqdT1ha4GK3sJEUB6f0ndZP0enVmobe2hqGuizzUmSB+SRxCt6g9YY7kg6+c3fMu3rxmE9OLl5ZXK81E6b8NU/yvVKst4rxb6dkvNc5tO2cbWOhVrTfhqn+V6pUvrD3jD8b9hVr5VdP8pv9S/xf3LnFqWIuAlpXsHW1+19gVaRTxBd6qnprpQjeHNcMxvHEH+OhUuaN0Uz4njDmOLT4wrbpgOFoj2s4LnEeLKrV4c190qXNORzhSDERSVptE9c3nS4RQ5xtEZJ8QUyywW+MYkfK49ZeAnIqiKy1enIiwmlme135L94Pn6FXZo3wyuikaWvacEFORwRZFBRz1s/NQt7XOPBo7VYafTtI1o56SSR3Tg4CcirIrNWachcwmllex/QH7wfuXXRaejkpWvqJJY5TnaaMbt6ciuouTGOe9rGNLnOOAB0lWGi043YDquZ20eLWdHnU8iuIrX/ACft7gdmSbxh4P2KJu9mlomGaN/OwjicYLfGo5GRTahdDSxw9ytcWNDdrbxnHZhWDkNlM3LBapiMGR9Q4jqzBIVQleeQX8bFl/b/AFEi890/08vivTV/PH5bI9lN4As360/1F5+XoH2U3gCzfrT/AFF5+Xj0Xsx6dV7lERbN5HeTi261tddW19xqac08wibHAG59znJJB6/oK0bNmOvH1ZPHDC53iNuavt1v/wAjVYO4aYBloD2YiA2XCMEEbtxB3rysvaVystNX6YnsEskraeakNKXgjbDdnZz1ZWjeU/kmtOldHz3qiuddNLC+NpZMG7Lg5wb0AY456Vzuj34484297W3qdWV4yn2jT6Kzcn+ibxrO4up7c1sVPFgz1UgOxGD0drj0AfQN63PbeQnTENOG19xudXP8J7HNib5m4JHnJW3b1OvVeMr3ZtejPOcyPOS9Z6Q/E3Qf7lH1SoWr+QmBtFJUaXuM7p2AuFNVlpEnY14AwfGD4wthaap56XklpaapifDPFaNiSN4w5rhGQQR0FYuq3YbccfTfu09Pqy15X1fh5HREXUYBERAREQEREBERAREQEREFu0t4Jb5blKqK0t4Jb5blKqlBb65Kf6g239r9a9aFW+uSn+oNt/a/WvWLr/bny19H/O/C0KP1DebbYLVLc7rVMp6aIb3O4uPQ1o6SeoLB1vqy0aRtBr7pN3zsiGBhHOTO6mj0ngF5c19rK76xupq7hJsQMJFPSsPeQt+09bjvPYMAY+n6XLdeb4at2+a5x91/1frKfV0zJ4i6K3t3wQZ3jtdj4Xo4dpr6pdnuUlBN0uhce/Z9o7VcaeaOeFssTw5jhkELr44TCcTw5mWVyvNc1Bax97QeWfQp1QWsfe0Hln0K0VRWm/DVP8r1SrRc6GKvhbFK57Q120C1VfTfhqn+V6pU1quWWKiiMUj2EyYJacdBU3yOH8m6X+3m+j7l2Q6eoWODnulk7HOwPoVa7rqvzmb/AJhXJlwrmEEVk+7hmQkKeKLTep56OgxSU5I2cbTeEY8Spw3kZOM9Kt+n7g6vp3tmA52PAcQPdA9Kr+oKRtJcXNjGI3jbaOrPR86QT1ZcKSltJbR1ELntYGxhrgT1Zx9Kqcj3yPL5Hue48S45KmLdYJ52CSofzLTvDcZcfuUh7T2imGaiTPxkuPRhO0GHpKpmNS+mLnOi2NoAn3JBC69XRtbXxyAYL49/aQVM26e1ic01DsbRGTst6u3pUVrH3zB5B9KieRKWGnZSWpj3YDnt5x57Oj6FW7pcqitmcdtzYs96wHAx29ZVprt1lm2OHMHHi2VSEgy7fX1NHK18cji34TCdxCu0EjZoWSsOWvaHDxFa+V008SbNT7XHB9YpRAaWa112aXcWsJb41IaulqGRwsYXNhdnaI6T1FQFHUSUtSyeP3TDnx9itdPd7dVxbMr2MJHfMlG75+BU0VKCaWCQSQyOY4dIKs9Pd6GpoNislax7mlsjdk/Qu+S0WyobtMiaM/Cjdj9yirjp+SJhkpJDKBvLHDvvN1qOZRBnjuOVeOQX8bFl/b/USKjK88gv42LL+3+okVN/t5fFemr+ePy2R7KbwBZv1p/qLz8vQPspvAFm/Wn+ovPy8ei9mPTqvcosu33K424vNvuFXSbeNvmJnM2scM4O9YiLXZyzvXepqyqpuSmtroKiRlU20F7Zg47YdzXus8c9OV5Trbzea+HuesutfVREg83LUPe0no3E8V6k1f8Aibr/APcp+qXl/SkTJtU2mGQZZJWwtcOsF4BXO6GSY5X+2zquecY9R6Vt9Byfcm7O6QGCjpjU1jhxfLjLvGc96PEAvNur9a6g1PcpKuur52RF2YqaOQtiiHQAB6TvK357Imolg5MqmOPOJ6iGN5HQ3a2vS0Ly+p6LCZS7MvNp1WXpswnhd+TblDvOl7xTietqKm0ueG1FNI8vDWni5meDhx3ccYK9PXx7JdOV0kbg5j6ORzXDgQWHBXipettKyPl5H6B8ji53tKBk9kWFTrteMuOUW6TO2XGvJKIi6bCIiICIiAiIgIiICIiAiIgt2lvBLfLcpVRWlvBLfLcpVUoLZNJr+1aL5MrZzuzVXKVspgpGuwT/ADr++cfgt9PR041sqfqfwxJ5LfQvPZpm2SZeHpr2XXbY+6nv901JdpLnd6l0879wHBrG9DWjoH8cVFoi9pJJxFLbbzRZ9nuUlBN0uhce/Z9o7VgIpQ2BTzRzwtlieHMcMghQusfe0Hln0KJstzfQTYdl0Lz37ertHapPVcsc1DTSxOD2OcSCPEq8dxG6b8NU/wAr1SpfWHvGH437CojTfhqn+V6pVsrKWnq4xHURh7QcgZI3+ZL5FCRXP2ktn5t/iO+9chabawh3crN3WSR9KnkR2kKd7WTVLgQ1+Gt7ccVyugjm1LRxOwQ1oJHzlZtddaKij2Wva94GGxxn+MKqitm9sRXOIMm3tHq8XzblAs+paqWlt4MLi1z37O0OgYKqDiXElxJJ4kq6h1Fd6It2g9jt5GcOaVHjTUG3k1MhZ1bIz86S8DD0lE51e+XHesYRntP8FdmsffMHkH0qQirbdQTxUEBaAT37gdzT2nrXberfBWQmaRzmuiY4tLSAPOnPcfbNMyrtMYO/DObePEMehVS40ctFUuhkBxnvXdDh1rstNxlt8xcwbcbvdsJ4/vVhbeLVUx4mcB1skZn7wp8Cr0lPLVTthhYXOPzDtKvNLC2npo4G7wxobnrUVPebdSRFtHG17jwDGbLfOs+0zST2+KaU5e8En5yoorFktjbiJSZ+b5vG4NznP/4ui60L6Cq5lztsEbTXYxkLlZ651BWCXBLHd68ditFRBQXana4uEgHuXMOC3+O1TyKbFJJE7aikcx3W04Kt+nquWsoNube9jiwu69w+9Yo03TbWTUTFvVuysueeitFGI24GB3sYPfOP8dKi9xV7w1rLpUtaMDnCrdyC/jYsv7f6iRUmaR00z5XnLnuLj4yrryDuazlXspe4NGZhknG8wSAD51Td7WXxXpq/nPlsn2U3gCzfrT/UXn5ez9T6bsmpqJlHfKBtZDG/bYC9zC13DILSD9Kgm8lugQABp2Ddu3zSH/5LndP1mGrXMbK2bumyzz9Uryai9Z/5LtBf6OQf82T/AOy1xy/aO0rp3S9FV2a3RUdZJWiM7MryXR7DydxJ6Q3f29q1a+twzymMl7vDPpcsMbla2Rq4E8jlfgZ/oU/VLyraas0F1pK5oyaedkoHXsuB+xeqeTrUFk1domlo+fgml7jbT1tI5wDx3uy4FvHZO/B6itecr/JtpTTWi6m72yOohqmzRtjD6guadp2CMHjuyfMs/S7JryuvKd7XtvwucmeP2jZPKZahqvk4r6ahxM+aBtTSlvwy3D2geUBjzryOQQSCMEcQt9cg/KPR+1kOl79Vsp5oO8op5XYbIzojJO4EcB1jA4jfZ9Yckel9R18lyY6ot1VMS6R1MW7Ejj8ItIO/xYymnZ+1yuvPwbMP15M8PLzJb6OpuFdBQ0cTpaiokbHExvFzicAL2F7XttOgja2uDhSWwwbQ6dmLGfPhVaz6T0LyYU0l7qqk8+1pDamseHScN7Y2gDeewE9uFaqi50l10PPdqWQdzVNvfM0uIy0GMnB6iOB6ivPqd/6tnpnZfRq/Tl5vd41REXYc0REQEREBERAREQEREBERBlU1wrKaLmoJ3MZnOMBdvtxcvzp3/CPuWAiDP9uLl+dO/wCEfcsSpnlqJTLM8veeJK60QEREBERAXLbfsBm07YByG53ZXFEBERAREQEREH1rnNOWkg9YK7H1NQ9uy+eVzeovJC6kQFy5yTY2Nt2z1Z3LiiC0WOkt1ZbWOdTxmRvev689aiK2z1tPKWthfMzPeuYM5HiWLRVc9HLzkDy09I6D41OUuopHnZkpWl2OLX4HzYKjvBF0lorqiQNMD4m53ueMYVmr5Y7daS0HGyzYjHSTjA+9R1VqF0YwylbtEbiX5HoUHXVlRWy85O/OOAG4DxJ5GOvrHOY7aa4tPWDhfEUjvNXVuGDVTEdRkK6SSTknJXxEBERAREQEREH1ri1wc0kOByCDvC5SyySu2pZHyOAxlzslcEQFKUGo9Q2+EQUF9ulJENwZBVyMaPMCotFFkvlMtnhkV1bWV03PV1XPVS8NuaQvd85WOiKUP//Z"/></a>
+  </div>
+  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1" href="index.html">Home</a> <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
+  <div class="flex items-center gap-4">
+    <a href="customer.html" class="bg-on-surface text-surface px-8 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors">Account</a>
+  </div>
+</div>
+</nav>
+<main class="max-w-[1280px] mx-auto px-10 pt-32 pb-24">
+
+  <!-- Progress Steps -->
+  <div class="flex items-center gap-0 mb-12 overflow-x-auto">
+    <div class="flex items-center gap-3 px-5 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0 opacity-60">
+      <span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">✓</span>Configure
+    </div>
+    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
+    <div class="flex items-center gap-3 px-5 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0 opacity-60">
+      <span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">✓</span>Branding
+    </div>
+    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
+    <div class="flex items-center gap-3 px-5 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0 opacity-60">
+      <span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">✓</span>Delivery
+    </div>
+    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
+    <div class="flex items-center gap-3 px-5 py-3 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest flex-shrink-0">
+      <span class="w-6 h-6 rounded-full bg-on-primary text-primary flex items-center justify-center text-xs font-bold">4</span>Payment
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Payment Form -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Pre-payment Notice -->
+      <div class="bg-amber-50 border border-amber-200 p-6 flex gap-4">
+        <span class="material-symbols-outlined text-amber-600 flex-shrink-0">info</span>
+        <div>
+          <p class="font-body-md font-semibold text-amber-800">100% Pre-Payment Required</p>
+          <p class="font-body-md text-amber-700 mt-1">Production begins only after full payment is confirmed. No refunds once materials are purchased. All prices in Ghana Cedis (GHS).</p>
+        </div>
+      </div>
+
+      <!-- Customer Details -->
+      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
+        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">person</span>Business / Customer Details
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Business Name *</label>
+            <input type="text" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none" placeholder="e.g. Accra Bakery Ltd"/>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Contact Person *</label>
+            <input type="text" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none" placeholder="Full name"/>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Phone / WhatsApp *</label>
+            <input type="tel" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none" placeholder="+233 XX XXX XXXX"/>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Email Address *</label>
+            <input type="email" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none" placeholder="email@yourbusiness.com"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Method -->
+      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
+        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">payments</span>Payment Method
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <label class="flex items-center gap-4 p-5 border-2 border-primary bg-surface cursor-pointer">
+            <input type="radio" name="pay_method" value="momo" class="accent-primary" checked/>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-yellow-400 rounded flex items-center justify-center font-bold text-sm text-yellow-900">MM</div>
+              <div>
+                <p class="font-body-md font-semibold">Mobile Money</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">MTN · Vodafone · AirtelTigo</p>
+              </div>
+            </div>
+          </label>
+          <label class="flex items-center gap-4 p-5 border-2 border-outline-variant cursor-pointer hover:border-primary transition-colors">
+            <input type="radio" name="pay_method" value="bank" class="accent-primary"/>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-primary rounded flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-primary text-lg">account_balance</span>
+              </div>
+              <div>
+                <p class="font-body-md font-semibold">Bank Transfer</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">GCB · Fidelity · Ecobank</p>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <!-- MoMo Details -->
+        <div id="momo-details" class="space-y-4">
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Mobile Money Number *</label>
+            <input type="tel" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none" placeholder="+233 XX XXX XXXX"/>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Network *</label>
+            <select class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary focus:ring-0 font-body-md outline-none">
+              <option>MTN Mobile Money</option>
+              <option>Vodafone Cash</option>
+              <option>AirtelTigo Money</option>
+            </select>
+          </div>
+          <div class="bg-surface-container-low p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">
+            Powered by Paystack · Secure · Instant Confirmation
+          </div>
+        </div>
+
+        <!-- Bank Details (hidden by default) -->
+        <div id="bank-details" class="hidden space-y-4">
+          <div class="bg-surface-container p-6 border border-outline-variant">
+            <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Transfer To</p>
+            <div class="space-y-2 font-body-md">
+              <div class="flex justify-between"><span class="text-on-surface-variant">Account Name</span><span class="font-semibold">Kraapht Bags Ltd</span></div>
+              <div class="flex justify-between"><span class="text-on-surface-variant">Account Number</span><span class="font-semibold">XXXX-XXXX-XXXX</span></div>
+              <div class="flex justify-between"><span class="text-on-surface-variant">Bank</span><span class="font-semibold">GCB Bank Ghana</span></div>
+              <div class="flex justify-between"><span class="text-on-surface-variant">Branch</span><span class="font-semibold">Accra Main</span></div>
+            </div>
+          </div>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">After transfer, upload your proof of payment below. Production starts within 24hrs of confirmation.</p>
+          <div class="border-2 border-dashed border-outline-variant p-6 text-center hover:border-primary transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-3xl text-outline mb-2 block">upload_file</span>
+            <p class="font-body-md text-on-surface-variant">Upload Payment Proof (screenshot or PDF)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="bg-surface border border-outline-variant p-6">
+        <label class="flex items-start gap-4 cursor-pointer">
+          <input type="checkbox" id="terms" class="mt-1 w-5 h-5 accent-primary flex-shrink-0"/>
+          <p class="font-body-md text-on-surface-variant">I agree that this order requires <strong class="text-on-surface">100% pre-payment</strong> and that no refund will be issued once production materials have been purchased. I have reviewed my order details.</p>
+        </label>
+      </div>
+    </div>
+
+    <!-- Order Summary Sidebar -->
+    <div class="lg:col-span-1">
+      <div class="sticky top-28">
+        <div class="bg-inverse-surface text-inverse-on-surface p-8 mb-4">
+          <h3 class="font-headline-md text-headline-md mb-6">Order Summary</h3>
+          <div class="space-y-3 mb-6 pb-6 border-b border-surface/20">
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Flat Bottom Bag</span><span>250 units</span></div>
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Size</span><span>Small</span></div>
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Handle</span><span>Twisted Paper</span></div>
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Subtotal</span><span>GHS 875.00</span></div>
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Delivery</span><span>GHS 75.00</span></div>
+            <div class="flex justify-between font-body-md"><span class="opacity-70">Paystack fee (1.95%)</span><span>GHS 18.55</span></div>
+          </div>
+          <div class="flex justify-between font-headline-md text-headline-md mb-8">
+            <span>Total</span><span class="text-primary-fixed-dim">GHS 968.55</span>
+          </div>
+          <button onclick="handlePayment()" class="w-full bg-primary text-on-primary py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface hover:text-on-surface transition-colors">
+            Pay GHS 968.55 Now
+          </button>
+          <div class="flex items-center justify-center gap-2 mt-4 opacity-50">
+            <span class="material-symbols-outlined text-sm">lock</span>
+            <p class="font-label-sm text-label-sm uppercase tracking-widest">Secured by Paystack</p>
+          </div>
+        </div>
+        <div class="bg-surface-container p-5 border border-outline-variant">
+          <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Est. Production Timeline</p>
+          <div class="space-y-2">
+            <div class="flex justify-between font-body-md text-sm"><span>Payment confirmed</span><span class="font-semibold">Day 0</span></div>
+            <div class="flex justify-between font-body-md text-sm"><span>Production starts</span><span class="font-semibold">Day 1</span></div>
+            <div class="flex justify-between font-body-md text-sm"><span>Quality check</span><span class="font-semibold">Day 5–7</span></div>
+            <div class="flex justify-between font-body-md text-sm"><span>Dispatch</span><span class="font-semibold">Day 7–10</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="bg-inverse-surface text-inverse-on-surface py-8 text-center">
+  <p class="font-label-sm text-label-sm opacity-60 uppercase tracking-widest">© 2026 Kraapht Bags Ltd · Accra, Ghana · <a href="index.html" class="hover:text-primary-fixed-dim">Back to Home</a></p>
+</footer>
+<script>
+document.querySelectorAll('[name="pay_method"]').forEach(r => {
+  r.addEventListener('change', function() {
+    document.getElementById('momo-details').classList.toggle('hidden', this.value !== 'momo');
+    document.getElementById('bank-details').classList.toggle('hidden', this.value !== 'bank');
+  });
+});
+function handlePayment() {
+  const terms = document.getElementById('terms');
+  if (!terms.checked) { alert('Please agree to the payment terms before proceeding.'); return; }
+  window.location.href = 'confirmation.html';
+}
+</script>
+</body>
+</html>

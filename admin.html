@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard | Kraapht Bags Ltd</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}.glass-nav{backdrop-filter:blur(12px);}.blueprint-grid{background-image:radial-gradient(circle,#80756b22 1px,transparent 1px);background-size:24px 24px;}.sparkline{stroke-dasharray:200;stroke-dashoffset:200;animation:dash 2.5s ease-in-out forwards;}@keyframes dash{to{stroke-dashoffset:0;}}</style>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#30312e","inverse-on-surface":"#f2f1ec","primary-fixed-dim":"#e2c19b","surface-container":"#f0eee9","surface-container-low":"#f5f3ee","outline-variant":"#d1c4b8","outline":"#80756b","background":"#fbf9f4","on-primary":"#ffffff","on-surface-variant":"#4e453c","on-surface":"#1b1c19","inverse-primary":"#e2c19b","primary":"#705838","surface-container-lowest":"#ffffff","error":"#ba1a1a","surface-container-highest":"#e4e2dd","primary-fixed":"#ffddb6","tertiary":"#755717","surface-container-high":"#eae8e3","surface":"#fbf9f4","tertiary-container":"#90702e","on-primary-container":"#fffbff","surface-tint":"#735a3a"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["72px",{"lineHeight":"80px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]}}}}
+</script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased blueprint-grid min-h-screen">
+
+<!-- Admin Topnav -->
+<nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav shadow-sm border-b border-outline-variant">
+  <div class="max-w-[1440px] mx-auto px-8 flex justify-between items-center h-16">
+    <div class="flex items-center gap-6">
+      <img alt="Kraapht Bags Ltd" class="h-8 w-auto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaK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"/>
+      <span class="font-label-sm text-label-sm text-primary uppercase tracking-widest px-3 py-1 bg-primary/10">Admin</span>
+      <div class="hidden md:flex gap-5">
+        <a class="font-body-md text-primary border-b border-primary pb-0.5" href="#">Dashboard</a>
+        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Orders</a>
+        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Production</a>
+        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Clients</a>
+        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Finance</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-2">
+        <span class="material-symbols-outlined text-outline text-lg">search</span>
+        <input class="bg-transparent border-none focus:ring-0 font-label-sm w-36 outline-none" placeholder="Search orders..." type="text"/>
+      </div>
+      <div class="flex items-center gap-2 p-3 bg-primary text-on-primary">
+        <span class="material-symbols-outlined text-lg">person</span>
+        <span class="font-label-sm text-label-sm uppercase tracking-widest hidden md:block">Founder</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-[1440px] mx-auto px-8 pt-24 pb-16">
+
+  <!-- Header -->
+  <header class="mb-8 flex justify-between items-end">
+    <div>
+      <span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-2 block">System Operational · All Systems Go</span>
+      <h1 class="font-headline-lg text-headline-lg">Command Centre</h1>
+    </div>
+    <div class="flex gap-4">
+      <div class="p-4 bg-surface border border-outline-variant text-right">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Live Time</p>
+        <p class="font-headline-md text-headline-md" id="clock">--:--:--</p>
+      </div>
+      <div class="p-4 bg-surface border border-outline-variant text-right">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Today</p>
+        <p class="font-headline-md text-headline-md" id="today-date">--</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPI Stat Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-surface-container-lowest border border-outline-variant p-6">
+      <div class="flex items-start justify-between mb-4">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Today's Revenue</p>
+        <span class="material-symbols-outlined text-primary">payments</span>
+      </div>
+      <p class="text-3xl font-bold text-on-surface">GHS 3,840</p>
+      <p class="font-label-sm text-label-sm text-green-600 uppercase tracking-widest mt-2">↑ +18% vs yesterday</p>
+      <svg class="w-full h-8 mt-3" viewBox="0 0 100 20">
+        <path class="sparkline" d="M0 16 Q15 8,25 12 T50 6 T75 10 T100 4" fill="none" stroke="#705838" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-6">
+      <div class="flex items-start justify-between mb-4">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Active Orders</p>
+        <span class="material-symbols-outlined text-primary">inbox</span>
+      </div>
+      <p class="text-3xl font-bold text-on-surface">7</p>
+      <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">3 in production · 4 pending</p>
+      <div class="flex gap-1 mt-3">
+        <div class="h-2 bg-primary" style="width:43%"></div>
+        <div class="h-2 bg-primary/30" style="width:57%"></div>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant p-6">
+      <div class="flex items-start justify-between mb-4">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Bags This Month</p>
+        <span class="material-symbols-outlined text-primary">shopping_bag</span>
+      </div>
+      <p class="text-3xl font-bold text-on-surface">6,240</p>
+      <p class="font-label-sm text-label-sm text-green-600 uppercase tracking-widest mt-2">↑ +34% vs last month</p>
+      <div class="h-1 bg-surface-container-high mt-4">
+        <div class="h-full bg-primary" style="width:62%"></div>
+      </div>
+    </div>
+    <div class="bg-primary text-on-primary p-6">
+      <div class="flex items-start justify-between mb-4">
+        <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-80">Monthly Revenue</p>
+        <span class="material-symbols-outlined opacity-80">trending_up</span>
+      </div>
+      <p class="text-3xl font-bold">GHS 24,180</p>
+      <p class="font-label-sm text-label-sm uppercase tracking-widest mt-2 opacity-80">Target: GHS 35,000</p>
+      <div class="h-1 bg-on-primary/20 mt-4">
+        <div class="h-full bg-on-primary" style="width:69%"></div>
+      </div>
+      <p class="font-label-sm text-label-sm uppercase tracking-widest mt-1 opacity-60">69% of target</p>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid grid-cols-12 gap-6">
+
+    <!-- Orders Queue -->
+    <section class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">list_alt</span>Live Order Queue
+        </h2>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest text-xs">All</button>
+          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Production</button>
+          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Pending</button>
+          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Delivered</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-outline-variant">
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Order Ref</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Client</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Product</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Qty</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Amount</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4">Status</th>
+              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3">Due</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant">
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00147</td>
+              <td class="py-4 pr-4 font-body-md">Accra Bakery</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Flat Bottom · Small</td>
+              <td class="py-4 pr-4 font-body-md">250</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 968</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest text-xs">Production</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">3 Jun</td>
+            </tr>
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00146</td>
+              <td class="py-4 pr-4 font-body-md">Tema Pharmacy</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Flat Bottom · Medium</td>
+              <td class="py-4 pr-4 font-body-md">1,000</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 3,800</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest text-xs">Production</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">5 Jun</td>
+            </tr>
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00145</td>
+              <td class="py-4 pr-4 font-body-md">East Legon Events</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Flat Bottom · Custom</td>
+              <td class="py-4 pr-4 font-body-md">500</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 2,350</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-amber-100 text-amber-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">QC Check</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">1 Jun</td>
+            </tr>
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00144</td>
+              <td class="py-4 pr-4 font-body-md">Osu Restaurant</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Food Bowl · Standard</td>
+              <td class="py-4 pr-4 font-body-md">300</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 1,440</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">Dispatched</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Today</td>
+            </tr>
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00143</td>
+              <td class="py-4 pr-4 font-body-md">Labone Boutique</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Flat Bottom · Large</td>
+              <td class="py-4 pr-4 font-body-md">200</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 1,600</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-surface-container border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs text-on-surface-variant">New Order</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">8 Jun</td>
+            </tr>
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-4 pr-4 font-body-md font-semibold">KBL-00142</td>
+              <td class="py-4 pr-4 font-body-md">Makola Trader</td>
+              <td class="py-4 pr-4 font-body-md text-on-surface-variant">Flat Bottom · Small</td>
+              <td class="py-4 pr-4 font-body-md">100</td>
+              <td class="py-4 pr-4 font-body-md font-semibold">GHS 420</td>
+              <td class="py-4 pr-4"><span class="px-2 py-1 bg-green-100 text-green-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">Delivered</span></td>
+              <td class="py-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Done</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Showing 6 of 147 total orders</p>
+        <a href="#" class="font-label-sm text-label-sm text-primary uppercase tracking-widest hover:underline">View All Orders →</a>
+      </div>
+    </section>
+
+    <!-- Right Column: Production + Alerts -->
+    <div class="col-span-12 lg:col-span-4 space-y-6">
+
+      <!-- Production Status -->
+      <div class="bg-surface-container-lowest border border-outline-variant p-6">
+        <h2 class="font-headline-md text-headline-md flex items-center gap-2 mb-6">
+          <span class="material-symbols-outlined text-primary">precision_manufacturing</span>Production
+        </h2>
+        <div class="space-y-5">
+          <div>
+            <div class="flex justify-between mb-2">
+              <div>
+                <p class="font-body-md font-semibold">KBL-00147 · Accra Bakery</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">250 bags · Day 2 of 7</p>
+              </div>
+              <span class="font-headline-md text-headline-md text-primary">28%</span>
+            </div>
+            <div class="h-2 bg-surface-container-high">
+              <div class="h-full bg-primary transition-all" style="width:28%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-2">
+              <div>
+                <p class="font-body-md font-semibold">KBL-00146 · Tema Pharmacy</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">1,000 bags · Day 4 of 7</p>
+              </div>
+              <span class="font-headline-md text-headline-md text-primary">57%</span>
+            </div>
+            <div class="h-2 bg-surface-container-high">
+              <div class="h-full bg-primary transition-all" style="width:57%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-2">
+              <div>
+                <p class="font-body-md font-semibold">KBL-00145 · East Legon Events</p>
+                <p class="font-label-sm text-label-sm text-amber-600 uppercase tracking-widest">QC in progress</p>
+              </div>
+              <span class="font-headline-md text-headline-md text-amber-600">95%</span>
+            </div>
+            <div class="h-2 bg-surface-container-high">
+              <div class="h-full bg-amber-500 transition-all" style="width:95%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Summary -->
+      <div class="bg-inverse-surface text-inverse-on-surface p-6">
+        <h2 class="font-headline-md text-headline-md mb-6">Revenue · June 2026</h2>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between font-body-md">
+            <span class="opacity-70">Received (paid orders)</span>
+            <span class="font-semibold">GHS 24,180</span>
+          </div>
+          <div class="flex justify-between font-body-md">
+            <span class="opacity-70">In production (locked)</span>
+            <span class="font-semibold">GHS 7,118</span>
+          </div>
+          <div class="flex justify-between font-body-md">
+            <span class="opacity-70">Material cost (est.)</span>
+            <span class="font-semibold text-red-400">GHS 9,682</span>
+          </div>
+          <div class="flex justify-between font-body-md">
+            <span class="opacity-70">Labour cost (est.)</span>
+            <span class="font-semibold text-red-400">GHS 3,422</span>
+          </div>
+        </div>
+        <div class="border-t border-surface/20 pt-4">
+          <div class="flex justify-between font-headline-md text-headline-md">
+            <span>Net Profit</span>
+            <span class="text-primary-fixed-dim">GHS 11,076</span>
+          </div>
+          <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-60 mt-1">45.8% margin</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="bg-surface border border-outline-variant p-6">
+        <h3 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-4">Quick Actions</h3>
+        <div class="space-y-2">
+          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors font-body-md">
+            <span class="material-symbols-outlined text-primary">add</span>Create Manual Order
+          </button>
+          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors font-body-md">
+            <span class="material-symbols-outlined text-primary">update</span>Update Production Status
+          </button>
+          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors font-body-md">
+            <span class="material-symbols-outlined text-primary">chat</span>Message Client (WhatsApp)
+          </button>
+          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors font-body-md">
+            <span class="material-symbols-outlined text-primary">download</span>Export Monthly Report
+          </button>
+          <a href="index.html" class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container-low transition-colors font-body-md">
+            <span class="material-symbols-outlined text-primary">open_in_new</span>View Public Website
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom: Top Clients -->
+    <section class="col-span-12 bg-surface-container-lowest border border-outline-variant p-6">
+      <h2 class="font-headline-md text-headline-md flex items-center gap-2 mb-6">
+        <span class="material-symbols-outlined text-primary">groups</span>Top Clients — June 2026
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
+          <div class="flex justify-between items-start mb-3">
+            <p class="font-body-md font-semibold">Tema Pharmacy</p>
+            <span class="px-2 py-0.5 bg-primary text-on-primary font-label-sm text-label-sm text-xs uppercase tracking-widest">#1</span>
+          </div>
+          <p class="text-2xl font-bold text-primary">GHS 7,600</p>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">2,000 bags · 2 orders</p>
+        </div>
+        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
+          <div class="flex justify-between items-start mb-3">
+            <p class="font-body-md font-semibold">East Legon Events</p>
+            <span class="px-2 py-0.5 bg-primary/20 text-primary font-label-sm text-label-sm text-xs uppercase tracking-widest">#2</span>
+          </div>
+          <p class="text-2xl font-bold text-primary">GHS 5,200</p>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">1,100 bags · 2 orders</p>
+        </div>
+        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
+          <div class="flex justify-between items-start mb-3">
+            <p class="font-body-md font-semibold">Accra Bakery</p>
+            <span class="px-2 py-0.5 bg-primary/20 text-primary font-label-sm text-label-sm text-xs uppercase tracking-widest">#3</span>
+          </div>
+          <p class="text-2xl font-bold text-primary">GHS 3,870</p>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">850 bags · 3 orders</p>
+        </div>
+        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
+          <div class="flex justify-between items-start mb-3">
+            <p class="font-body-md font-semibold">Osu Restaurant</p>
+            <span class="px-2 py-0.5 bg-primary/20 text-primary font-label-sm text-label-sm text-xs uppercase tracking-widest">#4</span>
+          </div>
+          <p class="text-2xl font-bold text-primary">GHS 2,880</p>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">600 bags · 2 orders</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('today-date').textContent = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
