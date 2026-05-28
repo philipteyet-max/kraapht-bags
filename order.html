@@ -3,325 +3,726 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kraapht Bags | Configure Your Order</title>
+<title>Configure Your Order | Kraapht Bags Ltd</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}.glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}.industrial-shadow{box-shadow:0 20px 40px -20px rgba(26,26,26,0.04);}.hover-lift{transition:transform 0.4s cubic-bezier(0.165,0.84,0.44,1),box-shadow 0.4s ease;}.hover-lift:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 40px 60px -30px rgba(26,26,26,0.08);}</style>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+  .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
+  .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
+  .carousel-item{transition:opacity 0.8s ease-in-out;}
+  input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+</style>
 <script id="tailwind-config">
-tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#30312e","inverse-on-surface":"#f2f1ec","primary-fixed-dim":"#e2c19b","surface-container":"#f0eee9","surface-container-low":"#f5f3ee","primary-container":"#8b704f","on-error":"#ffffff","error-container":"#ffdad6","secondary":"#5f5e5e","outline-variant":"#d1c4b8","surface-variant":"#e4e2dd","outline":"#80756b","surface-dim":"#dbdad5","on-secondary":"#ffffff","background":"#fbf9f4","on-primary":"#ffffff","on-surface-variant":"#4e453c","on-surface":"#1b1c19","surface-bright":"#fbf9f4","inverse-primary":"#e2c19b","primary":"#705838","on-background":"#1b1c19","surface-container-lowest":"#ffffff","error":"#ba1a1a","surface-container-highest":"#e4e2dd","primary-fixed":"#ffddb6","tertiary":"#755717","surface-container-high":"#eae8e3","surface":"#fbf9f4","secondary-container":"#e2dfde","tertiary-fixed-dim":"#e9c176","tertiary-container":"#90702e","on-primary-container":"#fffbff","surface-tint":"#735a3a","on-tertiary-container":"#fffbff","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},"fontSize":{"body-lg":["18px",{"lineHeight":"28px","letterSpacing":"0em","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["72px",{"lineHeight":"80px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]}}}}
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#1F4D3A",
+  "primary-light":"#2D6B52",
+  "on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8",
+  "on-primary-container":"#002114",
+  "secondary":"#D8C3A5",
+  "on-secondary":"#2B2B2B",
+  "tertiary":"#2B2B2B",
+  "accent":"#C8A96B",
+  "on-accent":"#FFFFFF",
+  "background":"#F7F4EF",
+  "on-background":"#2B2B2B",
+  "surface":"#FFFFFF",
+  "on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2",
+  "surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA",
+  "on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B",
+  "inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B",
+  "outline":"#8B7355",
+  "outline-variant":"#D8C3A5",
+  "error":"#BA1A1A",
+  "kraft":"#D8C3A5",
+  "forest":"#1F4D3A",
+  "gold":"#C8A96B",
+  "charcoal":"#2B2B2B"
+},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
+"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
 </script>
+<style>
+  .paper-card{cursor:pointer;transition:all 0.25s;border:2px solid #D8C3A5;}
+  .paper-card:hover{border-color:#1F4D3A;transform:translateY(-2px);box-shadow:0 8px 24px -8px rgba(31,77,58,0.2);}
+  .paper-card.selected{border-color:#1F4D3A;background:#F0F7F4;}
+  .paper-card.selected .check-badge{display:flex;}
+  .check-badge{display:none;position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:#1F4D3A;color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+  .option-card{cursor:pointer;transition:all 0.2s;}
+  .option-card:hover{border-color:#1F4D3A;}
+  .option-card.selected{border-color:#1F4D3A;background:#F0F7F4;}
+  .color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all 0.2s;}
+  .color-swatch.selected{border-color:#1F4D3A;transform:scale(1.25);box-shadow:0 0 0 2px #C8A96B;}
+  .gallery-img{transition:transform 0.4s ease;}
+  .gallery-img:hover{transform:scale(1.04);}
+  .disabled-section{opacity:0.38;pointer-events:none;user-select:none;}
+</style>
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
-<nav class="fixed top-0 w-full z-50 bg-surface/80 glass-nav shadow-sm">
+<body class="bg-background text-on-surface font-sans antialiased">
+<nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
 <div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
-  <div class="flex items-center gap-4">
-    <a href="index.html"><img alt="Kraapht Bags Ltd Logo" class="h-10 w-auto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaK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"/></a>
-  </div>
-  <div class="hidden md:flex items-center gap-8">
-    <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a>
-<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1" href="order.html">Products &amp; Order</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a>
-  </div>
-  <div class="flex items-center gap-4">
-    <button class="material-symbols-outlined text-on-surface p-2 hover:opacity-80 transition-opacity">search</button>
-    <a href="customer.html" class="bg-on-surface text-surface px-8 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors">Account</a>
+  <a href="index.html" class="flex items-center gap-3">
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png"/>
+  </a>
+  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a> <a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
+  <div class="flex items-center gap-3">
+    <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
   </div>
 </div>
 </nav>
-<main class="max-w-[1280px] mx-auto px-10 pt-32 pb-24">
-  <div class="mb-12">
-    <span class="font-label-sm text-label-sm uppercase tracking-[0.4em] text-primary mb-4 block">Step 1 of 4</span>
-    <h1 class="font-headline-lg text-headline-lg">Configure Your Order</h1>
-    <p class="font-body-lg text-body-lg text-on-surface-variant mt-4 max-w-2xl">Select your bag type, size, quantity and custom print options. All orders require 100% pre-payment.</p>
-  </div>
 
-  <!-- Progress Steps -->
-  <div class="flex items-center gap-0 mb-16 overflow-x-auto">
-    <div class="flex items-center gap-3 px-6 py-3 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest flex-shrink-0">
-      <span class="w-6 h-6 rounded-full bg-on-primary text-primary flex items-center justify-center text-xs font-bold">1</span>
-      Configure
+<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
+
+  <!-- ===== PORTFOLIO GALLERY ===== -->
+  <section class="mb-16">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-2 block">Our Portfolio</span>
+        <h2 class="text-3xl font-bold">Bags We Have Built</h2>
+      </div>
+      <p class="font-body-md text-on-surface-variant hidden md:block">Hover for details</p>
     </div>
-    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
-    <div class="flex items-center gap-3 px-6 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0">
-      <span class="w-6 h-6 rounded-full bg-outline-variant text-on-surface-variant flex items-center justify-center text-xs font-bold">2</span>
-      Branding
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="relative overflow-hidden h-56 bg-charcoal group">
+        <img src="paper_brown_card.png" alt="Brown Card bag — Freedom Taste" class="gallery-img w-full h-full object-contain p-3"/>
+        <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/80 transition-all duration-300 flex flex-col items-start justify-end p-4 opacity-0 group-hover:opacity-100">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Brown Card 250gsm</p>
+          <p class="font-body-md font-semibold text-white">Freedom Taste</p>
+        </div>
+      </div>
+      <div class="relative overflow-hidden h-56 bg-charcoal group">
+        <img src="paper_brown_80.png" alt="Brown Paper 80gsm — The Abachs" class="gallery-img w-full h-full object-contain p-3"/>
+        <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/80 transition-all duration-300 flex flex-col items-start justify-end p-4 opacity-0 group-hover:opacity-100">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Brown Paper 80gsm</p>
+          <p class="font-body-md font-semibold text-white">The Abachs</p>
+        </div>
+      </div>
+      <div class="relative overflow-hidden h-56 bg-charcoal group">
+        <img src="paper_chromo.png" alt="Chromo Coat white bag" class="gallery-img w-full h-full object-contain p-3"/>
+        <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/80 transition-all duration-300 flex flex-col items-start justify-end p-4 opacity-0 group-hover:opacity-100">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">White / Chromo Coat</p>
+          <p class="font-body-md font-semibold text-white">Clean Canvas</p>
+        </div>
+      </div>
+      <div class="relative overflow-hidden h-56 bg-charcoal group">
+        <img src="paper_duplex.png" alt="Duplex Board — AL Lounge" class="gallery-img w-full h-full object-contain p-3"/>
+        <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/80 transition-all duration-300 flex flex-col items-start justify-end p-4 opacity-0 group-hover:opacity-100">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Duplex Board</p>
+          <p class="font-body-md font-semibold text-white">AL Lounge</p>
+        </div>
+      </div>
     </div>
-    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
-    <div class="flex items-center gap-3 px-6 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0">
-      <span class="w-6 h-6 rounded-full bg-outline-variant text-on-surface-variant flex items-center justify-center text-xs font-bold">3</span>
-      Delivery
+    <!-- Lifestyle row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+      <div class="relative overflow-hidden h-48 group">
+        <img src="lifestyle_abachs.png" alt="The Abachs in-context bag" class="gallery-img w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent flex items-end p-4">
+          <div><p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Brown Paper 80gsm · Lifestyle</p><p class="font-body-md font-semibold text-white text-sm">The Abachs Cocktail Bar</p></div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden h-48 group">
+        <img src="lifestyle_alounge.png" alt="AL Lounge street food market" class="gallery-img w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent flex items-end p-4">
+          <div><p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Duplex Board · Street Market</p><p class="font-body-md font-semibold text-white text-sm">AL Lounge Bar &amp; Restaurant</p></div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden h-48 group">
+        <img src="lifestyle_congress.png" alt="Young African Women Congress event bag" class="gallery-img w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent flex items-end p-4">
+          <div><p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs">Chromo Coat · Event</p><p class="font-body-md font-semibold text-white text-sm">Young African Women Congress</p></div>
+        </div>
+      </div>
     </div>
-    <div class="w-8 h-px bg-outline-variant flex-shrink-0"></div>
-    <div class="flex items-center gap-3 px-6 py-3 bg-surface-container-low border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0">
-      <span class="w-6 h-6 rounded-full bg-outline-variant text-on-surface-variant flex items-center justify-center text-xs font-bold">4</span>
-      Payment
+  </section>
+
+  <!-- ===== PROGRESS STEPS ===== -->
+  <div class="flex items-center gap-0 mb-12 overflow-x-auto pb-2">
+    <div class="flex items-center gap-3 px-5 py-3 bg-primary text-white font-label-sm text-label-sm uppercase tracking-widest flex-shrink-0">
+      <span class="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</span>Configure
+    </div>
+    <div class="w-10 h-px bg-outline-variant flex-shrink-0"></div>
+    <div class="flex items-center gap-3 px-5 py-3 bg-surface border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0">
+      <span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center text-xs font-bold">2</span>Delivery
+    </div>
+    <div class="w-10 h-px bg-outline-variant flex-shrink-0"></div>
+    <div class="flex items-center gap-3 px-5 py-3 bg-surface border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant flex-shrink-0">
+      <span class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center text-xs font-bold">3</span>Payment
     </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Configuration Form -->
-    <div class="lg:col-span-2 space-y-8">
+    <!-- ===== LEFT: FORM ===== -->
+    <div class="lg:col-span-2 space-y-6">
 
-      <!-- Product Type -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">shopping_bag</span>
-          Product Type
+      <!-- 1. PAPER TYPE — with real product images -->
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">layers</span>Step 1 — Select Paper Type
+        </h2>
+        <p class="font-body-md text-on-surface-variant text-sm mb-6">Your paper choice determines bag strength, print quality, and cost. Tap a paper to select.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="paper-options">
+
+          <!-- Chromo Coat -->
+          <label class="paper-card selected rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="chromo_coat" data-price="525" data-handle="true">
+            <input type="radio" name="paper_type" value="chromo_coat" class="sr-only" checked/>
+            <span class="check-badge" style="display:flex;">✓</span>
+            <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
+              <img src="paper_chromo.png" alt="White Chromo Coat paper bag" class="h-full object-contain p-2 hover:scale-105 transition-transform duration-300"/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-1">
+                <p class="font-body-md font-semibold">White / Chromo Coat</p>
+                <span class="px-2 py-0.5 bg-primary text-white text-xs font-label-sm uppercase tracking-widest">Popular</span>
+              </div>
+              <p class="text-sm text-on-surface-variant mb-2">Glossy white. Best for full-colour logo printing. Sharp &amp; premium.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 525 / ream</p>
+            </div>
+          </label>
+
+          <!-- Brown Card 250gsm -->
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_card_250" data-price="550" data-handle="true">
+            <input type="radio" name="paper_type" value="brown_card_250" class="sr-only"/>
+            <span class="check-badge">✓</span>
+            <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
+              <img src="paper_brown_card.png" alt="Brown Card 250gsm paper bag" class="h-full object-contain p-2 hover:scale-105 transition-transform duration-300"/>
+            </div>
+            <div class="p-4">
+              <p class="font-body-md font-semibold mb-1">Brown Card 250gsm</p>
+              <p class="text-sm text-on-surface-variant mb-2">Heavy kraft board. Strong &amp; premium. Ideal for retail &amp; boutique bags.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 550 / ream</p>
+            </div>
+          </label>
+
+          <!-- Brown Paper 80gsm -->
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_paper_80" data-price="420" data-handle="false">
+            <input type="radio" name="paper_type" value="brown_paper_80" class="sr-only"/>
+            <span class="check-badge">✓</span>
+            <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
+              <img src="paper_brown_80.png" alt="Brown Paper 80gsm folded top bag" class="h-full object-contain p-2 hover:scale-105 transition-transform duration-300"/>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-1">
+                <p class="font-body-md font-semibold">Brown Paper 80gsm</p>
+                <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-label-sm uppercase tracking-widest">Folded Top</span>
+              </div>
+              <p class="text-sm text-on-surface-variant mb-2">Lightweight kraft. Folded top — no handle. High-volume food &amp; pharmacy orders.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 420 / ream</p>
+            </div>
+          </label>
+
+          <!-- Matt Paper 150gsm -->
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="matt_150" data-price="695" data-handle="true">
+            <input type="radio" name="paper_type" value="matt_150" class="sr-only"/>
+            <span class="check-badge">✓</span>
+            <div class="bg-charcoal h-36 flex items-center justify-center">
+              <div class="text-center text-white/40">
+                <span class="material-symbols-outlined text-4xl mb-1 block">texture</span>
+                <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs">Matte Surface</p>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-1">
+                <p class="font-body-md font-semibold">Matt Paper 150gsm</p>
+                <span class="px-2 py-0.5 bg-accent/20 text-accent text-xs font-label-sm uppercase tracking-widest">Premium</span>
+              </div>
+              <p class="text-sm text-on-surface-variant mb-2">Smooth matte finish. Non-glare. Perfect for luxury brands and corporate gifting.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 695 / ream</p>
+            </div>
+          </label>
+
+          <!-- Duplex Board — full width -->
+          <label class="paper-card rounded-none p-0 flex flex-row relative overflow-hidden md:col-span-2" data-paper="duplex_300" data-price="300" data-handle="true">
+            <input type="radio" name="paper_type" value="duplex_300" class="sr-only"/>
+            <span class="check-badge">✓</span>
+            <div class="bg-charcoal w-40 flex-shrink-0 flex items-center justify-center overflow-hidden">
+              <img src="paper_duplex.png" alt="Duplex Board paper bag" class="h-full object-contain p-2 hover:scale-105 transition-transform duration-300"/>
+            </div>
+            <div class="p-5 flex-1">
+              <div class="flex items-center justify-between mb-2">
+                <p class="font-body-md font-semibold">Duplex Board</p>
+                <span class="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-label-sm uppercase tracking-widest">Most Affordable</span>
+              </div>
+              <p class="text-sm text-on-surface-variant mb-3">Two-layer grey-back board. Stiff and durable. Best unit rate for large volume orders with printed designs.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 300 / ream</p>
+            </div>
+          </label>
+
+        </div>
+        <!-- Brown 80gsm warning -->
+        <div id="no-handle-msg" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-amber-600 flex-shrink-0">info</span>
+          <p class="font-body-md text-amber-800 text-sm"><strong>Brown Paper 80gsm</strong> uses a folded top — handle selection is not applicable for this paper type.</p>
+        </div>
+      </div>
+
+      <!-- 2. PRODUCT TYPE -->
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">shopping_bag</span>Step 2 — Product Type
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label class="flex items-start gap-4 p-5 border-2 border-primary bg-surface cursor-pointer hover:bg-surface-container-low transition-colors">
+          <label class="option-card selected border-2 border-primary p-5 flex items-start gap-4 relative">
             <input type="radio" name="product_type" value="flat_bottom" class="mt-1 accent-primary" checked/>
-            <div>
-              <p class="font-body-md font-semibold">Flat Bottom Bag</p>
-              <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">All sizes · Custom handles · Perfect for retail &amp; food service</p>
-              <p class="font-label-sm text-label-sm text-primary mt-2 uppercase tracking-widest">From GHS 3.50 / unit</p>
+            <div class="flex-1">
+              <p class="font-body-md font-semibold mb-1">Flat Bottom Bag</p>
+              <p class="text-sm text-on-surface-variant uppercase tracking-widest font-label-sm">All sizes · Handle options</p>
             </div>
+            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5">✓</span>
           </label>
-          <label class="flex items-start gap-4 p-5 border-2 border-outline-variant cursor-pointer hover:border-primary hover:bg-surface-container-low transition-all">
+          <label class="option-card border-2 border-outline-variant p-5 flex items-start gap-4 relative">
             <input type="radio" name="product_type" value="food_bowl" class="mt-1 accent-primary"/>
-            <div>
-              <p class="font-body-md font-semibold">Paper Food Bowl</p>
-              <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">All sizes · Food-safe liner · For restaurants &amp; events</p>
-              <p class="font-label-sm text-label-sm text-primary mt-2 uppercase tracking-widest">From GHS 4.00 / unit</p>
+            <div class="flex-1">
+              <p class="font-body-md font-semibold mb-1">Paper Food Bowl</p>
+              <p class="text-sm text-on-surface-variant uppercase tracking-widest font-label-sm">Food-safe · All sizes</p>
             </div>
           </label>
         </div>
       </div>
 
-      <!-- Size & Dimensions -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">straighten</span>
-          Size &amp; Dimensions
+      <!-- 3. SIZE -->
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">straighten</span>Step 3 — Size
         </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          <label class="p-4 border-2 border-primary bg-surface text-center cursor-pointer">
-            <input type="radio" name="size" value="small" class="sr-only" checked/>
-            <p class="font-body-md font-semibold">Small</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">15×8×21 cm</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="size-options">
+          <label class="option-card selected border-2 border-primary p-4 text-center" data-size="a5" data-bps="3">
+            <input type="radio" name="size" value="a5" class="sr-only" checked/>
+            <p class="font-body-md font-semibold">A5 / Small</p>
+            <p class="text-xs text-on-surface-variant mt-1">15×8×21 cm</p>
+            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">3 per sheet</p>
           </label>
-          <label class="p-4 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
-            <input type="radio" name="size" value="medium" class="sr-only"/>
-            <p class="font-body-md font-semibold">Medium</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">24×12×30 cm</p>
+          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="a4" data-bps="2">
+            <input type="radio" name="size" value="a4" class="sr-only"/>
+            <p class="font-body-md font-semibold">A4 / Medium</p>
+            <p class="text-xs text-on-surface-variant mt-1">24×12×30 cm</p>
+            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">2 per sheet</p>
           </label>
-          <label class="p-4 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
-            <input type="radio" name="size" value="large" class="sr-only"/>
-            <p class="font-body-md font-semibold">Large</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">32×16×40 cm</p>
+          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="a3" data-bps="2">
+            <input type="radio" name="size" value="a3" class="sr-only"/>
+            <p class="font-body-md font-semibold">A3 / Large</p>
+            <p class="text-xs text-on-surface-variant mt-1">32×16×40 cm</p>
+            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">2 per sheet</p>
           </label>
-          <label class="p-4 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
+          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="custom" data-bps="2">
             <input type="radio" name="size" value="custom" class="sr-only"/>
             <p class="font-body-md font-semibold">Custom</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Your specs</p>
+            <p class="text-xs text-on-surface-variant mt-1">Your specs</p>
           </label>
         </div>
-        <div id="custom-dims" class="hidden grid grid-cols-3 gap-4">
-          <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label>
-            <input type="number" class="w-full border-b border-on-surface bg-transparent px-0 py-2 focus:border-primary focus:ring-0 font-body-md" placeholder="e.g. 20"/>
-          </div>
-          <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label>
-            <input type="number" class="w-full border-b border-on-surface bg-transparent px-0 py-2 focus:border-primary focus:ring-0 font-body-md" placeholder="e.g. 10"/>
-          </div>
-          <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label>
-            <input type="number" class="w-full border-b border-on-surface bg-transparent px-0 py-2 focus:border-primary focus:ring-0 font-body-md" placeholder="e.g. 25"/>
+        <div id="custom-dims" class="hidden grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-outline-variant">
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 20"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 10"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 25"/></div>
+        </div>
+      </div>
+
+      <!-- 4. HANDLE TYPE -->
+      <div class="bg-surface border border-outline-variant p-7" id="handle-section">
+        <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">back_hand</span>Step 4 — Handle Type
+        </h2>
+        <div id="handle-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="option-card selected border-2 border-primary p-5 flex items-start gap-4 cursor-pointer">
+            <input type="radio" name="handle" value="twisted" class="mt-1 accent-primary" checked/>
+            <div>
+              <p class="font-body-md font-semibold">Twisted Paper Rope</p>
+              <p class="text-sm text-on-surface-variant mt-1">Classic kraft paper twist. Strong, natural look. Standard choice.</p>
+            </div>
+          </label>
+          <div class="border-2 border-outline-variant p-5">
+            <label class="flex items-start gap-4 cursor-pointer">
+              <input type="radio" name="handle" value="pp_rope" class="mt-1 accent-primary" id="pp-radio"/>
+              <div class="flex-1">
+                <p class="font-body-md font-semibold mb-1">PP Rope Handle</p>
+                <p class="text-sm text-on-surface-variant mb-4">Polypropylene rope. Durable and available in 7 colours.</p>
+                <div id="pp-colors" class="hidden">
+                  <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Rope Colour:</p>
+                  <div class="flex gap-2 flex-wrap">
+                    <button type="button" class="color-swatch selected" data-color="White" style="background:#FFFFFF;border:2px solid #1F4D3A;" title="White" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Black" style="background:#1a1a1a;" title="Black" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Brown" style="background:#8B6347;" title="Brown" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Gold" style="background:#C8A96B;" title="Gold" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Red" style="background:#C0392B;" title="Red" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Navy" style="background:#1B3A6B;" title="Navy" onclick="selectColor(this)"></button>
+                    <button type="button" class="color-swatch" data-color="Green" style="background:#1F4D3A;" title="Green" onclick="selectColor(this)"></button>
+                  </div>
+                  <p class="font-label-sm text-label-sm text-primary mt-2" id="selected-color-label">Selected: White</p>
+                </div>
+              </div>
+            </label>
           </div>
         </div>
       </div>
 
-      <!-- Handle Type -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">back_hand</span>
-          Handle Type
+      <!-- 5. QUANTITY -->
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">inventory_2</span>Step 5 — Quantity
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <label class="p-4 border-2 border-primary bg-surface cursor-pointer hover:bg-surface-container-low flex items-center gap-3">
-            <input type="radio" name="handle" value="twisted" class="accent-primary" checked/>
-            <div><p class="font-body-md font-semibold">Twisted Paper</p><p class="font-label-sm text-label-sm text-on-surface-variant">Premium, strong</p></div>
+        <p class="text-sm text-on-surface-variant mb-5">Minimum 200 bags. Bulk discount from 1,000 units.</p>
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="qty-options">
+          <label class="option-card selected border-2 border-primary p-3 text-center" data-qty="200">
+            <input type="radio" name="qty" value="200" class="sr-only" checked/>
+            <p class="font-body-md font-semibold">200</p>
+            <p class="text-xs text-on-surface-variant mt-0.5">Min</p>
           </label>
-          <label class="p-4 border-2 border-outline-variant cursor-pointer hover:border-primary flex items-center gap-3">
-            <input type="radio" name="handle" value="flat" class="accent-primary"/>
-            <div><p class="font-body-md font-semibold">Flat Paper</p><p class="font-label-sm text-label-sm text-on-surface-variant">Classic look</p></div>
-          </label>
-          <label class="p-4 border-2 border-outline-variant cursor-pointer hover:border-primary flex items-center gap-3">
-            <input type="radio" name="handle" value="ribbon" class="accent-primary"/>
-            <div><p class="font-body-md font-semibold">Ribbon</p><p class="font-label-sm text-label-sm text-on-surface-variant">Luxury finish</p></div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Quantity -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">inventory_2</span>
-          Quantity
-        </h2>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-4">
-          <label class="p-3 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
-            <input type="radio" name="qty" value="100" class="sr-only"/>
-            <p class="font-body-md font-semibold">100</p>
-          </label>
-          <label class="p-3 border-2 border-primary bg-surface text-center cursor-pointer">
-            <input type="radio" name="qty" value="250" class="sr-only" checked/>
-            <p class="font-body-md font-semibold">250</p>
-          </label>
-          <label class="p-3 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
+          <label class="option-card border-2 border-outline-variant p-3 text-center" data-qty="500">
             <input type="radio" name="qty" value="500" class="sr-only"/>
             <p class="font-body-md font-semibold">500</p>
           </label>
-          <label class="p-3 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
+          <label class="option-card border-2 border-outline-variant p-3 text-center" data-qty="1000">
             <input type="radio" name="qty" value="1000" class="sr-only"/>
             <p class="font-body-md font-semibold">1,000</p>
+            <p class="text-xs text-green-600 mt-0.5">-5%</p>
           </label>
-          <label class="p-3 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
+          <label class="option-card border-2 border-outline-variant p-3 text-center" data-qty="2500">
             <input type="radio" name="qty" value="2500" class="sr-only"/>
             <p class="font-body-md font-semibold">2,500</p>
           </label>
-          <label class="p-3 border-2 border-outline-variant text-center cursor-pointer hover:border-primary transition-colors">
+          <label class="option-card border-2 border-outline-variant p-3 text-center" data-qty="5000">
             <input type="radio" name="qty" value="5000" class="sr-only"/>
-            <p class="font-body-md font-semibold">5,000+</p>
+            <p class="font-body-md font-semibold">5,000</p>
+          </label>
+          <label class="option-card border-2 border-outline-variant p-3 text-center" data-qty="custom_qty">
+            <input type="radio" name="qty" value="custom_qty" class="sr-only"/>
+            <p class="font-body-md font-semibold">Other</p>
           </label>
         </div>
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Minimum order: 100 units · Bulk discount above 1,000 units</p>
+        <div id="custom-qty-input" class="hidden mt-4">
+          <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Enter Quantity (min 200)</label>
+          <input type="number" id="qty-custom-val" min="200" class="w-48 border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 750" oninput="calcPrice()"/>
+        </div>
       </div>
 
-      <!-- Custom Print -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">draw</span>
-          Custom Printing (Optional)
+      <!-- 6. CUSTOM PRINTING -->
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">print</span>Step 6 — Custom Printing
         </h2>
-        <div class="flex items-center gap-4 mb-6">
-          <input type="checkbox" id="custom-print" class="w-5 h-5 accent-primary" />
-          <label for="custom-print" class="font-body-md cursor-pointer">Yes, I want custom printing on my bags</label>
+        <div class="space-y-3 mb-4">
+          <label class="flex items-center gap-3 p-4 border-2 border-outline-variant cursor-pointer hover:border-primary transition-colors">
+            <input type="radio" name="printing" value="none" class="accent-primary" checked onchange="showPrintOptions(this.value)"/>
+            <div><p class="font-body-md font-semibold">No Printing</p><p class="text-sm text-on-surface-variant">Plain bag — no artwork</p></div>
+          </label>
+          <label class="flex items-center gap-3 p-4 border-2 border-outline-variant cursor-pointer hover:border-primary transition-colors">
+            <input type="radio" name="printing" value="upload" class="accent-primary" onchange="showPrintOptions(this.value)"/>
+            <div><p class="font-body-md font-semibold">Upload My Design</p><p class="text-sm text-on-surface-variant">I have artwork ready — PNG, PDF, SVG</p></div>
+          </label>
+          <label class="flex items-start gap-3 p-4 border-2 border-outline-variant cursor-pointer hover:border-primary transition-colors">
+            <input type="radio" name="printing" value="designer" class="accent-primary mt-0.5" onchange="showPrintOptions(this.value)"/>
+            <div class="flex-1 flex items-start justify-between gap-4 flex-wrap">
+              <div><p class="font-body-md font-semibold">Request a Kraapht Designer</p><p class="text-sm text-on-surface-variant">We design your artwork based on your brief. You approve before production.</p></div>
+              <span class="px-3 py-1 bg-accent/20 text-accent font-label-sm text-label-sm uppercase tracking-widest text-xs flex-shrink-0">+GHS 100</span>
+            </div>
+          </label>
         </div>
-        <div id="print-options" class="hidden space-y-4">
+
+        <!-- Upload panel -->
+        <div id="upload-panel" class="hidden space-y-5 bg-surface-container p-5 border border-outline-variant">
           <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Your Business Name</label>
-            <input type="text" class="w-full border-b border-on-surface bg-transparent px-0 py-2 focus:border-primary focus:ring-0 font-body-md" placeholder="e.g. Accra Bakery"/>
-          </div>
-          <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Upload Artwork / Logo (optional)</label>
-            <div class="border-2 border-dashed border-outline-variant p-8 text-center hover:border-primary transition-colors cursor-pointer">
-              <span class="material-symbols-outlined text-4xl text-outline mb-2 block">upload_file</span>
-              <p class="font-body-md text-on-surface-variant">Drop your file here or click to upload</p>
-              <p class="font-label-sm text-label-sm text-on-surface-variant mt-1 uppercase tracking-widest">PNG, PDF, SVG · Max 10MB</p>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Number of Colours *</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="color-opts-upload">
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="1"><input type="radio" name="print_colors" value="1" class="sr-only"/>1 Colour<br/><span class="text-xs text-primary">GHS 50 + GHS 60 plate</span></label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="2"><input type="radio" name="print_colors" value="2" class="sr-only"/>2 Colours<br/><span class="text-xs text-primary">GHS 100 + GHS 120 plate</span></label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="3"><input type="radio" name="print_colors" value="3" class="sr-only"/>3 Colours<br/><span class="text-xs text-primary">GHS 150 + GHS 180 plate</span></label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="4"><input type="radio" name="print_colors" value="4" class="sr-only"/>Full Colour<br/><span class="text-xs text-primary">GHS 200 + GHS 240 plate</span></label>
             </div>
           </div>
-          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">+GHS 0.80 per bag for custom printing</p>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Upload Artwork</label>
+            <div class="border-2 border-dashed border-outline-variant p-6 text-center hover:border-primary transition-colors cursor-pointer">
+              <span class="material-symbols-outlined text-3xl text-outline mb-2 block">upload_file</span>
+              <p class="text-sm text-on-surface-variant">PNG, PDF, SVG · High resolution recommended</p>
+            </div>
+          </div>
+          <!-- Save design -->
+          <div class="border border-outline-variant p-4 bg-surface">
+            <div class="flex items-center gap-3 mb-2">
+              <input type="checkbox" id="save-design" class="w-4 h-4 accent-primary"/>
+              <label for="save-design" class="font-body-md font-semibold cursor-pointer">Save this design to my profile</label>
+            </div>
+            <p class="text-sm text-on-surface-variant ml-7">Returning customers can reuse saved designs without re-uploading.</p>
+            <div id="saved-designs" class="hidden mt-4 pt-4 border-t border-outline-variant">
+              <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Or choose a saved design:</p>
+              <label class="flex items-center gap-3 p-3 border border-outline-variant hover:border-primary cursor-pointer transition-colors">
+                <input type="radio" name="design_source" value="saved_1" class="accent-primary"/>
+                <span class="material-symbols-outlined text-primary">image</span>
+                <div><p class="text-sm font-semibold">Logo Design v2 — Saved 14 May 2026</p></div>
+              </label>
+            </div>
+          </div>
         </div>
+
+        <!-- Designer panel -->
+        <div id="designer-panel" class="hidden space-y-4 bg-surface-container p-5 border border-outline-variant">
+          <div class="flex items-start gap-3 bg-accent/10 p-4 border border-accent/30">
+            <span class="material-symbols-outlined text-accent flex-shrink-0">brush</span>
+            <p class="text-sm text-on-surface"><strong>GHS 100 flat fee.</strong> Our designer creates your artwork. You receive a digital proof before production starts. Revisions included.</p>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Describe Your Brand &amp; Design Brief *</label>
+            <textarea rows="3" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md resize-none" placeholder="e.g. Our bakery uses brown and gold. Logo is text-only — 'Accra Bakery'. Centre it on the front with our tagline below..."></textarea>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Number of Colours *</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="color-opts-designer">
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="1"><input type="radio" name="print_colors" value="1" class="sr-only"/>1 Colour</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="2"><input type="radio" name="print_colors" value="2" class="sr-only"/>2 Colours</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="3"><input type="radio" name="print_colors" value="3" class="sr-only"/>3 Colours</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-colors="4"><input type="radio" name="print_colors" value="4" class="sr-only"/>Full Colour</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. RETURNING CUSTOMER -->
+      <div class="bg-surface border-2 border-accent/40 p-7">
+        <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
+          <span class="material-symbols-outlined text-accent">loyalty</span>Returning Customer?
+        </h2>
+        <p class="text-sm text-on-surface-variant mb-4">If you have ordered the same bag design before, your <strong>plate-making and die-cut board costs are waived</strong>. Tick below to apply your discount.</p>
+        <div class="flex items-center gap-3 mb-3">
+          <input type="checkbox" id="is-recurring" class="w-5 h-5 accent-primary" onchange="calcPrice()"/>
+          <label for="is-recurring" class="font-body-md font-semibold cursor-pointer">Yes — same design, repeat order</label>
+        </div>
+        <p id="recurring-savings" class="font-label-sm text-label-sm text-primary uppercase tracking-widest hidden"></p>
       </div>
 
     </div>
 
-    <!-- Order Summary -->
+    <!-- ===== RIGHT: LIVE PRICE SUMMARY ===== -->
     <div class="lg:col-span-1">
-      <div class="sticky top-28 bg-inverse-surface text-inverse-on-surface p-8">
-        <h3 class="font-headline-md text-headline-md mb-8 text-inverse-on-surface">Order Summary</h3>
-        <div class="space-y-4 mb-8 border-b border-surface/20 pb-8">
-          <div class="flex justify-between font-body-md">
-            <span class="opacity-70">Product</span>
-            <span>Flat Bottom Bag</span>
+      <div class="sticky top-24 space-y-4">
+        <div class="bg-charcoal text-white p-7">
+          <h3 class="text-xl font-bold mb-6">Live Price Estimate</h3>
+          <div class="space-y-2 text-sm mb-4 pb-4 border-b border-white/20">
+            <div class="flex justify-between"><span class="opacity-60">Paper cost</span><span id="sb-paper">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Printing</span><span id="sb-printing">None</span></div>
+            <div class="flex justify-between" id="plate-row"><span class="opacity-60">Plate making</span><span id="sb-plate">—</span></div>
+            <div class="flex justify-between" id="diecut-row"><span class="opacity-60">Die cut board</span><span id="sb-diecutboard">GHS 300</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Die cutting</span><span id="sb-diecut">GHS 60</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Folding labour</span><span id="sb-labour">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Delivery (Accra)</span><span>GHS 30</span></div>
+            <div class="flex justify-between" id="designer-cost-row" style="display:none;"><span class="opacity-60">Designer fee</span><span class="text-accent">GHS 100</span></div>
           </div>
-          <div class="flex justify-between font-body-md">
-            <span class="opacity-70">Size</span>
-            <span>Small (15×8×21cm)</span>
+          <div id="discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-4 pb-4 border-b border-white/20">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">loyalty</span>Returning customer saving</span>
+            <span id="sb-discount">—</span>
           </div>
-          <div class="flex justify-between font-body-md">
-            <span class="opacity-70">Handle</span>
-            <span>Twisted Paper</span>
+          <div class="flex justify-between text-xl font-bold mb-1">
+            <span>Total</span><span class="text-accent" id="sb-total">GHS —</span>
           </div>
-          <div class="flex justify-between font-body-md">
-            <span class="opacity-70">Quantity</span>
-            <span>250 units</span>
+          <div class="flex justify-between text-sm mb-6">
+            <span class="opacity-50">Per bag</span><span class="opacity-80" id="sb-per-bag">— / bag</span>
           </div>
-          <div class="flex justify-between font-body-md">
-            <span class="opacity-70">Unit Price</span>
-            <span>GHS 3.80</span>
+          <div class="bg-white/10 p-4 mb-4 text-sm">
+            <p class="opacity-60 font-label-sm uppercase tracking-widest text-xs mb-1">Payment Policy</p>
+            <p class="opacity-80">100% pre-payment. Production starts after payment is confirmed.</p>
           </div>
+          <p class="text-xs text-white/30 text-center mb-5 uppercase tracking-widest leading-5">First orders include plate &amp; die-cut setup costs. Returning customers save these on repeat orders.</p>
         </div>
-        <div class="flex justify-between font-headline-md text-headline-md mb-8">
-          <span>Total</span>
-          <span class="text-primary-fixed-dim">GHS 950.00</span>
+
+        <!-- Place Order — right-aligned -->
+        <div class="flex justify-end">
+          <a href="payment.html" class="w-full bg-accent text-white py-5 px-8 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">shopping_cart_checkout</span>Place Order
+          </a>
         </div>
-        <div class="bg-surface/10 p-4 mb-6">
-          <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-70">Payment Policy</p>
-          <p class="font-body-md mt-2 opacity-90">100% pre-payment required. Production begins only after payment is confirmed.</p>
-        </div>
-        <a href="payment.html" class="block w-full bg-primary text-on-primary text-center py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface hover:text-on-surface transition-colors">Proceed to Payment</a>
-        <p class="font-label-sm text-label-sm opacity-50 text-center mt-4 uppercase tracking-widest">Secured by Paystack</p>
+        <p class="text-center font-label-sm text-label-sm text-on-surface-variant text-xs uppercase tracking-widest">Secured by Paystack</p>
       </div>
     </div>
   </div>
 </main>
-<footer class="bg-inverse-surface text-inverse-on-surface w-full">
+
+<footer class="bg-charcoal text-inverse-on-surface w-full">
 <div class="max-w-[1280px] mx-auto px-10 py-16">
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
     <div class="md:col-span-1">
-      <div class="flex items-center gap-4 mb-6">
-        <img alt="Kraapht Bags Ltd Logo" class="h-8 w-auto brightness-0 invert" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaK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"/>
-      </div>
-      <p class="font-body-md opacity-60">Eco-friendly premium paper bags engineered for your brand. Made in Ghana.</p>
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png"/>
+      <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
     </div>
     <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Products</h5>
-      <ul class="space-y-4 font-body-md">
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Flat Bottom Bags</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Paper Food Bowls</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Custom Print</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Bulk Orders</a></li>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Products</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Bulk Orders</a></li>
       </ul>
     </div>
     <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Company</h5>
-      <ul class="space-y-4 font-body-md">
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="index.html#contact">Contact Us</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="index.html">Our Process</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="customer.html">Track Order</a></li>
-        <li><a class="hover:text-primary-fixed-dim transition-colors" href="admin.html">Admin Login</a></li>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
+        <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
+        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
       </ul>
     </div>
     <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Contact</h5>
-      <ul class="space-y-4 font-body-md opacity-70">
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">chat</span> WhatsApp</li>
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">mail</span> kraaphtbags@gmail.com</li>
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">location_on</span> Accra, Ghana</li>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
       </ul>
     </div>
   </div>
-  <div class="flex flex-col md:flex-row justify-between items-center gap-6 border-t border-surface/10 pt-8">
-    <p class="font-label-sm text-label-sm opacity-60">© 2026 Kraapht Bags Ltd. Eco-Friendly · Precision Crafted · Made in Ghana.</p>
-    <div class="flex gap-8">
-      <a class="font-label-sm text-label-sm hover:text-primary-fixed-dim transition-colors" href="#">Privacy Policy</a>
-      <a class="font-label-sm text-label-sm hover:text-primary-fixed-dim transition-colors" href="#">Terms of Service</a>
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
+    <p class="font-label-sm text-label-sm opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
+    <div class="flex gap-6 opacity-40">
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Privacy</a>
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Terms</a>
     </div>
   </div>
 </div>
 </footer>
+
 <script>
-// Size selector visual feedback
-document.querySelectorAll('[name="size"]').forEach(r => {
-  r.closest('label').addEventListener('click', function() {
-    document.querySelectorAll('[name="size"]').forEach(x => x.closest('label').classList.replace('border-primary','border-outline-variant'));
-    this.classList.replace('border-outline-variant','border-primary');
-    document.getElementById('custom-dims').classList.toggle('hidden', this.querySelector('input').value !== 'custom');
+let state = { paperPrice:525, bagsPerSheet:3, qty:200, printColors:0, isRecurring:false, hasDesigner:false };
+
+// Paper type cards
+document.querySelectorAll('#paper-options label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('#paper-options label').forEach(l => {
+      l.classList.remove('selected');
+      const cb = l.querySelector('.check-badge');
+      if(cb) cb.style.display='none';
+    });
+    this.classList.add('selected');
+    const cb = this.querySelector('.check-badge');
+    if(cb) cb.style.display='flex';
+    state.paperPrice = parseInt(this.dataset.price);
+    const hasHandle = this.dataset.handle === 'true';
+    document.getElementById('no-handle-msg').classList.toggle('hidden', hasHandle);
+    document.getElementById('handle-options').classList.toggle('disabled-section', !hasHandle);
+    calcPrice();
   });
 });
-document.querySelectorAll('[name="qty"]').forEach(r => {
-  r.closest('label').addEventListener('click', function() {
-    document.querySelectorAll('[name="qty"]').forEach(x => x.closest('label').classList.replace('border-primary','border-outline-variant'));
-    this.classList.replace('border-outline-variant','border-primary');
+
+// Size selection
+document.querySelectorAll('#size-options label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('#size-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    document.getElementById('custom-dims').classList.toggle('hidden', this.dataset.size !== 'custom');
+    state.bagsPerSheet = parseInt(this.dataset.bps) || 2;
+    calcPrice();
   });
 });
-document.getElementById('custom-print').addEventListener('change', function() {
-  document.getElementById('print-options').classList.toggle('hidden', !this.checked);
+
+// Handle selection
+document.querySelectorAll('[name="handle"]').forEach(r => {
+  r.addEventListener('change', function() {
+    document.getElementById('pp-colors').classList.toggle('hidden', this.value !== 'pp_rope');
+  });
 });
+
+// Colour swatches
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(s => { s.style.borderColor='transparent'; s.classList.remove('selected'); });
+  el.style.borderColor='#1F4D3A'; el.classList.add('selected');
+  document.getElementById('selected-color-label').textContent = 'Selected: ' + el.dataset.color;
+}
+
+// Quantity
+document.querySelectorAll('#qty-options label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('#qty-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    const isCustom = this.dataset.qty === 'custom_qty';
+    document.getElementById('custom-qty-input').classList.toggle('hidden', !isCustom);
+    if(!isCustom) { state.qty = parseInt(this.dataset.qty); calcPrice(); }
+  });
+});
+
+// Print colours
+document.querySelectorAll('[data-colors]').forEach(label => {
+  label.addEventListener('click', function() {
+    const panel = this.closest('#upload-panel,#designer-panel');
+    if(panel) { panel.querySelectorAll('[data-colors]').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); }); }
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    state.printColors = parseInt(this.dataset.colors);
+    calcPrice();
+  });
+});
+
+// Printing mode
+function showPrintOptions(val) {
+  document.getElementById('upload-panel').classList.toggle('hidden', val !== 'upload');
+  document.getElementById('designer-panel').classList.toggle('hidden', val !== 'designer');
+  state.hasDesigner = val === 'designer';
+  if(val === 'none') state.printColors = 0;
+  document.getElementById('designer-cost-row').style.display = val === 'designer' ? 'flex' : 'none';
+  calcPrice();
+}
+
+// Save design toggle
+document.getElementById('save-design').addEventListener('change', function() {
+  document.getElementById('saved-designs').classList.toggle('hidden', !this.checked);
+});
+
+// ===== PRICING CALCULATOR =====
+function calcPrice() {
+  const qtyInput = document.getElementById('qty-custom-val');
+  const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden') ? parseInt(qtyInput.value)||0 : state.qty;
+  if(qty < 200) return;
+
+  const sheetsNeeded = Math.ceil(qty / state.bagsPerSheet);
+  const reamsNeeded = Math.ceil(sheetsNeeded / 100);
+  const paperCost = reamsNeeded * state.paperPrice;
+
+  const printCosts  = {0:0,1:50,2:100,3:150,4:200};
+  const plateCosts  = {0:0,1:60,2:120,3:180,4:240};
+  const printCost   = printCosts[state.printColors]||0;
+  const plateCost   = plateCosts[state.printColors]||0;
+  const dieCutBoard = 300;
+  const dieCutRun   = 60;
+  const labour      = qty;
+  const delivery    = 30;
+  const designerFee = state.hasDesigner ? 100 : 0;
+
+  const isRecurring = document.getElementById('is-recurring').checked;
+  const saving = state.printColors > 0 ? plateCost + dieCutBoard : 0;
+  const baseTotal = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + designerFee;
+  const total = isRecurring && saving > 0 ? baseTotal - saving : baseTotal;
+  const perBag = (total/qty).toFixed(2);
+  const savingPct = baseTotal > 0 ? ((saving/baseTotal)*100).toFixed(0) : 0;
+
+  document.getElementById('sb-paper').textContent = `GHS ${paperCost.toLocaleString()}`;
+  document.getElementById('sb-printing').textContent = printCost > 0 ? `GHS ${printCost}` : 'None';
+  document.getElementById('sb-plate').textContent = `GHS ${plateCost}`;
+  document.getElementById('sb-diecutboard').textContent = `GHS ${dieCutBoard}`;
+  document.getElementById('sb-labour').textContent = `GHS ${labour.toLocaleString()}`;
+  document.getElementById('sb-total').textContent = `GHS ${total.toLocaleString()}`;
+  document.getElementById('sb-per-bag').textContent = `GHS ${perBag} / bag`;
+
+  const discRow = document.getElementById('discount-row');
+  const savLabel = document.getElementById('recurring-savings');
+  if(isRecurring && saving > 0) {
+    discRow.classList.remove('hidden');
+    document.getElementById('sb-discount').textContent = `- GHS ${saving.toLocaleString()}`;
+    document.getElementById('plate-row').classList.add('hidden');
+    document.getElementById('diecut-row').classList.add('hidden');
+    savLabel.textContent = `✓ Saving GHS ${saving.toLocaleString()} (${savingPct}%) — repeat order discount applied`;
+    savLabel.classList.remove('hidden');
+  } else {
+    discRow.classList.add('hidden');
+    document.getElementById('plate-row').classList.remove('hidden');
+    document.getElementById('diecut-row').classList.remove('hidden');
+    savLabel.classList.add('hidden');
+  }
+}
+
+calcPrice();
 </script>
 </body>
 </html>

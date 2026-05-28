@@ -7,104 +7,132 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}.glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}.industrial-shadow{box-shadow:0 20px 40px -20px rgba(26,26,26,0.04);}</style>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+  .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
+  .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
+  .carousel-item{transition:opacity 0.8s ease-in-out;}
+  input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+</style>
 <script id="tailwind-config">
-tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#30312e","inverse-on-surface":"#f2f1ec","primary-fixed-dim":"#e2c19b","surface-container":"#f0eee9","surface-container-low":"#f5f3ee","outline-variant":"#d1c4b8","outline":"#80756b","background":"#fbf9f4","on-primary":"#ffffff","on-surface-variant":"#4e453c","on-surface":"#1b1c19","inverse-primary":"#e2c19b","primary":"#705838","surface-container-lowest":"#ffffff","error":"#ba1a1a","surface-container-highest":"#e4e2dd","primary-fixed":"#ffddb6","tertiary":"#755717","surface-container-high":"#eae8e3","surface":"#fbf9f4","tertiary-container":"#90702e","on-primary-container":"#fffbff","surface-tint":"#735a3a"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["72px",{"lineHeight":"80px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]}}}}
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#1F4D3A",
+  "primary-light":"#2D6B52",
+  "on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8",
+  "on-primary-container":"#002114",
+  "secondary":"#D8C3A5",
+  "on-secondary":"#2B2B2B",
+  "tertiary":"#2B2B2B",
+  "accent":"#C8A96B",
+  "on-accent":"#FFFFFF",
+  "background":"#F7F4EF",
+  "on-background":"#2B2B2B",
+  "surface":"#FFFFFF",
+  "on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2",
+  "surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA",
+  "on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B",
+  "inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B",
+  "outline":"#8B7355",
+  "outline-variant":"#D8C3A5",
+  "error":"#BA1A1A",
+  "kraft":"#D8C3A5",
+  "forest":"#1F4D3A",
+  "gold":"#C8A96B",
+  "charcoal":"#2B2B2B"
+},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
+"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
 </script>
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased">
-<nav class="fixed top-0 w-full z-50 bg-surface/80 glass-nav shadow-sm">
+<body class="bg-background text-on-surface font-sans antialiased">
+<nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
 <div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
-  <a href="index.html"><img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaK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"/></a>
-  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1" href="index.html">Home</a> <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
-  <a href="customer.html" class="bg-on-surface text-surface px-8 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors">Account</a>
+  <a href="index.html" class="flex items-center gap-3">
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png"/>
+  </a>
+  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
+  <div class="flex items-center gap-3">
+    <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+  </div>
 </div>
 </nav>
-<main class="max-w-[1280px] mx-auto px-10 pt-32 pb-24">
+
+<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
 
   <!-- Success Banner -->
-  <div class="bg-primary text-on-primary p-10 mb-12 text-center industrial-shadow">
-    <span class="material-symbols-outlined text-6xl mb-4 block" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">check_circle</span>
-    <h1 class="font-headline-lg text-headline-lg mb-3">Order Confirmed!</h1>
-    <p class="font-body-lg opacity-80">Payment received · Production begins within 24 hours</p>
-    <div class="mt-6 inline-block bg-on-primary/10 px-6 py-3">
-      <p class="font-label-sm text-label-sm uppercase tracking-widest">Order Reference</p>
-      <p class="font-headline-md text-headline-md mt-1">KBL-2026-00147</p>
+  <div class="bg-primary text-white p-10 mb-12 text-center">
+    <span class="material-symbols-outlined text-6xl mb-4 block text-accent" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">check_circle</span>
+    <h1 class="text-4xl font-bold mb-3">Order Confirmed!</h1>
+    <p class="font-body-lg text-white/80">Payment received · Production begins within 24 hours</p>
+    <div class="mt-6 inline-block bg-white/10 px-6 py-3">
+      <p class="font-label-sm text-label-sm uppercase tracking-widest text-white/70">Order Reference</p>
+      <p class="text-2xl font-bold mt-1 text-accent" id="order-ref">KBL-2026-00148</p>
     </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Left: Order details + timeline -->
+    <!-- Left: Details + Timeline -->
     <div class="lg:col-span-2 space-y-6">
 
       <!-- Order Details -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">receipt_long</span>
-          Order Details
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">receipt_long</span>Order Details
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Product</p>
-            <p class="font-body-md font-semibold">Flat Bottom Bag</p>
-          </div>
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Quantity</p>
-            <p class="font-body-md font-semibold">250 units</p>
-          </div>
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Size</p>
-            <p class="font-body-md font-semibold">Small (15×8×21 cm)</p>
-          </div>
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Handle</p>
-            <p class="font-body-md font-semibold">Twisted Paper</p>
-          </div>
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Custom Print</p>
-            <p class="font-body-md font-semibold">Yes — Artwork uploaded</p>
-          </div>
-          <div class="p-4 bg-surface-container-low">
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Amount Paid</p>
-            <p class="font-body-md font-semibold text-primary">GHS 968.55</p>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Product</p><p class="font-body-md font-semibold">Flat Bottom Bag</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Paper Type</p><p class="font-body-md font-semibold">White / Chromo Coat</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Quantity</p><p class="font-body-md font-semibold">200 units</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Size</p><p class="font-body-md font-semibold">A5 / Small (15×8×21 cm)</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Handle</p><p class="font-body-md font-semibold">Twisted Paper Rope</p></div>
+          <div class="p-4 bg-primary text-white"><p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mb-1 opacity-70">Amount Paid</p><p class="font-body-md font-semibold text-accent">GHS 917.95</p></div>
         </div>
       </div>
 
       <!-- Production Timeline -->
-      <div class="bg-surface border border-outline-variant p-8 industrial-shadow">
-        <h2 class="font-headline-md text-headline-md mb-8 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">timeline</span>
-          Production Timeline
+      <div class="bg-surface border border-outline-variant p-7">
+        <h2 class="text-xl font-bold mb-8 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">timeline</span>Production Timeline
         </h2>
         <div class="space-y-0">
-          <div class="flex gap-6">
+          <!-- Step 1 - complete -->
+          <div class="flex gap-5">
             <div class="flex flex-col items-center">
-              <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center flex-shrink-0">
+              <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">check</span>
               </div>
               <div class="w-px flex-1 bg-primary/30 my-1"></div>
             </div>
             <div class="pb-8">
               <p class="font-body-md font-semibold">Payment Confirmed</p>
-              <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Today · Day 0</p>
-              <p class="font-body-md text-on-surface-variant mt-2">Your order has been received and payment is confirmed via Paystack.</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mt-1">Today · Day 0</p>
+              <p class="font-body-md text-on-surface-variant text-sm mt-2">Order received and payment confirmed via Paystack. Order reference: <span id="ref-inline" class="font-semibold text-primary">KBL-2026-00148</span></p>
             </div>
           </div>
-          <div class="flex gap-6">
+          <!-- Step 2 - active -->
+          <div class="flex gap-5">
             <div class="flex flex-col items-center">
-              <div class="w-10 h-10 rounded-full bg-primary/30 border-2 border-primary text-primary flex items-center justify-center flex-shrink-0">
+              <div class="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-lg">precision_manufacturing</span>
               </div>
               <div class="w-px flex-1 bg-outline-variant my-1"></div>
             </div>
             <div class="pb-8">
               <p class="font-body-md font-semibold">Production Starts</p>
-              <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Tomorrow · Day 1</p>
-              <p class="font-body-md text-on-surface-variant mt-2">Materials purchased and community production team briefed.</p>
+              <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest mt-1">Tomorrow · Day 1</p>
+              <p class="font-body-md text-on-surface-variant text-sm mt-2">Materials purchased. Community production team briefed and work begins.</p>
             </div>
           </div>
-          <div class="flex gap-6">
+          <!-- Step 3 -->
+          <div class="flex gap-5">
             <div class="flex flex-col items-center">
               <div class="w-10 h-10 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-lg">fact_check</span>
@@ -114,19 +142,20 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#303
             <div class="pb-8">
               <p class="font-body-md font-semibold text-on-surface-variant">Quality Check</p>
               <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Day 5–7</p>
-              <p class="font-body-md text-on-surface-variant mt-2">Each bag inspected for print quality, structure, and handle integrity.</p>
+              <p class="font-body-md text-on-surface-variant text-sm mt-2">Each bag inspected for print quality, structure, and handle integrity.</p>
             </div>
           </div>
-          <div class="flex gap-6">
+          <!-- Step 4 -->
+          <div class="flex gap-5">
             <div class="flex flex-col items-center">
               <div class="w-10 h-10 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center flex-shrink-0">
                 <span class="material-symbols-outlined text-lg">local_shipping</span>
               </div>
             </div>
             <div class="pb-4">
-              <p class="font-body-md font-semibold text-on-surface-variant">Dispatched</p>
+              <p class="font-body-md font-semibold text-on-surface-variant">Dispatched to You</p>
               <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Day 7–10</p>
-              <p class="font-body-md text-on-surface-variant mt-2">Your order dispatched to delivery address. WhatsApp notification sent.</p>
+              <p class="font-body-md text-on-surface-variant text-sm mt-2">Order dispatched. WhatsApp notification sent with delivery details.</p>
             </div>
           </div>
         </div>
@@ -135,45 +164,88 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#303
       <!-- WhatsApp CTA -->
       <div class="bg-surface-container border border-outline-variant p-6 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <p class="font-body-md font-semibold">Get updates on WhatsApp</p>
-          <p class="font-body-md text-on-surface-variant mt-1">We'll send you a message when production starts and when your order is on its way.</p>
+          <p class="font-body-md font-semibold">Track your order on WhatsApp</p>
+          <p class="font-body-md text-on-surface-variant text-sm mt-1">We send you a message when production starts and when your order is dispatched.</p>
         </div>
-        <a href="https://wa.me/233558619224?text=Hi+Kraapht+Bags%2C+my+order+ref+is+KBL-2026-00147" class="bg-green-600 text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-green-700 transition-colors flex items-center gap-2 flex-shrink-0">
+        <a href="https://wa.me/233558619224?text=Hi+Kraapht+Bags%2C+my+order+ref+is+KBL-2026-00148" class="bg-green-600 text-white px-7 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-green-700 transition-colors flex items-center gap-2 flex-shrink-0">
           <span class="material-symbols-outlined">chat</span>Chat on WhatsApp
         </a>
       </div>
     </div>
 
-    <!-- Right sidebar -->
+    <!-- Right Sidebar -->
     <div class="lg:col-span-1 space-y-4">
-      <div class="bg-inverse-surface text-inverse-on-surface p-8">
-        <h3 class="font-headline-md text-headline-md mb-4">Invoice</h3>
-        <div class="space-y-3 font-body-md mb-6 pb-6 border-b border-surface/20 text-sm">
-          <div class="flex justify-between"><span class="opacity-70">Order Ref</span><span>KBL-2026-00147</span></div>
-          <div class="flex justify-between"><span class="opacity-70">Date</span><span id="order-date"></span></div>
-          <div class="flex justify-between"><span class="opacity-70">Products</span><span>GHS 875.00</span></div>
-          <div class="flex justify-between"><span class="opacity-70">Delivery</span><span>GHS 75.00</span></div>
-          <div class="flex justify-between"><span class="opacity-70">Paystack fee</span><span>GHS 18.55</span></div>
+      <!-- Invoice -->
+      <div class="bg-charcoal text-white p-7">
+        <h3 class="text-xl font-bold mb-6">Invoice</h3>
+        <div class="space-y-3 text-sm mb-6 pb-6 border-b border-white/20">
+          <div class="flex justify-between"><span class="opacity-60">Order Ref</span><span class="text-accent">KBL-2026-00148</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Date</span><span id="order-date"></span></div>
+          <div class="flex justify-between"><span class="opacity-60">Paper + Labour</span><span>GHS 870.00</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Delivery</span><span>GHS 30.00</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Paystack fee</span><span>GHS 17.95</span></div>
         </div>
-        <div class="flex justify-between font-headline-md text-headline-md mb-6">
-          <span>Total Paid</span><span class="text-primary-fixed-dim">GHS 968.55</span>
+        <div class="flex justify-between text-xl font-bold mb-6">
+          <span>Total Paid</span><span class="text-accent">GHS 917.95</span>
         </div>
-        <button onclick="window.print()" class="w-full border border-surface/30 text-surface py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface/10 transition-colors flex items-center justify-center gap-2">
-          <span class="material-symbols-outlined">download</span>Download Invoice
+        <button onclick="window.print()" class="w-full border border-white/30 text-white py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-lg">download</span>Download Invoice
         </button>
       </div>
-      <a href="order.html" class="block bg-surface border border-outline-variant text-center py-5 font-label-sm text-label-sm uppercase tracking-widest text-on-surface hover:bg-primary hover:text-on-primary transition-colors">
+
+      <a href="order.html" class="block bg-accent text-white text-center py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors">
         Place Another Order
       </a>
-      <a href="customer.html" class="block bg-surface-container-low border border-outline-variant text-center py-5 font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">
+      <a href="customer.html" class="block bg-surface border border-outline-variant text-center py-4 font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
         View All My Orders
       </a>
     </div>
   </div>
 </main>
-<footer class="bg-inverse-surface text-inverse-on-surface py-8 text-center">
-  <p class="font-label-sm text-label-sm opacity-60 uppercase tracking-widest">© 2026 Kraapht Bags Ltd · <a href="index.html" class="hover:text-primary-fixed-dim">Back to Home</a></p>
+
+<footer class="bg-charcoal text-inverse-on-surface w-full">
+<div class="max-w-[1280px] mx-auto px-10 py-16">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <div class="md:col-span-1">
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png"/>
+      <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Products</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Bulk Orders</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
+        <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
+        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
+    <p class="font-label-sm text-label-sm opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
+    <div class="flex gap-6 opacity-40">
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Privacy</a>
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Terms</a>
+    </div>
+  </div>
+</div>
 </footer>
+
 <script>
 document.getElementById('order-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 </script>

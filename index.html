@@ -1,571 +1,381 @@
 <!DOCTYPE html>
-
-<html class="scroll-smooth" lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>KRAAPHT | Engineered for Endurance</title>
+<title>Kraapht Bags Ltd | Premium Eco-Friendly Paper Bags — Accra, Ghana</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-nav {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .industrial-shadow {
-            box-shadow: 0 20px 40px -20px rgba(26, 26, 26, 0.04);
-        }
-        .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 40px 60px -30px rgba(26, 26, 26, 0.08);
-        }
-        .step-card {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .step-card.active {
-            transform: scale(1.02);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-        .step-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, opacity 0.3s ease-out;
-            opacity: 0;
-        }
-        .step-card.active .step-content {
-            max-height: 200px;
-            opacity: 1;
-            margin-top: 1rem;
-        }
-    </style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+  .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
+  .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
+  .carousel-item{transition:opacity 0.8s ease-in-out;}
+  input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+</style>
 <script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "inverse-surface": "#30312e",
-                      "inverse-on-surface": "#f2f1ec",
-                      "primary-fixed-dim": "#e2c19b",
-                      "on-tertiary-fixed-variant": "#5d4201",
-                      "surface-container": "#f0eee9",
-                      "on-primary-fixed-variant": "#594325",
-                      "on-secondary-fixed-variant": "#474746",
-                      "secondary-container": "#e2dfde",
-                      "surface-container-low": "#f5f3ee",
-                      "primary-container": "#8b704f",
-                      "on-error": "#ffffff",
-                      "error-container": "#ffdad6",
-                      "secondary": "#5f5e5e",
-                      "tertiary-fixed": "#ffdea5",
-                      "on-tertiary-container": "#fffbff",
-                      "outline-variant": "#d1c4b8",
-                      "surface-variant": "#e4e2dd",
-                      "on-tertiary-fixed": "#261900",
-                      "surface-dim": "#dbdad5",
-                      "on-secondary": "#ffffff",
-                      "background": "#fbf9f4",
-                      "secondary-fixed-dim": "#c8c6c5",
-                      "tertiary-fixed-dim": "#e9c176",
-                      "on-primary": "#ffffff",
-                      "secondary-fixed": "#e5e2e1",
-                      "on-primary-fixed": "#291801",
-                      "on-tertiary": "#ffffff",
-                      "on-secondary-fixed": "#1c1b1b",
-                      "outline": "#80756b",
-                      "tertiary-container": "#90702e",
-                      "on-surface-variant": "#4e453c",
-                      "on-primary-container": "#fffbff",
-                      "surface-tint": "#735a3a",
-                      "on-surface": "#1b1c19",
-                      "surface-bright": "#fbf9f4",
-                      "on-error-container": "#93000a",
-                      "inverse-primary": "#e2c19b",
-                      "primary": "#705838",
-                      "on-background": "#1b1c19",
-                      "surface-container-lowest": "#ffffff",
-                      "error": "#ba1a1a",
-                      "on-secondary-container": "#636262",
-                      "surface-container-highest": "#e4e2dd",
-                      "primary-fixed": "#ffddb6",
-                      "tertiary": "#755717",
-                      "surface-container-high": "#eae8e3",
-                      "surface": "#fbf9f4"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "spacing": {
-                      "base": "8px",
-                      "grid-gutter": "24px",
-                      "section-gap-desktop": "120px",
-                      "grid-margin": "40px",
-                      "section-gap-mobile": "64px"
-              },
-              "fontFamily": {
-                      "body-lg": ["Hanken Grotesk"],
-                      "body-md": ["Hanken Grotesk"],
-                      "headline-md": ["Hanken Grotesk"],
-                      "display-xl": ["Hanken Grotesk"],
-                      "headline-lg": ["Hanken Grotesk"],
-                      "headline-lg-mobile": ["Hanken Grotesk"],
-                      "label-sm": ["Hanken Grotesk"]
-              },
-              "fontSize": {
-                      "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
-                      "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
-                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "0.02em", "fontWeight": "600"}],
-                      "display-xl": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                      "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}]
-              }
-            },
-          },
-        }
-    </script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#1F4D3A",
+  "primary-light":"#2D6B52",
+  "on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8",
+  "on-primary-container":"#002114",
+  "secondary":"#D8C3A5",
+  "on-secondary":"#2B2B2B",
+  "tertiary":"#2B2B2B",
+  "accent":"#C8A96B",
+  "on-accent":"#FFFFFF",
+  "background":"#F7F4EF",
+  "on-background":"#2B2B2B",
+  "surface":"#FFFFFF",
+  "on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2",
+  "surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA",
+  "on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B",
+  "inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B",
+  "outline":"#8B7355",
+  "outline-variant":"#D8C3A5",
+  "error":"#BA1A1A",
+  "kraft":"#D8C3A5",
+  "forest":"#1F4D3A",
+  "gold":"#C8A96B",
+  "charcoal":"#2B2B2B"
+},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
+"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
+</script>
+<style>
+  .hero-video-overlay{background:linear-gradient(135deg,rgba(31,77,58,0.88) 0%,rgba(43,43,43,0.6) 100%);}
+  .gold-line{background:linear-gradient(90deg,transparent,#C8A96B,transparent);height:1px;}
+  .client-card img{transition:transform 0.5s ease;}
+  .client-card:hover img{transform:scale(1.05);}
+</style>
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
-<!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-sm">
-<div class="max-w-[1280px] mx-auto px-grid-margin flex justify-between items-center h-20">
-<div class="flex items-center gap-4">
-<img alt="KRAAPHT Logo" class="h-10 w-auto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaKTfPC1T5awlm3zwtU+WsJWgzrFFHPdYYpWB7HbWQenvSp6726hits8kdMxr2tyCOhQmm/DVP8r1SrNfPBNT5Ci+RSF9AJOAMkr4rLp2082G1lS3vzvjYfg9p7VNHOzWSJkHOVsYfI/eGng0fesbUHtdSsNPBTR8+4byB7gfepG+XRtDFzcZDqhw3D8kdZVRe5z3l73FznHJJ4lRBxREUgi5mOQM2zG8N6yNy4ICLtip6iUZiglkH6LCVxlhli/CxPZ5TSEHBERARfQCTgAknoC7e5anGe5psdewUHSi+kEHBGCviAiIgIu3uao2drueXZ69g4XUgK6SWi3uic0UrASMAjiqWthqKNeIvoBJwBkrsdT1DW7ToJQ3rLDhSOpco27cjWZxtEBcV20gJqogBkl49KCZl045kD5O6wXNaTjm9x8+VAq+12e4p8Ak827GOPBUJRAREUgiIgIiICIiAiIgIiICIiCy6et9HUW3nJoGveXkZOVP2P+hLgy4WoClqowQ2RoyQCMHj2FROlvBLfLcpVUy79qS8eFnj19q1jdlt3cR+lBGT9LVR9dNuF+r5L1UTGorHNAl70N2g0YGAABwCkUVMcMcbzItc8spxa14uynhlqJ44IInyyyODGMY3LnOO4AAcSrDf7MZSaqjZmQ+7jA912jtW7eRPk2Zp2mZfb1E193mZmKNw96tI4eWek9HDrzG7fjqx5q+rVdmXEdfJbyS0FqtndupYBU3KoZvh2yGU7eOzuO93WeHQOs3T+Q2lP/R4v+Y/71Y0XFy37Mrzy6eOnDGccKhNyZaFmldLJp6Bz3HJPOyb/AO8tXeyC0lp3Tlmtc1ltcVHJLUPZI5jnHaGznG8legFpv2U3gCzfrT/UXt0uzO7cZbXnvwxmu2Ro/Tfhqn+V6pVmvngmp8hVnTfhqn+V6pVwljZLGY5GhzTxB6V2b5ctXdOWnbLaypb3vGNh6e0qWvNwbQU21jalfkRt6PGVky1NPDLHDJK1r5DhjetY95oW11GY9wkbvjPb1IKZNLJNK6WVxc9xySVwX17XMeWPBa5pwQegr4rC6aeAFnp8DGQT9JX2C2wMrpqyRjXPe7LARuaMelcdOEmy0+f0vWKitVV0nP8AcUbi1jQC/HST0eLCr9xKXqpp3WupY2eJztnGA8E5WJYLRC2nZVVLA+R42mtdwaOjd1qsKwjUbWw7DaQghuB3+70KeBJ1V3oKWQwvly5u4hjc4XZSV1FXhzInh5x3zHN348RVIAc924Fzj5ypjTlFVi4xzmJ8cbc5LhjO7h2qOBy1LbI6bZqaduzG47LmjgD2KMt1K+sq2U7DjaO89Q6SrTqZubNMeotP94KuWaubb6h0rouc2m7PHGN/7lM8C1RQ0VtptoBkTGjvnnifGelY4v1uL9nnXgdewcKDvV29sI442xGNrSScuzkqPhgmmOIopHn9FpKjgXSppKO404c5rXhw72RvEedU2sgfS1UlO/3TDjPX1FW6wU01Lbmxzbnlxds54Z6FAapAF3eR0sbn5kgstsa32rphgYMLd2OwLogoqC2h9Q/YaS4nbf0b9wCyLZ4NpfiWeqFWNSVb6i4vi2jzcR2Wjt6SgsUV2t0snNsqm7R3bwQPnK+XS2U9dGSWhk2O9kA3+frVKVu0xVOqLfzbzl0J2c9nR/HYlnAqk8T4ZnxSDD2HBC2Aqtq6EMro5gMc4zf4x+7CtKUR8MNutEILnMY48Xu3ud/HYu+kr6SrOKedrz1cD8xVMr6mSrqnzyEnaO4dQ6AuNHI6GqilYcOa8EKeBY9R2yOSnfVwsDZWDLwB7odPnX2w3Cijt8FO+ZrJd4LSDxJUvO0OgkaeBaQfmVDpffMXlj0qJ3F/cQ1pc44AGSVD3O5259vqI45mue9hAAad5+ZSVd7xn+Ld6FQkkBERWBERAREQEREBERAREQEREFu0t4Jb5blKqK0t4Jb5blKqlBERAW1OTPXUZhjs17qGxuYMQVMjsAgcGuJ6eo+bx6rXbSwTVVRHT08T5ZpHBrGNGS4noXlt1Y7MeMnpq2Za8uY3jeNdWqCUUVozd7hIdiKKn3sLu13DHiz5uKlNO22tg26+71RqLjO3Dw0nmoW/kMHV1niVE8nej4tPUndNU1klylHfvG8RD8hv2npVuXH2XDH6cP8At1MJlfqzFpv2U3gCzfrT/UW5Fpv2U3gCzfrT/UVuk97FXqPbrR+m/DVP8r1SrdUytgp5Jn+5Y0uKqOm/DVP8r1SrLfgTaKjH5P2hdy+XJU+qqJamodPK4l7jnxeJW2xV4rqMF5/no9zx19R86piyrXWPoaxszclvB7esKbBL6qt+D3dE3julA+gqvK/gxVNPndJFI3zEFUy7UTqGsdEclh3sd1hJRZ9N+Baf5XrFVvUO+8VHjHoCsmm/AtP8r1iq3qDwxUeMegKJ5GC1pc4NaMknAHWrXbLHTQRtfUsE0p4g+5HZjpVes2z7a021w5wfP0K4XTnfa6o5nO3zZxjipoxp7pbKPMYe3I4tibn0bl00t9jqq6KmhgcA8+6cd43dSqamNL0kkte2p2SI4s7+s4xhOBN6k8C1HyfWCrdmtzrhUFpcWRMGXuHoCsmpPAtR8n1gsTR4b3DMfhc7v8WB+9RPAzW0ltt8XOGOKMD4b95+crGn1BQRjEYklxw2W4H0rB1gJe6YSc81sburazv+jCggCSABkngEkF3tNb3fSmfm+b78tAzlVzVPhZ3kNU/YaV9JbWRyDD3EucOrPQoDVXhZ3kNSeRZrZ4NpfiWeqFTLkCLhUh3HnXZ+cq5Wog2ylI/sW+gKv6noHxVTqtjSYpPdEfBd+9IIVWHRoOao/B737VXwCSAASTwAVx0/Ruo6ACQYkkO04dXUFNEfrLGKXr7/AOxWBx2Wk9QyqrqucS3BsTTkRNwfGd/3K0y/g3eIqKNfLlF+FZ5QXFcovwrPKCsL/L+Dd4iqFS++YvLHpV9l/Bu8RVCpt1TET+WPSqwXmu94z/Fu9CoSv9UwvpZWN4uYQPmVBIIOCMEKYPiIikEREBERAREQEREBERAREQW7S3glvluUqsrkl1EbFSjn6SGso5JDzsUjASO1pPA+n0egbP7QXe3x11BS0U0L+BELcg9IIxuKx7+ouq98ezRq0zZ4vd50Rbm1/qOyWCJ1HR0FDUXJw3N5lpbD2u3cexaNFzra/Vr7e6J1RPVStbEI279twG7A6MnzeJX07bsnqs4im3XMLxLzUhTwy1FRHTwRuklkcGsY0ZLieAW7uTzRsOnqcVdWGS3ORvfO4iIH4Le3rP2ceHJ3ouKwQiurmslubxxG9sIPQ3t6z5h23NYOq6r1/Tj4bOn6f0/Vl5ERFhbBab9lN4Asw/1p/qLbF6uVHZ7VU3Svl5qlpozJI7GcAdQ6T0YXlPlO1vW61vQqJWGChp9ptJT59w08XO63HAz4gFs6LVllsmX2jL1WcmHp+9QFhljhu0Mkrwxg2suPAd6VYLxX0clsnZHUxOc5uAA7JKqtNDLUTNhhbtyO4DOFm+0lz/Nv8Rv3rs1zEcikfaS5/m3+I371xNnuQzmldu6nA/ap5Gfpq5shaaWpkDY+LHOO4dYWbe326uoy0VcHOs76M7Y49XnVXlikhfsSxuY7qcMFcFHAtliraOK0wsfUxMc3OWucAc5PQq/epI5rpPJE4PYSMEcDuCw0Tgco3OY9r2HDmkEHqKt1svNLVRtEsjYZukOOAfEVT0SzkXWeltTnc9NHTDO8uJABWDW32np3MhomNexrhtEDDQM7wFWETgXlldQzw7XdEJY4bw5wHzgqDZc4aK9zmLZdSybIOwNwwBvH0qCROBeRUW+ti2edglYfguI9BWO72ntxMoEEbxwxvd5ulU5E4FqoL9DPVPjmAhjP4Nzj6Vz1BNROt0uXwPlLcM3gu49CqSJwLzaPBdN8U30LGhu9K+ompakticx7mZd7lwBwsm0Ai102f7JvoVbp7XX3rUz7Xa6Z1TWTzyCONpALsZJ3kgDcCd/Uq9vNJOVlijoIzz0TKZn6bQ0fSsG6Xunp43MpntmmPAje1vn6Vgap0hqPTAhdfbY+kbMSI3c4x7XEbyMtJGd6glONmU5l5TZZeK5FxfKXyOJLnZcTxPWrtJcKDmyTWQ4I6HjKo6KbEC5RECVhduAcMriikXiW4UPNE91wHLTjDxlUdEUScC4W28UlRA3npmRSgd8HnAz1grjeqqiNunDJ4HSObgBrgSVUVZafQerqiytvMNjqH0LoTMJQ5u9mM7WM54dirbjj5qZjb4VpERXQIiICIiAiIgIiICIiAiIgt2lvBLfLcrNZr1dbO6Q2ytlpudGHhuCHeY9PaqzpbwS3y3KVXnlJe1TLZeY5yySSyulle58jyXOc45LieJJW2ORnSlrpbeNUmPnrjW7TQ94/AsaSzDfHs5J7cePUi31yU/1Btv7X616ydblZr7flp6SS7O60IiLkOmLGuddS22hlra2ZsMEQy5x9HaexLnXUttoZa2tmbDBEMucfR2nsWi9darqtS13woaGI/wAzDn+87rd6PT79P0923+nhu3TXP7fNeaqqdT1ha4GK3sJEUB6f0ndZP0enVmobe2hqGuizzUmSB+SRxCt6g9YY7kg6+c3fMu3rxmE9OLl5ZXK81E6b8NU/yvVKst4rxb6dkvNc5tO2cbWOhVrTfhqn+V6pUvrD3jD8b9hVr5VdP8pv9S/xf3LnFqWIuAlpXsHW1+19gVaRTxBd6qnprpQjeHNcMxvHEH+OhUuaN0Uz4njDmOLT4wrbpgOFoj2s4LnEeLKrV4c190qXNORzhSDERSVptE9c3nS4RQ5xtEZJ8QUyywW+MYkfK49ZeAnIqiKy1enIiwmlme135L94Pn6FXZo3wyuikaWvacEFORwRZFBRz1s/NQt7XOPBo7VYafTtI1o56SSR3Tg4CcirIrNWachcwmllex/QH7wfuXXRaejkpWvqJJY5TnaaMbt6ciuouTGOe9rGNLnOOAB0lWGi043YDquZ20eLWdHnU8iuIrX/ACft7gdmSbxh4P2KJu9mlomGaN/OwjicYLfGo5GRTahdDSxw9ytcWNDdrbxnHZhWDkNlM3LBapiMGR9Q4jqzBIVQleeQX8bFl/b/AFEi890/08vivTV/PH5bI9lN4As360/1F5+XoH2U3gCzfrT/AFF5+Xj0Xsx6dV7lERbN5HeTi261tddW19xqac08wibHAG59znJJB6/oK0bNmOvH1ZPHDC53iNuavt1v/wAjVYO4aYBloD2YiA2XCMEEbtxB3rysvaVystNX6YnsEskraeakNKXgjbDdnZz1ZWjeU/kmtOldHz3qiuddNLC+NpZMG7Lg5wb0AY456Vzuj34484297W3qdWV4yn2jT6Kzcn+ibxrO4up7c1sVPFgz1UgOxGD0drj0AfQN63PbeQnTENOG19xudXP8J7HNib5m4JHnJW3b1OvVeMr3ZtejPOcyPOS9Z6Q/E3Qf7lH1SoWr+QmBtFJUaXuM7p2AuFNVlpEnY14AwfGD4wthaap56XklpaapifDPFaNiSN4w5rhGQQR0FYuq3YbccfTfu09Pqy15X1fh5HREXUYBERAREQEREBERAREQEREFu0t4Jb5blKqK0t4Jb5blKqlBb65Kf6g239r9a9aFW+uSn+oNt/a/WvWLr/bny19H/O/C0KP1DebbYLVLc7rVMp6aIb3O4uPQ1o6SeoLB1vqy0aRtBr7pN3zsiGBhHOTO6mj0ngF5c19rK76xupq7hJsQMJFPSsPeQt+09bjvPYMAY+n6XLdeb4at2+a5x91/1frKfV0zJ4i6K3t3wQZ3jtdj4Xo4dpr6pdnuUlBN0uhce/Z9o7VcaeaOeFssTw5jhkELr44TCcTw5mWVyvNc1Bax97QeWfQp1QWsfe0Hln0K0VRWm/DVP8r1SrRc6GKvhbFK57Q120C1VfTfhqn+V6pU1quWWKiiMUj2EyYJacdBU3yOH8m6X+3m+j7l2Q6eoWODnulk7HOwPoVa7rqvzmb/AJhXJlwrmEEVk+7hmQkKeKLTep56OgxSU5I2cbTeEY8Spw3kZOM9Kt+n7g6vp3tmA52PAcQPdA9Kr+oKRtJcXNjGI3jbaOrPR86QT1ZcKSltJbR1ELntYGxhrgT1Zx9Kqcj3yPL5Hue48S45KmLdYJ52CSofzLTvDcZcfuUh7T2imGaiTPxkuPRhO0GHpKpmNS+mLnOi2NoAn3JBC69XRtbXxyAYL49/aQVM26e1ic01DsbRGTst6u3pUVrH3zB5B9KieRKWGnZSWpj3YDnt5x57Oj6FW7pcqitmcdtzYs96wHAx29ZVprt1lm2OHMHHi2VSEgy7fX1NHK18cji34TCdxCu0EjZoWSsOWvaHDxFa+V008SbNT7XHB9YpRAaWa112aXcWsJb41IaulqGRwsYXNhdnaI6T1FQFHUSUtSyeP3TDnx9itdPd7dVxbMr2MJHfMlG75+BU0VKCaWCQSQyOY4dIKs9Pd6GpoNislax7mlsjdk/Qu+S0WyobtMiaM/Cjdj9yirjp+SJhkpJDKBvLHDvvN1qOZRBnjuOVeOQX8bFl/b/USKjK88gv42LL+3+okVN/t5fFemr+ePy2R7KbwBZv1p/qLz8vQPspvAFm/Wn+ovPy8ei9mPTqvcosu33K424vNvuFXSbeNvmJnM2scM4O9YiLXZyzvXepqyqpuSmtroKiRlU20F7Zg47YdzXus8c9OV5Trbzea+HuesutfVREg83LUPe0no3E8V6k1f8Aibr/APcp+qXl/SkTJtU2mGQZZJWwtcOsF4BXO6GSY5X+2zquecY9R6Vt9Byfcm7O6QGCjpjU1jhxfLjLvGc96PEAvNur9a6g1PcpKuur52RF2YqaOQtiiHQAB6TvK357Imolg5MqmOPOJ6iGN5HQ3a2vS0Ly+p6LCZS7MvNp1WXpswnhd+TblDvOl7xTietqKm0ueG1FNI8vDWni5meDhx3ccYK9PXx7JdOV0kbg5j6ORzXDgQWHBXipettKyPl5H6B8ji53tKBk9kWFTrteMuOUW6TO2XGvJKIi6bCIiICIiAiIgIiICIiAiIgt2lvBLfLcpVRWlvBLfLcpVUoLZNJr+1aL5MrZzuzVXKVspgpGuwT/ADr++cfgt9PR041sqfqfwxJ5LfQvPZpm2SZeHpr2XXbY+6nv901JdpLnd6l0879wHBrG9DWjoH8cVFoi9pJJxFLbbzRZ9nuUlBN0uhce/Z9o7VgIpQ2BTzRzwtlieHMcMghQusfe0Hln0KJstzfQTYdl0Lz37ertHapPVcsc1DTSxOD2OcSCPEq8dxG6b8NU/wAr1SpfWHvGH437CojTfhqn+V6pVsrKWnq4xHURh7QcgZI3+ZL5FCRXP2ktn5t/iO+9chabawh3crN3WSR9KnkR2kKd7WTVLgQ1+Gt7ccVyugjm1LRxOwQ1oJHzlZtddaKij2Wva94GGxxn+MKqitm9sRXOIMm3tHq8XzblAs+paqWlt4MLi1z37O0OgYKqDiXElxJJ4kq6h1Fd6It2g9jt5GcOaVHjTUG3k1MhZ1bIz86S8DD0lE51e+XHesYRntP8FdmsffMHkH0qQirbdQTxUEBaAT37gdzT2nrXberfBWQmaRzmuiY4tLSAPOnPcfbNMyrtMYO/DObePEMehVS40ctFUuhkBxnvXdDh1rstNxlt8xcwbcbvdsJ4/vVhbeLVUx4mcB1skZn7wp8Cr0lPLVTthhYXOPzDtKvNLC2npo4G7wxobnrUVPebdSRFtHG17jwDGbLfOs+0zST2+KaU5e8En5yoorFktjbiJSZ+b5vG4NznP/4ui60L6Cq5lztsEbTXYxkLlZ651BWCXBLHd68ditFRBQXana4uEgHuXMOC3+O1TyKbFJJE7aikcx3W04Kt+nquWsoNube9jiwu69w+9Yo03TbWTUTFvVuysueeitFGI24GB3sYPfOP8dKi9xV7w1rLpUtaMDnCrdyC/jYsv7f6iRUmaR00z5XnLnuLj4yrryDuazlXspe4NGZhknG8wSAD51Td7WXxXpq/nPlsn2U3gCzfrT/UXn5ez9T6bsmpqJlHfKBtZDG/bYC9zC13DILSD9Kgm8lugQABp2Ddu3zSH/5LndP1mGrXMbK2bumyzz9Uryai9Z/5LtBf6OQf82T/AOy1xy/aO0rp3S9FV2a3RUdZJWiM7MryXR7DydxJ6Q3f29q1a+twzymMl7vDPpcsMbla2Rq4E8jlfgZ/oU/VLyraas0F1pK5oyaedkoHXsuB+xeqeTrUFk1domlo+fgml7jbT1tI5wDx3uy4FvHZO/B6itecr/JtpTTWi6m72yOohqmzRtjD6guadp2CMHjuyfMs/S7JryuvKd7XtvwucmeP2jZPKZahqvk4r6ahxM+aBtTSlvwy3D2geUBjzryOQQSCMEcQt9cg/KPR+1kOl79Vsp5oO8op5XYbIzojJO4EcB1jA4jfZ9Yckel9R18lyY6ot1VMS6R1MW7Ejj8ItIO/xYymnZ+1yuvPwbMP15M8PLzJb6OpuFdBQ0cTpaiokbHExvFzicAL2F7XttOgja2uDhSWwwbQ6dmLGfPhVaz6T0LyYU0l7qqk8+1pDamseHScN7Y2gDeewE9uFaqi50l10PPdqWQdzVNvfM0uIy0GMnB6iOB6ivPqd/6tnpnZfRq/Tl5vd41REXYc0REQEREBERAREQEREBERBlU1wrKaLmoJ3MZnOMBdvtxcvzp3/CPuWAiDP9uLl+dO/wCEfcsSpnlqJTLM8veeJK60QEREBERAXLbfsBm07YByG53ZXFEBERAREQEREH1rnNOWkg9YK7H1NQ9uy+eVzeovJC6kQFy5yTY2Nt2z1Z3LiiC0WOkt1ZbWOdTxmRvev689aiK2z1tPKWthfMzPeuYM5HiWLRVc9HLzkDy09I6D41OUuopHnZkpWl2OLX4HzYKjvBF0lorqiQNMD4m53ueMYVmr5Y7daS0HGyzYjHSTjA+9R1VqF0YwylbtEbiX5HoUHXVlRWy85O/OOAG4DxJ5GOvrHOY7aa4tPWDhfEUjvNXVuGDVTEdRkK6SSTknJXxEBERAREQEREH1ri1wc0kOByCDvC5SyySu2pZHyOAxlzslcEQFKUGo9Q2+EQUF9ulJENwZBVyMaPMCotFFkvlMtnhkV1bWV03PV1XPVS8NuaQvd85WOiKUP//Z"/>
-<span class="font-headline-md text-headline-md font-bold tracking-tighter text-on-surface dark:text-inverse-on-surface">KRAAPHT</span>
-</div>
-<div class="hidden md:flex items-center gap-8">
-<a class="font-body-md text-body-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1" href="index.html">About</a>
-<a class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="order.html">Products &amp; Order</a>
-<a class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#contact">Contact</a>
-</div>
-<div class="flex items-center gap-4">
-<button class="material-symbols-outlined text-on-surface p-2 hover:opacity-80 transition-opacity">search</button>
-<a href="customer.html" class="bg-on-surface text-surface px-8 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors">Account</a>
-</div>
+<body class="bg-background text-on-surface font-sans antialiased overflow-x-hidden">
+<nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
+<div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
+  <a href="index.html" class="flex items-center gap-3">
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png"/>
+  </a>
+  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
+  <div class="flex items-center gap-3">
+    <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+  </div>
 </div>
 </nav>
-<main>
-<!-- Hero Section -->
-<section class="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-<div class="absolute inset-0 z-0">
-<img alt="Industrial Background" class="w-full h-full object-cover brightness-[0.4]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj-7VTkNRn5R1WRdRlihcMWrAfiOflHbT2Etm5gvJ7dsRVU8_VcIMe2QGQG03Vh73eI89QbR2Vmvsndk7bJkJXuo2lCTCl-LAYg93EDrdXRIYTri1LENsqRhKaokyT3621ZdzcNLAvzJPSVdN1MMUYBh9zobUHNlDtlXwPCPQcQA9yGe2Zq7tF-uPqxWJhIkfeLz-1m5vnQ6NOWKOyJ2F-jbCmGGwxDTUxzVGnmiKyI7VclH3nT7nsBVAsnoP6tEiEIU_QCJ2G2Sc"/>
-</div>
-<div class="max-w-[1280px] mx-auto px-grid-margin relative z-10 w-full">
-<div class="max-w-2xl text-left">
-<span class="font-label-sm text-label-sm uppercase tracking-[0.4em] text-primary-fixed-dim mb-6 block">Industrial Luxury Packaging</span>
-<h1 class="font-display-xl text-display-xl text-surface mb-8 leading-tight">Custom Premium Paper Bags for Your Brand</h1>
-<p class="font-body-lg text-body-lg text-surface-variant mb-12 max-w-lg">Seamless online customization and nationwide delivery engineered for excellence. We transform raw materials into brand statements.</p>
-<div class="flex flex-wrap gap-4">
-<a href="order.html" class="bg-primary text-surface px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface hover:text-on-surface transition-all duration-300 inline-block">Start Your Order</a>
-<button class="border border-surface/30 text-surface px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface/10 backdrop-blur-sm transition-all duration-300">View Catalog</button>
-</div>
-</div>
-</div>
-<!-- Scroll Indicator -->
-<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
-<span class="font-label-sm text-label-sm uppercase tracking-widest text-surface vertical-text">Explore</span>
-<div class="w-[1px] h-12 bg-gradient-to-b from-surface to-transparent"></div>
-</div>
-</section>
-<!-- Production Journey Section -->
-<section class="py-20 bg-surface-container-low border-y border-outline-variant">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-<div class="text-center mb-16">
-<h2 class="font-headline-md text-headline-md uppercase tracking-widest text-primary mb-4">The Production Journey</h2>
-<p class="font-body-md text-on-surface-variant max-w-2xl mx-auto">Witness the transformation from raw material to premium finished product through our technical engineering process.</p>
-</div>
-<div class="w-full overflow-hidden bg-surface p-12 industrial-shadow">
-<div class="max-w-4xl mx-auto">
-<div class="w-full overflow-hidden bg-surface p-12 industrial-shadow">
-<div class="max-w-4xl mx-auto">
-<div class="flex items-center justify-between gap-4">
-  <div class="flex-1 text-center p-6 bg-surface-container-low border border-outline-variant">
-    <span class="material-symbols-outlined text-4xl text-primary mb-3 block">roll_content</span>
-    <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">01</p>
-    <p class="font-body-md font-semibold mt-1">Kraft Paper</p>
-  </div>
-  <span class="material-symbols-outlined text-outline text-3xl flex-shrink-0">arrow_forward</span>
-  <div class="flex-1 text-center p-6 bg-surface-container-low border border-outline-variant">
-    <span class="material-symbols-outlined text-4xl text-primary mb-3 block">print</span>
-    <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">02</p>
-    <p class="font-body-md font-semibold mt-1">Custom Print</p>
-  </div>
-  <span class="material-symbols-outlined text-outline text-3xl flex-shrink-0">arrow_forward</span>
-  <div class="flex-1 text-center p-6 bg-surface-container-low border border-outline-variant">
-    <span class="material-symbols-outlined text-4xl text-primary mb-3 block">precision_manufacturing</span>
-    <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">03</p>
-    <p class="font-body-md font-semibold mt-1">Cut &amp; Fold</p>
-  </div>
-  <span class="material-symbols-outlined text-outline text-3xl flex-shrink-0">arrow_forward</span>
-  <div class="flex-1 text-center p-6 bg-primary text-on-primary">
-    <span class="material-symbols-outlined text-4xl mb-3 block">shopping_bag</span>
-    <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-80">04</p>
-    <p class="font-body-md font-semibold mt-1">Finished Bag</p>
-  </div>
-</div></div>
-<div class="grid grid-cols-4 mt-8 text-center border-t border-primary/20 pt-8">
-<div><span class="font-label-sm text-label-sm font-bold text-primary">01</span><p class="font-body-md font-semibold">Rim of Paper</p></div>
-<div><span class="font-label-sm text-label-sm font-bold text-primary">02</span><p class="font-body-md font-semibold">Printed Sheet</p></div>
-<div><span class="font-label-sm text-label-sm font-bold text-primary">03</span><p class="font-body-md font-semibold">Folded Bag</p></div>
-<div><span class="font-label-sm text-label-sm font-bold text-primary">04</span><p class="font-body-md font-semibold">Packaged Bag</p></div>
-</div>
-</div>
-</div>
-</section>
-<!-- Product Packages (Redesigned) -->
-<section class="py-section-gap-desktop bg-background overflow-hidden">
-<div class="max-w-[1280px] mx-auto px-grid-margin relative">
-<div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-<div class="max-w-xl">
-<h2 class="font-headline-lg text-headline-lg mb-6">Precision Built Packaging</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">Selected materials and refined manufacturing processes ensure your brand is represented with absolute clarity and durability.</p>
-</div>
-<div class="flex gap-4">
-<button class="w-12 h-12 flex items-center justify-center border border-outline hover:bg-primary hover:text-surface transition-colors">
-<span class="material-symbols-outlined">arrow_back</span>
-</button>
-<button class="w-12 h-12 flex items-center justify-center border border-outline hover:bg-primary hover:text-surface transition-colors">
-<span class="material-symbols-outlined">arrow_forward</span>
-</button>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-grid-gutter">
-<!-- Kraft Bags -->
-<div class="group cursor-pointer">
-<div class="aspect-[4/3] overflow-hidden mb-6 bg-surface-container-low transition-all duration-500 group-hover:shadow-2xl">
-<img alt="Kraft Bags" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/ADBb0ugjCo9HdI4oMAa9Lz7ETqnEmAb2DYvXTnOLFR7X394hoZfQFTXrAAjojB_wCuiYDaTDx-q0vd65vXcftz-P39qj2WJdesYPhOFPR-kynDtAOet3Ham_x0xXqdBouFm_SdLZVNmoCBqcfCOS9Ss6PvZmAsREQ3vPM7XWYO1_RcJ5K5udxn3Ql_7dRp0764F-_Yr6YOTaEwSF0H8whVWO_GY4lSmHZXh9CKmX3RyESsPoQkIXAIgT3LZ6FA"/>
-</div>
-<h3 class="font-headline-md text-headline-md text-center group-hover:text-primary transition-colors">Kraft Bags</h3>
-</div>
-<!-- Luxury Bags -->
-<div class="group cursor-pointer">
-<div class="aspect-[4/3] overflow-hidden mb-6 bg-surface-container-low transition-all duration-500 group-hover:shadow-2xl">
-<img alt="Luxury Bags" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/ADBb0uiuH2jw5RJDES8KqpaldijLA97oyNxJISkoMIuqtJ0P1sH8TK_xGOS3UwhMcrLpU70SLrhclP_NnJdzCVfImYRolsoJCW3oU8LgpSnlwJ_rd7FwQ8XRsNR2Yi3krHFZddINQnZU_s21QxIh54B-u_-N36cWzMZJbh-v-56xWB3Xhi8d4rMHutBpQLOQVUte-VbLNn88aa2CIL01-60aXv0mFze2JbO6rrqnEQv7mJROqYee5liKzR2L2Ow"/>
-</div>
-<h3 class="font-headline-md text-headline-md text-center group-hover:text-primary transition-colors">Luxury Bags</h3>
-</div>
-<!-- Retail & Food -->
-<div class="group cursor-pointer">
-<div class="aspect-[4/3] overflow-hidden mb-6 bg-surface-container-low transition-all duration-500 group-hover:shadow-2xl">
-<img alt="Retail &amp; Food" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/ADBb0uiW2ID6aJsyD9jN2LYzw8NbeIeK2zsNt-moVVBjJ1xNioiHgxkNu5lMefPwmRlBTM9To38pvBbWnsDILCg5FJceumj8QGM6ZueEcdg3VAWEBSiU_3lTwoGQYCz9ZNfeMuOsm1AISPpGaSQWaAuPuQmvloLUrvUHgzm8mccKq7_iTQelVbKY-ujbObp1PD0s65exPZSbQzoqzqfn1keb620EuCb4KzXUksjU6qF-aThp2oGyyiEFYhwmLWk"/>
-</div>
-<h3 class="font-headline-md text-headline-md text-center group-hover:text-primary transition-colors">Retail &amp; Food</h3>
-</div>
-</div>
-</div>
-</section>
-<!-- Production Journey (Original - Repurposed or kept as a secondary details section) -->
-<section class="py-section-gap-desktop bg-inverse-surface text-inverse-on-surface overflow-hidden">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-<div class="text-center mb-24">
-<h2 class="font-headline-lg text-headline-lg mb-4">Engineering Specs</h2>
-<p class="font-body-lg text-body-lg opacity-60">A technical view of our automated assembly line capabilities.</p>
-</div>
-<div class="relative grid grid-cols-1 md:grid-cols-3 gap-20">
-<!-- Progress line background -->
-<div class="absolute top-[35%] left-0 w-full h-px bg-surface/20 hidden md:block z-0"></div>
-<div class="relative z-10 text-center flex flex-col items-center">
-<div class="w-24 h-24 bg-surface-container-highest/10 border border-surface/20 flex items-center justify-center mb-8 rotate-45 group hover:bg-primary/20 transition-all duration-500">
-<span class="material-symbols-outlined text-4xl -rotate-45" data-icon="description">description</span>
-</div>
-<h4 class="font-headline-md text-headline-md mb-2">Fiber Sourcing</h4>
-<p class="font-body-md opacity-60 max-w-xs">Sustainably sourced kraft and luxury stock sheets.</p>
-</div>
-<div class="relative z-10 text-center flex flex-col items-center">
-<div class="w-24 h-24 bg-surface-container-highest/10 border border-surface/20 flex items-center justify-center mb-8 rotate-45 group hover:bg-primary/20 transition-all duration-500">
-<span class="material-symbols-outlined text-4xl -rotate-45" data-icon="layers">layers</span>
-</div>
-<h4 class="font-headline-md text-headline-md mb-2">Structural Folding</h4>
-<p class="font-body-md opacity-60 max-w-xs">Precision creases and reinforcement for heavy-load side gussets.</p>
-</div>
-<div class="relative z-10 text-center flex flex-col items-center">
-<div class="w-24 h-24 bg-primary flex items-center justify-center mb-8 rotate-45 shadow-lg shadow-primary/20">
-<span class="material-symbols-outlined text-4xl -rotate-45" data-icon="shopping_bag">shopping_bag</span>
-</div>
-<h4 class="font-headline-md text-headline-md mb-2">Final QC</h4>
-<p class="font-body-md opacity-60 max-w-xs">Handle application and load-bearing testing for industrial endurance.</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Path to Superior Packaging (Redesigned) -->
-<section class="py-section-gap-desktop bg-surface overflow-hidden">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-<!-- Steps Column -->
-<div class="lg:col-span-7 flex flex-col gap-6">
-<h2 class="font-headline-lg text-headline-lg mb-4 leading-tight">The Path to <span class="text-primary">Superior</span> Packaging</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-xl">Our ordering process is designed for high-performance teams. Clear, efficient, and fully transparent.</p>
-<div class="space-y-4">
-<!-- Step 1 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 01</span>
-<h3 class="font-headline-md text-headline-md">Select Foundation</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Choose from our curated range of materials, sizes, and base silhouettes. Browse our library of pre-engineered bags or request a bespoke size.</p>
-</div>
-</div>
-<!-- Step 2 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 02</span>
-<h3 class="font-headline-md text-headline-md">Technical Design</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Upload your vector artwork and specify finish preferences like foil or spot UV. Our engineers review your artwork for optimal production clarity.</p>
-</div>
-</div>
-<!-- Step 3 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 03</span>
-<h3 class="font-headline-md text-headline-md">Material Proof</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Receive a high-resolution digital proof or a physical sample for tactile confirmation. Digital and physical proofs ensure 100% brand alignment.</p>
-</div>
-</div>
-<!-- Step 4 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 04</span>
-<h3 class="font-headline-md text-headline-md">Production</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Automated manufacturing begins in our industrial facility under strict QC supervision. State-of-the-art folding and printing technology brings your bag to life.</p>
-</div>
-</div>
-<!-- Step 5 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 05</span>
-<h3 class="font-headline-md text-headline-md">Quality Assurance</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Each batch undergoes rigorous strength and print fidelity testing before shipping. We ensure handles and seams exceed load-bearing requirements.</p>
-</div>
-</div>
-<!-- Step 6 -->
-<div class="step-card bg-surface-container-low p-8 border-l-4 border-primary/20 cursor-pointer" data-active="false">
-<span class="font-label-sm text-label-sm text-primary mb-2 block">STEP 06</span>
-<h3 class="font-headline-md text-headline-md">Logistics</h3>
-<div class="step-content">
-<p class="font-body-md text-on-surface-variant">Secure, tracked logistics delivering directly to your warehouses or retail outlets. White-glove delivery to your doorstep, anywhere in the nation.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Image Column -->
-<div class="lg:col-span-5 relative">
-<div class="sticky top-40">
-<img alt="Project Manager pointing to process" class="w-full h-auto object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdAXP4a3DWCMKUCAnSEA3FLVEQxx306-B1s0IwAVZ-0uyDCgaJG2rh6DHhLPWjrxPFPQ0SayihQMWzTCo9ZsSKlSilCfzzDWkQj499nBbgfazqExlUjkmnyUcgg0QPRxtP9IpCKQSBn3xogNsmd0QNXRM_eRlRYoaEwFytqLXVoI-O1myUbTxNdh8iEQCdKEsADDnX9VtUbExDOkDZKkQ-y89woIboBUxnCd2sFSawnAgZz8LXX28lqGasctzAIBL8qTorp30ENNo"/>
-<div class="absolute -bottom-8 -left-8 bg-primary text-surface p-8 max-w-xs industrial-shadow">
-<p class="font-headline-md text-headline-md">"Our process is engineered for your brand's success."</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- What We Stand For -->
-<section class="py-section-gap-desktop bg-surface-container">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-16">
-<div class="flex flex-col items-start">
-<span class="material-symbols-outlined text-5xl text-primary mb-6" data-icon="verified">verified</span>
-<h3 class="font-headline-md text-headline-md mb-4">Unyielding Quality</h3>
-<p class="font-body-md text-on-surface-variant">We don't compromise on structural integrity. Every KRAAPHT bag is a testament to precision engineering.</p>
-</div>
-<div class="flex flex-col items-start">
-<span class="material-symbols-outlined text-5xl text-primary mb-6" data-icon="eco">eco</span>
-<h3 class="font-headline-md text-headline-md mb-4">Eco-Conscious</h3>
-<p class="font-body-md text-on-surface-variant">Sustainability is integrated into our manufacturing logic, utilizing FSC-certified papers and water-based inks.</p>
-</div>
-<div class="flex flex-col items-start">
-<span class="material-symbols-outlined text-5xl text-primary mb-6" data-icon="precision_manufacturing">precision_manufacturing</span>
-<h3 class="font-headline-md text-headline-md mb-4">Total Reliability</h3>
-<p class="font-body-md text-on-surface-variant">Predictable timelines and consistent output. We are the stable foundation for your retail logistics.</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Testimonials & Brands -->
-<section class="py-section-gap-desktop bg-background overflow-hidden">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-<h2 class="font-label-sm text-label-sm uppercase tracking-[0.5em] text-center mb-20 opacity-40">Trusted by Global Entities</h2>
-<div class="flex flex-wrap justify-center items-center gap-16 md:gap-24 opacity-40 hover:opacity-100 transition-opacity duration-700">
-<div class="h-8 md:h-12 w-auto grayscale contrast-125 bg-on-surface/5 px-6 py-2">
-<span class="font-headline-md text-headline-md font-bold tracking-tighter uppercase italic">VOGUE</span>
-</div>
-<div class="h-8 md:h-12 w-auto grayscale contrast-125 bg-on-surface/5 px-6 py-2">
-<span class="font-headline-md text-headline-md font-bold tracking-tighter">NIKE</span>
-</div>
-<div class="h-8 md:h-12 w-auto grayscale contrast-125 bg-on-surface/5 px-6 py-2">
-<span class="font-headline-md text-headline-md font-bold tracking-tighter border-2 border-on-surface px-2">KRAFT</span>
-</div>
-<div class="h-8 md:h-12 w-auto grayscale contrast-125 bg-on-surface/5 px-6 py-2">
-<span class="font-headline-md text-headline-md font-bold tracking-tighter uppercase">Omnicom</span>
-</div>
-<div class="h-8 md:h-12 w-auto grayscale contrast-125 bg-on-surface/5 px-6 py-2">
-<span class="font-headline-md text-headline-md font-bold tracking-tighter">GENESIS</span>
-</div>
-</div>
-<div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-12">
-<div class="bg-surface-container-low p-12 relative overflow-hidden group">
-<span class="material-symbols-outlined text-9xl absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity" data-icon="format_quote">format_quote</span>
-<p class="font-headline-md text-headline-md mb-8 relative z-10 italic">"The tactile quality of KRAAPHT bags immediately elevated our unboxing experience. They're more than packaging; they're a physical extension of our brand."</p>
-<div class="flex items-center gap-4 relative z-10">
-<div class="w-12 h-12 bg-primary rounded-full"></div>
-<div>
-<h5 class="font-body-md font-bold">Marcus Thorne</h5>
-<p class="font-label-sm text-label-sm opacity-60 uppercase">Creative Director, Aethel</p>
-</div>
-</div>
-</div>
-<div class="bg-surface-container-low p-12 relative overflow-hidden group">
-<span class="material-symbols-outlined text-9xl absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity" data-icon="format_quote">format_quote</span>
-<p class="font-headline-md text-headline-md mb-8 relative z-10 italic">"Engineering excellence is rare in this industry. KRAAPHT delivered 50,000 units with zero defects and perfect color matching. Impressive."</p>
-<div class="flex items-center gap-4 relative z-10">
-<div class="w-12 h-12 bg-on-surface rounded-full"></div>
-<div>
-<h5 class="font-body-md font-bold">Elena Rodriguez</h5>
-<p class="font-label-sm text-label-sm opacity-60 uppercase">Operations Head, Lux Retail</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</main>
 
-<!-- Contact Section -->
-<section id="contact" class="py-section-gap-desktop bg-surface-container">
-<div class="max-w-[1280px] mx-auto px-grid-margin">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-    <div>
-      <span class="font-label-sm text-label-sm uppercase tracking-[0.4em] text-primary mb-4 block">Get In Touch</span>
-      <h2 class="font-headline-lg text-headline-lg mb-6">Ready to Order?</h2>
-      <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Contact us via WhatsApp for quick enquiries or place your order directly on our ordering system.</p>
-      <div class="flex flex-col gap-4">
-        <a href="https://wa.me/233558619224" class="flex items-center gap-3 font-body-md text-on-surface hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-primary">chat</span>
-          WhatsApp Business
+<!-- ===== HERO — VIDEO BACKGROUND ===== -->
+<section class="relative h-screen min-h-[600px] flex items-center overflow-hidden">
+  <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+    <source src="hero_video.mp4" type="video/mp4"/>
+  </video>
+  <div class="hero-video-overlay absolute inset-0"></div>
+  <div class="relative z-10 max-w-[1280px] mx-auto px-10 w-full">
+    <div class="max-w-2xl">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-8 h-px bg-accent"></div>
+        <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em]">Made in Ghana · Eco-Certified</span>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+        Premium Paper Bags<br/><span class="text-accent">Built for Your Brand</span>
+      </h1>
+      <p class="font-body-lg text-white/80 mb-10 max-w-xl">Custom-printed, eco-friendly flat bottom bags and food bowls. Pre-payment production. Delivered to your business in Accra.</p>
+      <div class="flex flex-wrap gap-4">
+        <a href="order.html" class="bg-accent text-white px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-all duration-300 inline-flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">shopping_bag</span>Start Your Order
         </a>
-        <a href="mailto:kraaphtbags@gmail.com" class="flex items-center gap-3 font-body-md text-on-surface hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-primary">mail</span>
-          kraaphtbags@gmail.com
+        <a href="#clients" class="border border-white/40 text-white px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:border-accent hover:text-accent transition-all duration-300 inline-flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">photo_library</span>See Our Work
         </a>
-        <div class="flex items-center gap-3 font-body-md text-on-surface">
-          <span class="material-symbols-outlined text-primary">location_on</span>
-          Accra, Ghana
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
+    <span class="font-label-sm text-label-sm uppercase tracking-widest text-xs">Scroll</span>
+    <div class="w-px h-12 bg-white/20 animate-pulse"></div>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<div class="bg-primary py-5">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div><p class="text-2xl font-bold text-accent">200+</p><p class="font-label-sm text-label-sm text-white/70 uppercase tracking-widest mt-1">Min. Order</p></div>
+      <div><p class="text-2xl font-bold text-accent">5</p><p class="font-label-sm text-label-sm text-white/70 uppercase tracking-widest mt-1">Paper Types</p></div>
+      <div><p class="text-2xl font-bold text-accent">7–10</p><p class="font-label-sm text-label-sm text-white/70 uppercase tracking-widest mt-1">Days Delivery</p></div>
+      <div><p class="text-2xl font-bold text-accent">100%</p><p class="font-label-sm text-label-sm text-white/70 uppercase tracking-widest mt-1">Eco-Friendly</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVERTISEMENT — THE PATH TO SUPERIOR PACKAGING ===== -->
+<section class="py-20 bg-background">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="relative">
+        <div class="absolute -top-4 -left-4 w-full h-full border-2 border-accent/30"></div>
+        <img src="bag_lady.png" alt="Premium paper bag by Kraapht Bags Ltd" class="w-full h-[520px] object-cover relative z-10 shadow-2xl"/>
+        <div class="absolute bottom-6 left-6 z-20 bg-primary/90 text-white px-5 py-3">
+          <p class="font-label-sm text-label-sm uppercase tracking-widest text-accent">Your Brand. Our Craft.</p>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-px bg-accent"></div>
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em]">Why Kraapht</span>
+        </div>
+        <h2 class="text-4xl font-bold text-on-surface leading-tight mb-6">The Path to<br/><span class="text-primary">Superior Packaging</span></h2>
+        <p class="font-body-lg text-on-surface-variant mb-8">Every Kraapht bag is precision-crafted from premium paper — custom-printed with your brand, built to carry your product, and designed to make a statement at the point of sale.</p>
+        <div class="space-y-4 mb-10">
+          <div class="flex items-start gap-4 p-4 bg-surface-container border-l-2 border-accent">
+            <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">eco</span>
+            <div><p class="font-body-md font-semibold">100% Eco-Friendly</p><p class="font-body-md text-on-surface-variant text-sm">Paper replaces plastic. Every bag reduces environmental impact across Ghana.</p></div>
+          </div>
+          <div class="flex items-start gap-4 p-4 bg-surface-container border-l-2 border-accent">
+            <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">draw</span>
+            <div><p class="font-body-md font-semibold">Custom Print, Your Brand</p><p class="font-body-md text-on-surface-variant text-sm">Logo, colours, tagline — printed in up to 4 colours on 5 premium paper types.</p></div>
+          </div>
+          <div class="flex items-start gap-4 p-4 bg-surface-container border-l-2 border-accent">
+            <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">loyalty</span>
+            <div><p class="font-body-md font-semibold">Returning Customers Save</p><p class="font-body-md text-on-surface-variant text-sm">Plate-making and die-cut board costs are waived on repeat orders. Your loyalty is rewarded.</p></div>
+          </div>
+        </div>
+        <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">
+          Configure Your Order <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CLIENT PORTFOLIO ===== -->
+<section id="clients" class="py-20 bg-surface-container">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="text-center mb-14">
+      <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">Real Client Bags</span>
+      <h2 class="text-4xl font-bold text-on-surface">Work We Have Delivered</h2>
+      <p class="font-body-lg text-on-surface-variant mt-3 max-w-2xl mx-auto">Every bag below was custom-configured, pre-paid, produced, and delivered to a real business in Ghana. Your brand could be next.</p>
+    </div>
+
+    <!-- Main showcase — Abachs lifestyle -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+      <div class="client-card lg:col-span-3 relative overflow-hidden h-80 lg:h-[420px] group">
+        <img src="lifestyle_abachs.png" alt="The Abachs Cocktail Bar and Grill — Brown Paper 80gsm bag" class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest mb-1 block">Brown Paper 80gsm · Gold Print</span>
+          <p class="font-body-lg font-semibold text-white">The Abachs Cocktail Bar &amp; Grill</p>
+          <p class="font-body-md text-white/70 text-sm">Dansoman, Accra</p>
+        </div>
+      </div>
+      <div class="lg:col-span-2 grid grid-rows-2 gap-4">
+        <div class="client-card relative overflow-hidden h-48 lg:h-auto group">
+          <img src="lifestyle_alounge.png" alt="AL Lounge Bar and Restaurant — Duplex Board bag at street food market" class="w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5 block">Duplex Board · African Print</span>
+            <p class="font-body-md font-semibold text-white text-sm">AL Lounge Bar &amp; Restaurant</p>
+          </div>
+        </div>
+        <div class="client-card relative overflow-hidden h-48 lg:h-auto group">
+          <img src="lifestyle_congress.png" alt="Young African Women Congress — Chromo Coat event bag" class="w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/10 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4">
+            <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5 block">Chromo Coat · Event Bag</span>
+            <p class="font-body-md font-semibold text-white text-sm">Young African Women Congress</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="bg-surface p-10 shadow-[0_20px_40px_-20px_rgba(26,26,26,0.06)]">
-      <a href="order.html" class="block w-full bg-primary text-on-primary text-center py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-on-surface transition-colors mb-4">Place an Order Online</a>
-      <p class="font-label-sm text-label-sm text-on-surface-variant text-center uppercase tracking-widest">100% pre-payment · Secure checkout · No credit</p>
+
+    <!-- Product mockup row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+      <div class="client-card relative overflow-hidden bg-charcoal group">
+        <img src="paper_brown_card.png" alt="Brown Card 250gsm — Freedom Taste bag" class="w-full h-52 object-contain p-2"/>
+        <div class="p-3 bg-charcoal">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Brown Card 250gsm</p>
+          <p class="font-body-md text-white text-sm font-semibold">Freedom Taste</p>
+        </div>
+      </div>
+      <div class="client-card relative overflow-hidden bg-charcoal group">
+        <img src="paper_brown_80.png" alt="Brown Paper 80gsm — The Abachs bag" class="w-full h-52 object-contain p-2"/>
+        <div class="p-3 bg-charcoal">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Brown Paper 80gsm</p>
+          <p class="font-body-md text-white text-sm font-semibold">The Abachs</p>
+        </div>
+      </div>
+      <div class="client-card relative overflow-hidden bg-charcoal group">
+        <img src="paper_chromo.png" alt="Chromo Coat — white bag" class="w-full h-52 object-contain p-2"/>
+        <div class="p-3 bg-charcoal">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">White / Chromo Coat</p>
+          <p class="font-body-md text-white text-sm font-semibold">Clean canvas</p>
+        </div>
+      </div>
+      <div class="client-card relative overflow-hidden bg-charcoal group">
+        <img src="paper_duplex.png" alt="Duplex Board — AL Lounge bag" class="w-full h-52 object-contain p-2"/>
+        <div class="p-3 bg-charcoal">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Duplex Board</p>
+          <p class="font-body-md text-white text-sm font-semibold">AL Lounge</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">
+        <span class="material-symbols-outlined">add_shopping_cart</span>Create Your Own
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS OVERVIEW ===== -->
+<section class="py-20 bg-background">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="text-center mb-14">
+      <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">What We Make</span>
+      <h2 class="text-4xl font-bold text-on-surface">Our Products</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-surface border border-outline-variant hover:border-primary transition-all duration-300 group p-8">
+        <div class="w-12 h-12 bg-primary-container flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+          <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-2xl">shopping_bag</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Flat Bottom Bags</h3>
+        <p class="font-body-md text-on-surface-variant mb-5 text-sm">5 paper types. All sizes. Twisted paper or PP rope handles. Custom printing in up to 4 colours. Minimum 200 pieces.</p>
+        <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">From GHS 3.50 / unit</p>
+      </div>
+      <div class="bg-primary text-white group p-8">
+        <div class="w-12 h-12 bg-white/20 flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-white text-2xl">restaurant</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Paper Food Bowls</h3>
+        <p class="font-body-md text-white/75 mb-5 text-sm">Food-safe paper bowls for restaurants, street food, and catering. Custom branded with your business logo. All sizes.</p>
+        <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest">From GHS 4.00 / unit</p>
+      </div>
+      <div class="bg-surface border border-outline-variant hover:border-primary transition-all duration-300 group p-8">
+        <div class="w-12 h-12 bg-primary-container flex items-center justify-center mb-6 group-hover:bg-primary transition-colors">
+          <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors text-2xl">print</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Custom Printing</h3>
+        <p class="font-body-md text-on-surface-variant mb-5 text-sm">1 to 4 colour printing. Upload your own artwork or request a Kraapht designer for GHS 100 flat fee.</p>
+        <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">From GHS 50 / run</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="py-20 bg-charcoal text-white">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="text-center mb-14">
+      <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">How It Works</span>
+      <h2 class="text-4xl font-bold">From Order to Delivery</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-0 items-center">
+      <div class="text-center p-6 group">
+        <div class="w-14 h-14 rounded-full border-2 border-accent text-accent flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all text-xl font-bold">01</div>
+        <p class="font-body-md font-semibold mb-2">Configure</p>
+        <p class="text-white/60 text-sm">Paper type, size, print</p>
+      </div>
+      <div class="text-accent/30 text-3xl text-center hidden md:block">→</div>
+      <div class="text-center p-6 group">
+        <div class="w-14 h-14 rounded-full border-2 border-accent text-accent flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all text-xl font-bold">02</div>
+        <p class="font-body-md font-semibold mb-2">Pre-Pay</p>
+        <p class="text-white/60 text-sm">MoMo or bank transfer</p>
+      </div>
+      <div class="text-accent/30 text-3xl text-center hidden md:block">→</div>
+      <div class="text-center p-6 group">
+        <div class="w-14 h-14 rounded-full border-2 border-accent text-accent flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-all text-xl font-bold">03</div>
+        <p class="font-body-md font-semibold mb-2">Delivered</p>
+        <p class="text-white/60 text-sm">7–10 working days</p>
+      </div>
+    </div>
+    <div class="gold-line my-8 opacity-30"></div>
+    <p class="text-center font-label-sm text-label-sm text-white/40 uppercase tracking-widest">Delivery within Accra: GHS 30 &nbsp;·&nbsp; Returning customers save on plate &amp; die-cut costs</p>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="py-20 bg-surface-container">
+  <div class="max-w-[1280px] mx-auto px-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div>
+        <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-4 block">Get In Touch</span>
+        <h2 class="text-4xl font-bold mb-6">Ready to Order?</h2>
+        <p class="font-body-lg text-on-surface-variant mb-8">Reach us on WhatsApp for quick enquiries, or place your full order online — 24 hours a day.</p>
+        <div class="space-y-3">
+          <a href="https://wa.me/233558619224" class="flex items-center gap-4 p-4 bg-surface border border-outline-variant hover:border-primary transition-colors group">
+            <div class="w-10 h-10 bg-green-500 text-white flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-lg">chat</span></div>
+            <div><p class="font-body-md font-semibold group-hover:text-primary transition-colors">WhatsApp Business</p><p class="text-sm text-on-surface-variant">+233 558 619 224</p></div>
+          </a>
+          <a href="mailto:kraaphtbags@gmail.com" class="flex items-center gap-4 p-4 bg-surface border border-outline-variant hover:border-primary transition-colors group">
+            <div class="w-10 h-10 bg-primary text-white flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-lg">mail</span></div>
+            <div><p class="font-body-md font-semibold group-hover:text-primary transition-colors">Email Us</p><p class="text-sm text-on-surface-variant">kraaphtbags@gmail.com</p></div>
+          </a>
+        </div>
+      </div>
+      <div class="bg-primary p-10 text-white">
+        <h3 class="text-xl font-bold mb-2">Place an Order Online</h3>
+        <p class="text-white/70 mb-8 font-body-md">Configure your bags, see your live price, and pay securely.</p>
+        <a href="order.html" class="block w-full bg-accent text-white text-center py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white hover:text-primary transition-colors mb-4">Start Ordering →</a>
+        <p class="font-label-sm text-label-sm text-white/50 text-center uppercase tracking-widest mb-8">100% pre-payment · Secured by Paystack</p>
+        <div class="pt-6 border-t border-white/20">
+          <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest mb-2">Returning Customer?</p>
+          <p class="text-white/70 text-sm">Plate-making and die-cut board costs are waived on repeat orders. Your savings show automatically in the price calculator.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-charcoal text-inverse-on-surface w-full">
+<div class="max-w-[1280px] mx-auto px-10 py-16">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <div class="md:col-span-1">
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png"/>
+      <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Products</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Bulk Orders</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
+        <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
+        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
+    <p class="font-label-sm text-label-sm opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
+    <div class="flex gap-6 opacity-40">
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Privacy</a>
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Terms</a>
     </div>
   </div>
 </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-inverse-surface dark:bg-surface-container-lowest text-inverse-on-surface dark:text-on-surface w-full">
-<div class="max-w-[1280px] mx-auto px-grid-margin py-section-gap-mobile md:py-grid-margin border-t border-outline-variant dark:border-outline">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-<div class="md:col-span-1">
-<div class="flex items-center gap-4 mb-6">
-<img alt="KRAAPHT Logo" class="h-8 w-auto brightness-0 invert" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADdAbADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAUGBAcCAwgB/8QAWBAAAQMDAQMFCAwJBwoHAAAAAQACAwQFEQYSITEHE0FRYRQiNXFygbGyCBUyNEJzgpGhs8HRMzdSVGJ0g+HwFiMlNlOioxcYVmRmdZKTpeNDRFWUwtLx/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECBAUD/8QAKxEBAQACAQMDAwQBBQAAAAAAAAECAxEEITESM3EiQVETFDJhBSNSgZGx/9oADAMBAAIRAxEAPwDxmSSckkntXxEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUvR6X1LW0zKmj07d6mCQZZLFRSPa4dYIGCotk8pkt8IhFNyaQ1ZGwvk0xe2NHEuoJQB/dXV/JrUf+j92/8AZyfco9eP5T6b+ESizq6z3ehi56utVdSx5xtzU72D5yFgqZZfCtnAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFbuSCyUOoOUC3W25MMlKduSSPONvZYXBp7MgZ7FXPKY43K/ZOOPqskXDkQ5MzeJItRagpv6Nadqlp3/wDmHD4Th+QPp8XH0M0BoAAAA3ADoXyKOOKJkUTGxxsaGta0YDQOAA6AtXcoPK+3SeqamxDTzqwwNYTMavmg4uaHbhsHdv4561xM8tnVZ9nVxmGjHu2mi0b/AJwX+yP/AFH/ALSf5wX+yP8A1H/tJ+z3f7f/AA/c6vy3ZXUtNXUctHWQRz08zCySN4y1zTxBC8wcsHJ5UaPuPdlCySay1Dv5qQ7zC4/+G4+g9PjCu1s5cK+4zugisFNAWt29p1Q5+d4GMYHWsm5cpVXcqCahrrJbqimnYWSRv2iHD51o6fVv05c8dnhu2adk892gEWTdImQ3GoiibsxtkOw3OcDO4Z8Sxl1WAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAX0jHSD4l8RAWwfY9/jSt/xU31blr5bB9j3+NK3/FTfVuXlv8Aay+Hpq9yfL1IvLfshPxpXD4qH6tq9SLy37IT8aVw+Kh+rauX/j/dvw3dZ7f/AC18iIuy5qZ0h4Sk+JPrNVqVV0h4Sk+JPrNVqVaK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"/>
-<span class="font-headline-md text-headline-md text-inverse-on-surface dark:text-on-surface font-bold tracking-tighter">KRAAPHT</span>
-</div>
-<p class="font-body-md opacity-60">Engineered packaging solutions for the world's most demanding brands. Sustainable, durable, and impeccably finished.</p>
-</div>
-<div>
-<h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Products</h5>
-<ul class="space-y-4 font-body-md">
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Luxury Paper Bags</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Kraft Solutions</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Retail Packaging</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="order.html">Custom Printing</a></li>
-</ul>
-</div>
-<div>
-<h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Company</h5>
-<ul class="space-y-4 font-body-md">
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="#">Sustainability</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="#">Technical Specs</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="#">Our Process</a></li>
-<li><a class="hover:text-primary-fixed-dim transition-colors" href="#">Contact</a></li>
-</ul>
-</div>
-<div>
-<h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-8 opacity-40">Connect</h5>
-<div class="flex gap-4">
-<a class="w-10 h-10 border border-surface/20 flex items-center justify-center hover:bg-surface/10 transition-colors" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="share">share</span>
-</a>
-<a class="w-10 h-10 border border-surface/20 flex items-center justify-center hover:bg-surface/10 transition-colors" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="mail">mail</span>
-</a>
-<a class="w-10 h-10 border border-surface/20 flex items-center justify-center hover:bg-surface/10 transition-colors" href="#">
-<span class="material-symbols-outlined text-xl" data-icon="public">public</span>
-</a>
-</div>
-</div>
-</div>
-<div class="flex flex-col md:flex-row justify-between items-center gap-6 border-t border-surface/10 pt-8">
-<p class="font-label-sm text-label-sm opacity-60">© 2026 Kraapht Bags Ltd. Engineered for Endurance.</p>
-<div class="flex gap-8">
-<a class="font-label-sm text-label-sm hover:text-primary-fixed-dim transition-colors" href="#">Privacy Policy</a>
-<a class="font-label-sm text-label-sm hover:text-primary-fixed-dim transition-colors" href="#">Terms of Service</a>
-</div>
-</div>
-</div>
 </footer>
-<script>
-        // Scroll-triggered Path steps
-        const stepCards = document.querySelectorAll('.step-card');
-        const observerOptions = {
-            threshold: 0.8
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Remove active class from all
-                    stepCards.forEach(card => {
-                        card.classList.remove('active', 'border-primary');
-                        card.classList.add('border-primary/20');
-                    });
-                    // Add to current
-                    entry.target.classList.add('active', 'border-primary');
-                    entry.target.classList.remove('border-primary/20');
-                }
-            });
-        }, observerOptions);
-
-        stepCards.forEach(card => observer.observe(card));
-
-        // Click to expand support
-        stepCards.forEach(card => {
-            card.addEventListener('click', () => {
-                stepCards.forEach(c => {
-                    c.classList.remove('active', 'border-primary');
-                    c.classList.add('border-primary/20');
-                });
-                card.classList.add('active', 'border-primary');
-                card.classList.remove('border-primary/20');
-            });
-        });
-
-        // Simple parallax effect for hero image
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroImage = document.querySelector('section img');
-            if (heroImage) {
-                heroImage.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-        });
-    </script>
-</body></html>
+</body>
+</html>
