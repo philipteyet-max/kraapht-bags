@@ -51,7 +51,7 @@ const KRAAPHT_CONFIG = {
     brown_card_250:  450,   // Brown Card 250gsm
     brown_paper_80:  420,   // Brown Paper 80gsm (no handle)
     matt_150:        695,   // Matt Paper 150gsm
-    duplex_300:      300,   // Duplex Board
+    duplex_300:      350,   // Duplex Board
   },
 
   // ----------------------------------------------------------
