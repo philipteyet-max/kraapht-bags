@@ -47,8 +47,8 @@ const KRAAPHT_CONFIG = {
   // Update these when material costs change in the market
   // ----------------------------------------------------------
   paper_prices: {
-    chromo_coat:     500,   // White / Chromo Coat
-    brown_card_250:  450,   // Brown Card 250gsm
+    chromo_coat:     700,   // White / Chromo Coat
+    brown_card_250:  600,   // Brown Card 250gsm
     brown_paper_80:  420,   // Brown Paper 80gsm (no handle)
     matt_150:        695,   // Matt Paper 150gsm
     duplex_300:      350,   // Duplex Board
