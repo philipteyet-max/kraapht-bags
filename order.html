@@ -670,42 +670,50 @@ document.getElementById('save-design').addEventListener('change', function() {
   document.getElementById('saved-designs').classList.toggle('hidden', !this.checked);
 });
 
-// ===== PRICING CALCULATOR =====
+// ===== PRICING CALCULATOR — reads from config.js =====
 function calcPrice() {
+  // Read config values (falls back to hardcoded if config not loaded yet)
+  const cfg = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+
+  const paperPrices  = cfg ? cfg.paper_prices  : {chromo_coat:525,brown_card_250:550,brown_paper_80:420,matt_150:695,duplex_300:300};
+  const printCosts   = cfg ? {0:0,1:cfg.printing.one_colour,2:cfg.printing.two_colour,3:cfg.printing.three_colour,4:cfg.printing.full_colour} : {0:0,1:50,2:100,3:150,4:200};
+  const plateCosts   = cfg ? {0:0,1:cfg.plate_making.one_colour,2:cfg.plate_making.two_colour,3:cfg.plate_making.three_colour,4:cfg.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
+  const dieCutBoard  = cfg ? cfg.order.die_cut_board  : 300;
+  const dieCutRun    = cfg ? cfg.order.die_cut_run    : 60;
+  const labourPerBag = cfg ? cfg.order.labour_per_bag : 1;
+  const delivery     = cfg ? cfg.order.delivery_cost  : 30;
+  const designerFee  = cfg ? cfg.order.designer_fee   : 100;
+  const minQty       = cfg ? cfg.order.minimum_qty    : 200;
+
   const qtyInput = document.getElementById('qty-custom-val');
-  const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden') ? parseInt(qtyInput.value)||0 : state.qty;
-  if(qty < 200) return;
+  const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
+    ? parseInt(qtyInput.value)||0 : state.qty;
+  if(qty < minQty) return;
 
   const sheetsNeeded = Math.ceil(qty / state.bagsPerSheet);
-  const reamsNeeded = Math.ceil(sheetsNeeded / 100);
-  const paperCost = reamsNeeded * state.paperPrice;
-
-  const printCosts  = {0:0,1:50,2:100,3:150,4:200};
-  const plateCosts  = {0:0,1:60,2:120,3:180,4:240};
-  const printCost   = printCosts[state.printColors]||0;
-  const plateCost   = plateCosts[state.printColors]||0;
-  const dieCutBoard = 300;
-  const dieCutRun   = 60;
-  const labour      = qty;
-  const delivery    = 30;
-  const designerFee = state.hasDesigner ? 100 : 0;
+  const reamsNeeded  = Math.ceil(sheetsNeeded / 100);
+  const paperCost    = reamsNeeded * state.paperPrice;
+  const printCost    = printCosts[state.printColors] || 0;
+  const plateCost    = plateCosts[state.printColors] || 0;
+  const labour       = qty * labourPerBag;
+  const extraDesigner = state.hasDesigner ? designerFee : 0;
 
   const isRecurring = document.getElementById('is-recurring').checked;
-  const saving = state.printColors > 0 ? plateCost + dieCutBoard : 0;
-  const baseTotal = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + designerFee;
-  const total = isRecurring && saving > 0 ? baseTotal - saving : baseTotal;
-  const perBag = (total/qty).toFixed(2);
-  const savingPct = baseTotal > 0 ? ((saving/baseTotal)*100).toFixed(0) : 0;
+  const saving      = state.printColors > 0 ? plateCost + dieCutBoard : 0;
+  const baseTotal   = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner;
+  const total       = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+  const perBag      = (total / qty).toFixed(2);
+  const savingPct   = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
 
-  document.getElementById('sb-paper').textContent = `GHS ${paperCost.toLocaleString()}`;
-  document.getElementById('sb-printing').textContent = printCost > 0 ? `GHS ${printCost}` : 'None';
-  document.getElementById('sb-plate').textContent = `GHS ${plateCost}`;
-  document.getElementById('sb-diecutboard').textContent = `GHS ${dieCutBoard}`;
-  document.getElementById('sb-labour').textContent = `GHS ${labour.toLocaleString()}`;
-  document.getElementById('sb-total').textContent = `GHS ${total.toLocaleString()}`;
-  document.getElementById('sb-per-bag').textContent = `GHS ${perBag} / bag`;
+  document.getElementById('sb-paper').textContent        = `GHS ${paperCost.toLocaleString()}`;
+  document.getElementById('sb-printing').textContent     = printCost > 0 ? `GHS ${printCost}` : 'None';
+  document.getElementById('sb-plate').textContent        = `GHS ${plateCost}`;
+  document.getElementById('sb-diecutboard').textContent  = `GHS ${dieCutBoard}`;
+  document.getElementById('sb-labour').textContent       = `GHS ${labour.toLocaleString()}`;
+  document.getElementById('sb-total').textContent        = `GHS ${total.toLocaleString()}`;
+  document.getElementById('sb-per-bag').textContent      = `GHS ${perBag} / bag`;
 
-  const discRow = document.getElementById('discount-row');
+  const discRow  = document.getElementById('discount-row');
   const savLabel = document.getElementById('recurring-savings');
   if(isRecurring && saving > 0) {
     discRow.classList.remove('hidden');
@@ -724,5 +732,6 @@ function calcPrice() {
 
 calcPrice();
 </script>
+<script src="config.js"></script>
 </body>
 </html>
