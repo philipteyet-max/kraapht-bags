@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="config.js"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Configure Your Order | Kraapht Bags Ltd</title>
@@ -184,7 +185,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-primary text-white text-xs font-label-sm uppercase tracking-widest">Popular</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Glossy white. Best for full-colour logo printing. Sharp &amp; premium.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 525 / ream</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 525 / ream</span></p>
             </div>
           </label>
 
@@ -198,7 +199,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div class="p-4">
               <p class="font-body-md font-semibold mb-1">Brown Card 250gsm</p>
               <p class="text-sm text-on-surface-variant mb-2">Heavy kraft board. Strong &amp; premium. Ideal for retail &amp; boutique bags.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 550 / ream</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 550 / ream</span></p>
             </div>
           </label>
 
@@ -215,7 +216,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-label-sm uppercase tracking-widest">Folded Top</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Lightweight kraft. Folded top — no handle. High-volume food &amp; pharmacy orders.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 420 / ream</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 420 / ream</span></p>
             </div>
           </label>
 
@@ -235,7 +236,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-accent/20 text-accent text-xs font-label-sm uppercase tracking-widest">Premium</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Smooth matte finish. Non-glare. Perfect for luxury brands and corporate gifting.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 695 / ream</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 695 / ream</span></p>
             </div>
           </label>
 
@@ -252,7 +253,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-label-sm uppercase tracking-widest">Most Affordable</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-3">Two-layer grey-back board. Stiff and durable. Best unit rate for large volume orders with printed designs.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest">GHS 300 / ream</p>
+              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 300 / ream</span></p>
             </div>
           </label>
 
@@ -589,6 +590,13 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <script>
 let state = { paperPrice:525, bagsPerSheet:3, qty:200, printColors:0, isRecurring:false, hasDesigner:false };
 
+// Initialise state from config.js values
+(function initFromConfig() {
+  if (typeof KRAAPHT_CONFIG !== 'undefined') {
+    state.paperPrice = KRAAPHT_CONFIG.paper_prices.chromo_coat; // default selected paper
+  }
+})();
+
 // Paper type cards
 document.querySelectorAll('#paper-options label').forEach(label => {
   label.addEventListener('click', function() {
@@ -672,18 +680,17 @@ document.getElementById('save-design').addEventListener('change', function() {
 
 // ===== PRICING CALCULATOR — reads from config.js =====
 function calcPrice() {
-  // Read config values (falls back to hardcoded if config not loaded yet)
-  const cfg = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+  // Read directly from config.js (loaded in <head> before this script)
+  const C = KRAAPHT_CONFIG;
 
-  const paperPrices  = cfg ? cfg.paper_prices  : {chromo_coat:525,brown_card_250:550,brown_paper_80:420,matt_150:695,duplex_300:300};
-  const printCosts   = cfg ? {0:0,1:cfg.printing.one_colour,2:cfg.printing.two_colour,3:cfg.printing.three_colour,4:cfg.printing.full_colour} : {0:0,1:50,2:100,3:150,4:200};
-  const plateCosts   = cfg ? {0:0,1:cfg.plate_making.one_colour,2:cfg.plate_making.two_colour,3:cfg.plate_making.three_colour,4:cfg.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
-  const dieCutBoard  = cfg ? cfg.order.die_cut_board  : 300;
-  const dieCutRun    = cfg ? cfg.order.die_cut_run    : 60;
-  const labourPerBag = cfg ? cfg.order.labour_per_bag : 1;
-  const delivery     = cfg ? cfg.order.delivery_cost  : 30;
-  const designerFee  = cfg ? cfg.order.designer_fee   : 100;
-  const minQty       = cfg ? cfg.order.minimum_qty    : 200;
+  const printCosts   = {0:0, 1:C.printing.one_colour, 2:C.printing.two_colour, 3:C.printing.three_colour, 4:C.printing.full_colour};
+  const plateCosts   = {0:0, 1:C.plate_making.one_colour, 2:C.plate_making.two_colour, 3:C.plate_making.three_colour, 4:C.plate_making.full_colour};
+  const dieCutBoard  = C.order.die_cut_board;
+  const dieCutRun    = C.order.die_cut_run;
+  const labourPerBag = C.order.labour_per_bag;
+  const delivery     = C.order.delivery_cost;
+  const designerFee  = C.order.designer_fee;
+  const minQty       = C.order.minimum_qty;
 
   const qtyInput = document.getElementById('qty-custom-val');
   const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
@@ -731,7 +738,33 @@ function calcPrice() {
 }
 
 calcPrice();
+
+// Update displayed paper prices from config.js on page load
+(function updatePriceDisplays() {
+  if (typeof KRAAPHT_CONFIG === 'undefined') return;
+  const p = KRAAPHT_CONFIG.paper_prices;
+  const priceMap = {
+    'chromo_coat':    p.chromo_coat,
+    'brown_card_250': p.brown_card_250,
+    'brown_paper_80': p.brown_paper_80,
+    'matt_150':       p.matt_150,
+    'duplex_300':     p.duplex_300,
+  };
+  // Update data-price attributes so click handlers read fresh values
+  document.querySelectorAll('#paper-options label[data-paper]').forEach(label => {
+    const key = label.dataset.paper;
+    if (priceMap[key] !== undefined) {
+      label.dataset.price = priceMap[key];
+      // Update the visible GHS text in the card
+      const priceEl = label.querySelector('.paper-price-display');
+      if (priceEl) priceEl.textContent = 'GHS ' + priceMap[key].toLocaleString() + ' / ream';
+    }
+  });
+  // Set initial state.paperPrice to config value for default selected paper
+  state.paperPrice = p.chromo_coat;
+  calcPrice();
+})();
+
 </script>
-<script src="config.js"></script>
 </body>
 </html>

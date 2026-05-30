@@ -47,11 +47,11 @@ const KRAAPHT_CONFIG = {
   // Update these when material costs change in the market
   // ----------------------------------------------------------
   paper_prices: {
-    chromo_coat:     700,   // White / Chromo Coat
-    brown_card_250:  600,   // Brown Card 250gsm
+    chromo_coat:     525,   // White / Chromo Coat
+    brown_card_250:  550,   // Brown Card 250gsm
     brown_paper_80:  420,   // Brown Paper 80gsm (no handle)
     matt_150:        695,   // Matt Paper 150gsm
-    duplex_300:      350,   // Duplex Board
+    duplex_300:      300,   // Duplex Board
   },
 
   // ----------------------------------------------------------
@@ -80,7 +80,7 @@ const KRAAPHT_CONFIG = {
   // Used to calculate how many reams are needed
   // ----------------------------------------------------------
   bags_per_sheet: {
-    a5_small:  4,   // A5 / Small bags — 3 per sheet
+    a5_small:  3,   // A5 / Small bags — 3 per sheet
     a4_medium: 2,   // A4 / Medium bags — 2 per sheet
     a3_large:  2,   // A3 / Large bags — 2 per sheet
     custom:    2,   // Custom size — defaults to 2
@@ -93,7 +93,7 @@ const KRAAPHT_CONFIG = {
   homepage: {
     hero_headline:    "Premium Paper Bags Built for Your Brand",
     hero_subtext:     "Custom-printed, eco-friendly flat bottom bags and food bowls. Pre-payment production. Delivered to your business in Accra.",
-    stat_min_order:   "100+",
+    stat_min_order:   "200+",
     stat_paper_types: "5",
     stat_delivery:    "7–10",
     stat_eco:         "100%",
