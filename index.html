@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Kraapht Bags Ltd | Premium Eco-Friendly Paper Bags — Accra, Ghana</title>
+<script src="config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -73,9 +74,25 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
 <!-- ===== HERO — VIDEO BACKGROUND ===== -->
 <section class="relative h-screen min-h-[600px] flex items-center overflow-hidden">
-  <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+  <video id="hero-vid" autoplay muted loop playsinline preload="auto"
+    class="absolute inset-0 w-full h-full object-cover"
+    poster="bag_lady.png">
     <source src="hero_video.mp4" type="video/mp4"/>
   </video>
+  <script>
+    // Force video play on load — handles browsers that need a nudge
+    (function(){
+      var v = document.getElementById('hero-vid');
+      if(!v) return;
+      v.addEventListener('canplay', function(){
+        v.play().catch(function(){ /* autoplay blocked — poster shows */ });
+      });
+      // Retry after 800ms in case it loaded before listener attached
+      setTimeout(function(){
+        if(v.paused) v.play().catch(function(){});
+      }, 800);
+    })();
+  </script>
   <div class="hero-video-overlay absolute inset-0"></div>
   <div class="relative z-10 max-w-[1280px] mx-auto px-10 w-full">
     <div class="max-w-2xl">
@@ -377,6 +394,5 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </div>
 </div>
 </footer>
-<script src="config.js"></script>
 </body>
 </html>
