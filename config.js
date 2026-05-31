@@ -107,6 +107,9 @@ const KRAAPHT_CONFIG = {
     // Portfolio section — right bottom panel
     portfolio_right_bottom: "lifestyle_congress.png",
 
+    // Portfolio section — Left bottom panel
+    portfolio_left_bottom: "lifestyle_hotone.png",
+
     // Homepage product grid — bottom 4 cards
     product_card_brown_card:   "paper_brown_card.png",
     product_card_brown_80:     "paper_brown_80.png",
