@@ -169,14 +169,14 @@ const KRAAPHT_CONFIG = {
     portfolio_card_1:    "lifestyle_abachs.png",  // Card 1 — The Abachs
     portfolio_card_2:    "lifestyle_alounge.png", // Card 2 — AL Lounge
     portfolio_card_3:    "lifestyle_congress.png",// Card 3 — YAWC Congress
-    portfolio_card_4:    "",                      // Card 4 — Channay (leave empty to keep CSS bag, or add filename)
+    portfolio_card_4:    "matt_paper.png",                      // Card 4 — Channay (leave empty to keep CSS bag, or add filename)
 
     // ---- ORDER PAGE ----
     // Paper type selector images — shown when customer picks paper type
     paper_chromo:        "paper_chromo.png",      // White / Chromo Coat
     paper_brown_card:    "paper_brown_card.png",  // Brown Card 250gsm
     paper_brown_80:      "paper_brown_80.png",    // Brown Paper 80gsm
-    paper_matt:          "paper_matt.png",         // Matt Paper 150gsm
+    paper_matt:          "matt_paper",         // Matt Paper 150gsm
     paper_duplex:        "paper_duplex.png",      // Duplex Board
 
     // Order page gallery — top portfolio strip
