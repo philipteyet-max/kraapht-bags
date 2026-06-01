@@ -105,7 +105,7 @@ const KRAAPHT_CONFIG = {
     portfolio_right_top: "lifestyle_alounge.png",
 
     // Portfolio section — right bottom panel
-    portfolio_right_bottom: "lifestyle_hotone.png",
+    portfolio_right_bottom: "lifestyle_congress.png",
 
     // Homepage product grid — bottom 4 cards
     product_card_brown_card:   "paper_brown_card.png",
@@ -148,6 +148,49 @@ const KRAAPHT_CONFIG = {
     stat_paper_types: "5",
     stat_delivery:    "7–10",
     stat_eco:         "100%",
+  },
+  // ----------------------------------------------------------
+  // IMAGES
+  // Change the filename here to swap any image on the website.
+  // Upload your new image to GitHub with the same filename,
+  // OR change the filename here to match your new file.
+  // All pages update automatically.
+  // ----------------------------------------------------------
+  images: {
+
+    // ---- HOMEPAGE ----
+    hero_video:          "hero_video.mp4",      // Background video on homepage hero
+    hero_poster:         "bag_lady.png",         // Fallback image if video doesn't play
+
+    // Advertisement section — "Path to Superior Packaging"
+    advert_main:         "bag_lady.png",         // Large left image
+
+    // "Work We Have Delivered" — 4 portfolio cards
+    portfolio_card_1:    "lifestyle_abachs.png",  // Card 1 — The Abachs
+    portfolio_card_2:    "lifestyle_alounge.png", // Card 2 — AL Lounge
+    portfolio_card_3:    "lifestyle_congress.png",// Card 3 — YAWC Congress
+    portfolio_card_4:    "",                      // Card 4 — Channay (leave empty to keep CSS bag, or add filename)
+
+    // ---- ORDER PAGE ----
+    // Paper type selector images — shown when customer picks paper type
+    paper_chromo:        "paper_chromo.png",      // White / Chromo Coat
+    paper_brown_card:    "paper_brown_card.png",  // Brown Card 250gsm
+    paper_brown_80:      "paper_brown_80.png",    // Brown Paper 80gsm
+    paper_matt:          "paper_matt.png",         // Matt Paper 150gsm
+    paper_duplex:        "paper_duplex.png",      // Duplex Board
+
+    // Order page gallery — top portfolio strip
+    gallery_1:           "lifestyle_abachs.png",
+    gallery_2:           "paper_brown_80.png",
+    gallery_3:           "paper_chromo.png",
+    gallery_4:           "paper_duplex.png",
+    gallery_lifestyle_1: "lifestyle_abachs.png",
+    gallery_lifestyle_2: "lifestyle_alounge.png",
+    gallery_lifestyle_3: "lifestyle_congress.png",
+
+    // ---- GLOBAL ----
+    logo:                "logo.png",             // Logo — top of every page
+
   },
 
 };
@@ -239,4 +282,25 @@ document.addEventListener("DOMContentLoaded", function () {
     if (el) el.textContent = entry[1];
   });
 
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof KRAAPHT_CONFIG === "undefined") return;
+  const imgs = KRAAPHT_CONFIG.images;
+  document.querySelectorAll("[data-img]").forEach(el => {
+    const key = el.getAttribute("data-img");
+    const src = imgs[key];
+    if (!src) return;
+    if (el.tagName === "IMG") el.src = src;
+  });
+  const heroVid = document.getElementById("hero-vid");
+  if (heroVid && imgs.hero_poster) heroVid.poster = imgs.hero_poster;
+  if (heroVid && imgs.hero_video) {
+    const s = heroVid.querySelector("source");
+    if (s) { s.src = imgs.hero_video; heroVid.load(); heroVid.play().catch(()=>{}); }
+  }
+  const channayCard = document.getElementById("channay-card");
+  if (channayCard && imgs.portfolio_card_4) {
+    channayCard.innerHTML = '<img src="' + imgs.portfolio_card_4 + '" alt="Channay" class="w-full h-full object-cover"/><div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-6"><span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Matt Paper 150gsm · 2-Colour Print</span><p class="font-body-lg font-semibold text-white">Channay</p></div>';
+  }
 });

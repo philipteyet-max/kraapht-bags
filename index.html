@@ -62,7 +62,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
 <div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
   <a href="index.html" class="flex items-center gap-3">
-    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png"/>
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png" data-img="logo"/>
   </a>
   <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
   <div class="flex items-center gap-3">
@@ -74,7 +74,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
 <!-- ===== HERO — VIDEO BACKGROUND ===== -->
 <section class="relative h-screen min-h-[600px] flex items-center overflow-hidden">
-  <video id="hero-vid" autoplay muted loop playsinline preload="auto"
+  <video id="hero-vid" data-img="hero_video" autoplay muted loop playsinline preload="auto"
     class="absolute inset-0 w-full h-full object-cover"
     poster="bag_lady.png">
     <source src="hero_video.mp4" type="video/mp4"/>
@@ -138,7 +138,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="relative">
         <div class="absolute -top-4 -left-4 w-full h-full border-2 border-accent/30"></div>
-        <img src="bag_lady.png" alt="Premium paper bag by Kraapht Bags Ltd" class="w-full h-[520px] object-cover relative z-10 shadow-2xl"/>
+        <img src="bag_lady.png" data-img="advert_main" alt="Premium paper bag by Kraapht Bags Ltd" class="w-full h-[520px] object-cover relative z-10 shadow-2xl"/>
         <div class="absolute bottom-6 left-6 z-20 bg-primary/90 text-white px-5 py-3">
           <p class="font-label-sm text-label-sm uppercase tracking-widest text-accent">Your Brand. Our Craft.</p>
         </div>
@@ -186,7 +186,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
       <!-- Card 1: Abachs -->
       <div class="client-card relative overflow-hidden h-80 group">
-        <img src="lifestyle_abachs.png" alt="The Abachs Cocktail Bar and Grill" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+        <img src="lifestyle_abachs.png" data-img="portfolio_card_1" alt="The Abachs Cocktail Bar and Grill" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
           <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Brown Paper 80gsm · Gold Print</span>
@@ -197,7 +197,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
       <!-- Card 2: AL Lounge -->
       <div class="client-card relative overflow-hidden h-80 group">
-        <img src="lifestyle_alounge.png" alt="AL Lounge Bar and Restaurant" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+        <img src="lifestyle_alounge.png" data-img="portfolio_card_2" alt="AL Lounge Bar and Restaurant" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
           <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Duplex Board · African Print</span>
@@ -208,7 +208,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
       <!-- Card 3: YAWC Congress -->
       <div class="client-card relative overflow-hidden h-80 group">
-        <img src="lifestyle_congress.png" alt="Young African Women Congress" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+        <img src="lifestyle_congress.png" data-img="portfolio_card_3" alt="Young African Women Congress" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
           <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Chromo Coat · Event Bag</span>
@@ -218,7 +218,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       </div>
 
       <!-- Card 4: Channay Clothing Line — CSS bag mockup -->
-      <div class="client-card relative overflow-hidden h-80 group bg-[#1a1a1a]">
+      <div id="channay-card" class="client-card relative overflow-hidden h-80 group bg-[#1a1a1a]">
         <!-- Bag illustration -->
         <div class="absolute inset-0 flex items-center justify-center p-8">
           <div class="relative w-48 h-56 flex flex-col items-center">
@@ -262,28 +262,28 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <!-- Product mockup row -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
       <div class="client-card relative overflow-hidden bg-charcoal group">
-        <img src="paper_brown_card.png" alt="Brown Card 250gsm — Freedom Taste bag" class="w-full h-52 object-contain p-2"/>
+        <img src="paper_brown_card.png" data-img="paper_brown_card" alt="Brown Card 250gsm — Freedom Taste bag" class="w-full h-52 object-contain p-2"/>
         <div class="p-3 bg-charcoal">
           <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Brown Card 250gsm</p>
           <p class="font-body-md text-white text-sm font-semibold">Freedom Taste</p>
         </div>
       </div>
       <div class="client-card relative overflow-hidden bg-charcoal group">
-        <img src="paper_brown_80.png" alt="Brown Paper 80gsm — The Abachs bag" class="w-full h-52 object-contain p-2"/>
+        <img src="paper_brown_80.png" data-img="paper_brown_80" alt="Brown Paper 80gsm — The Abachs bag" class="w-full h-52 object-contain p-2"/>
         <div class="p-3 bg-charcoal">
           <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Brown Paper 80gsm</p>
           <p class="font-body-md text-white text-sm font-semibold">The Abachs</p>
         </div>
       </div>
       <div class="client-card relative overflow-hidden bg-charcoal group">
-        <img src="paper_chromo.png" alt="Chromo Coat — white bag" class="w-full h-52 object-contain p-2"/>
+        <img src="paper_chromo.png" data-img="paper_chromo" alt="Chromo Coat — white bag" class="w-full h-52 object-contain p-2"/>
         <div class="p-3 bg-charcoal">
           <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">White / Chromo Coat</p>
           <p class="font-body-md text-white text-sm font-semibold">Clean Canvas</p>
         </div>
       </div>
       <div class="client-card relative overflow-hidden bg-charcoal group">
-        <img src="paper_duplex.png" alt="Duplex Board — AL Lounge bag" class="w-full h-52 object-contain p-2"/>
+        <img src="paper_duplex.png" data-img="paper_duplex" alt="Duplex Board — AL Lounge bag" class="w-full h-52 object-contain p-2"/>
         <div class="p-3 bg-charcoal">
           <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">Duplex Board</p>
           <p class="font-body-md text-white text-sm font-semibold">AL Lounge</p>
@@ -403,7 +403,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <div class="max-w-[1280px] mx-auto px-10 py-16">
   <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
     <div class="md:col-span-1">
-      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png"/>
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png" data-img="logo"/>
       <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
     </div>
     <div>

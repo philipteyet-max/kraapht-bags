@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Admin Dashboard | Kraapht Bags Ltd</title>
+<script src="config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -62,7 +63,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <nav class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur border-b border-outline-variant shadow-sm">
   <div class="max-w-[1440px] mx-auto px-8 flex justify-between items-center h-16">
     <div class="flex items-center gap-6">
-      <a href="index.html"><img alt="Kraapht Bags Ltd" class="h-8 w-auto" src="logo.png"/></a>
+      <a href="index.html"><img alt="Kraapht Bags Ltd" class="h-8 w-auto" src="logo.png" data-img="logo"/></a>
       <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest px-3 py-1 bg-primary/10 border border-primary/20">Admin</span>
       <div class="hidden md:flex gap-6">
         <a class="font-body-md text-primary border-b border-accent pb-0.5 text-sm" href="#">Dashboard</a>

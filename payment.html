@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Payment | Kraapht Bags Ltd</title>
+<script src="config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -58,7 +59,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
 <div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
   <a href="index.html" class="flex items-center gap-3">
-    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png"/>
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png" data-img="logo"/>
   </a>
   <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
   <div class="flex items-center gap-3">
@@ -255,7 +256,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <div class="max-w-[1280px] mx-auto px-10 py-16">
   <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
     <div class="md:col-span-1">
-      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png"/>
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png" data-img="logo"/>
       <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
     </div>
     <div>
