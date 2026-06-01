@@ -181,35 +181,82 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <p class="font-body-lg text-on-surface-variant mt-3 max-w-2xl mx-auto">Every bag below was custom-configured, pre-paid, produced, and delivered to a real business in Ghana. Your brand could be next.</p>
     </div>
 
-    <!-- Main showcase — Abachs lifestyle -->
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
-      <div class="client-card lg:col-span-3 relative overflow-hidden h-80 lg:h-[420px] group">
-        <img src="lifestyle_abachs.png" alt="The Abachs Cocktail Bar and Grill — Brown Paper 80gsm bag" class="w-full h-full object-cover"/>
+    <!-- 2x2 equal grid — all 4 clients -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+      <!-- Card 1: Abachs -->
+      <div class="client-card relative overflow-hidden h-80 group">
+        <img src="lifestyle_abachs.png" alt="The Abachs Cocktail Bar and Grill" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
         <div class="absolute bottom-0 left-0 right-0 p-6">
-          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest mb-1 block">Brown Paper 80gsm · Gold Print</span>
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Brown Paper 80gsm · Gold Print</span>
           <p class="font-body-lg font-semibold text-white">The Abachs Cocktail Bar &amp; Grill</p>
           <p class="font-body-md text-white/70 text-sm">Dansoman, Accra</p>
         </div>
       </div>
-      <div class="lg:col-span-2 grid grid-rows-2 gap-4">
-        <div class="client-card relative overflow-hidden h-48 lg:h-auto group">
-          <img src="lifestyle_alounge.png" alt="AL Lounge Bar and Restaurant — Duplex Board bag at street food market" class="w-full h-full object-cover"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/10 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-4">
-            <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5 block">Duplex Board · African Print</span>
-            <p class="font-body-md font-semibold text-white text-sm">AL Lounge Bar &amp; Restaurant</p>
-          </div>
-        </div>
-        <div class="client-card relative overflow-hidden h-48 lg:h-auto group">
-          <img src="lifestyle_congress.png" alt="Young African Women Congress — Chromo Coat event bag" class="w-full h-full object-cover"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/10 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-4">
-            <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5 block">Chromo Coat · Event Bag</span>
-            <p class="font-body-md font-semibold text-white text-sm">Young African Women Congress</p>
-          </div>
+
+      <!-- Card 2: AL Lounge -->
+      <div class="client-card relative overflow-hidden h-80 group">
+        <img src="lifestyle_alounge.png" alt="AL Lounge Bar and Restaurant" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Duplex Board · African Print</span>
+          <p class="font-body-lg font-semibold text-white">AL Lounge Bar &amp; Restaurant</p>
+          <p class="font-body-md text-white/70 text-sm">Accra, Ghana</p>
         </div>
       </div>
+
+      <!-- Card 3: YAWC Congress -->
+      <div class="client-card relative overflow-hidden h-80 group">
+        <img src="lifestyle_congress.png" alt="Young African Women Congress" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Chromo Coat · Event Bag</span>
+          <p class="font-body-lg font-semibold text-white">Young African Women Congress</p>
+          <p class="font-body-md text-white/70 text-sm">Accra, Ghana</p>
+        </div>
+      </div>
+
+      <!-- Card 4: Channay Clothing Line — CSS bag mockup -->
+      <div class="client-card relative overflow-hidden h-80 group bg-[#1a1a1a]">
+        <!-- Bag illustration -->
+        <div class="absolute inset-0 flex items-center justify-center p-8">
+          <div class="relative w-48 h-56 flex flex-col items-center">
+            <!-- Bag handles -->
+            <div class="flex gap-10 mb-0 relative z-10">
+              <div class="w-1 h-10 bg-[#c8a96b] rounded-full transform -rotate-6"></div>
+              <div class="w-1 h-10 bg-[#c8a96b] rounded-full transform rotate-6"></div>
+            </div>
+            <!-- Bag body -->
+            <div class="w-full flex-1 bg-[#f5f0e8] relative flex flex-col items-center justify-center px-4 py-6 shadow-2xl" style="border-radius:2px;">
+              <!-- Top fold line -->
+              <div class="absolute top-0 left-0 right-0 h-6 bg-[#e8e0d0] border-b border-[#d4c9b0]" style="border-radius:2px 2px 0 0;"></div>
+              <!-- Brand content -->
+              <div class="mt-4 text-center">
+                <p class="text-[9px] tracking-[0.35em] text-[#8B7355] uppercase mb-1">Collection 2026</p>
+                <p class="text-2xl font-bold tracking-[0.2em] text-[#1a1a1a] uppercase" style="font-family:Georgia,serif;letter-spacing:0.18em;">CHANNAY</p>
+                <div class="w-12 h-px bg-[#c8a96b] mx-auto my-2"></div>
+                <p class="text-[8px] tracking-[0.25em] text-[#8B7355] uppercase">Clothing &amp; Lifestyle</p>
+              </div>
+              <!-- Bottom accent -->
+              <div class="absolute bottom-4 left-4 right-4 flex items-center gap-2">
+                <div class="h-px flex-1 bg-[#d4c9b0]"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-[#c8a96b]"></div>
+                <div class="h-px flex-1 bg-[#d4c9b0]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Hover overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-charcoal/10 to-transparent opacity-80"></div>
+        <!-- Label -->
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Matt Paper 150gsm · 2-Colour Print</span>
+          <p class="font-body-lg font-semibold text-white">Channay</p>
+          <p class="font-body-md text-white/70 text-sm">Clothing &amp; Lifestyle Brand · Accra</p>
+        </div>
+      </div>
+
     </div>
 
     <!-- Product mockup row -->
@@ -232,7 +279,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <img src="paper_chromo.png" alt="Chromo Coat — white bag" class="w-full h-52 object-contain p-2"/>
         <div class="p-3 bg-charcoal">
           <p class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-0.5">White / Chromo Coat</p>
-          <p class="font-body-md text-white text-sm font-semibold">Clean canvas</p>
+          <p class="font-body-md text-white text-sm font-semibold">Clean Canvas</p>
         </div>
       </div>
       <div class="client-card relative overflow-hidden bg-charcoal group">
