@@ -119,7 +119,7 @@ const KRAAPHT_CONFIG = {
     order_gallery_1: "paper_brown_card.png",
     order_gallery_2: "paper_brown_80.png",
     order_gallery_3: "paper_chromo.png",
-    order_gallery_4: "paper_duplex.png",
+    order_gallery_4: "Brown_card_2.png",
     order_gallery_5: "lifestyle_abachs.png",
     order_gallery_6: "lifestyle_alounge.png",
     order_gallery_7: "Chromo_coat_bag.png",
@@ -185,7 +185,7 @@ const KRAAPHT_CONFIG = {
     gallery_3:           "food_bag.png",
     gallery_4:           "paper_duplex.png",
     gallery_lifestyle_1: "lifestyle_abachs.png",
-    gallery_lifestyle_2: "lifestyle_alounge.png",
+    gallery_lifestyle_2: "Brown_card_2.png",
     gallery_lifestyle_3: "lifestyle_congress.png",
 
     // ---- GLOBAL ----
