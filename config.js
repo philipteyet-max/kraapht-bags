@@ -122,7 +122,7 @@ const KRAAPHT_CONFIG = {
     order_gallery_4: "paper_duplex.png",
     order_gallery_5: "lifestyle_abachs.png",
     order_gallery_6: "lifestyle_alounge.png",
-    order_gallery_7: "Chromo_coat bag.png",
+    order_gallery_7: "Chromo_coat_bag.png",
 
     // Paper type selector cards (what shows in the paper chooser)
     paper_selector_chromo:       "paper_chromo.png",
@@ -176,13 +176,13 @@ const KRAAPHT_CONFIG = {
     paper_chromo:        "paper_chromo.png",      // White / Chromo Coat
     paper_brown_card:    "paper_brown_card.png",  // Brown Card 250gsm
     paper_brown_80:      "paper_brown_80.png",    // Brown Paper 80gsm
-    paper_matt:          "matt_paper",         // Matt Paper 150gsm
+    paper_matt:          "matt_paper.png",         // Matt Paper 150gsm
     paper_duplex:        "paper_duplex.png",      // Duplex Board
 
     // Order page gallery — top portfolio strip
     gallery_1:           "lifestyle_abachs.png",
-    gallery_2:           "paper_brown_80.png",
-    gallery_3:           "paper_chromo.png",
+    gallery_2:           "Chromo_coat_bag.png",
+    gallery_3:           "food_bag.png",
     gallery_4:           "paper_duplex.png",
     gallery_lifestyle_1: "lifestyle_abachs.png",
     gallery_lifestyle_2: "lifestyle_alounge.png",
