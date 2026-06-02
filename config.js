@@ -122,7 +122,7 @@ const KRAAPHT_CONFIG = {
     order_gallery_4: "paper_duplex.png",
     order_gallery_5: "lifestyle_abachs.png",
     order_gallery_6: "lifestyle_alounge.png",
-    order_gallery_7: "lifestyle_congress.png",
+    order_gallery_7: "Chromo_coat bag.png",
 
     // Paper type selector cards (what shows in the paper chooser)
     paper_selector_chromo:       "paper_chromo.png",
