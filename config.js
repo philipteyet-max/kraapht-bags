@@ -129,6 +129,7 @@ const KRAAPHT_CONFIG = {
     paper_selector_brown_card:   "paper_brown_card.png",
     paper_selector_brown_80:     "paper_brown_80.png",
     paper_selector_duplex:       "paper_duplex.png",
+    paper_matt:                  "matt_paper.png",         // Matt Paper 150gsm
 
     // Logo — appears on every page top nav
     logo: "logo.png",
@@ -183,7 +184,7 @@ const KRAAPHT_CONFIG = {
     gallery_1:           "lifestyle_abachs.png",
     gallery_2:           "Chromo_coat_bag.png",
     gallery_3:           "food_bag.png",
-    gallery_4:           "paper_duplex.png",
+    gallery_4:           "matt_paper.png",
     gallery_lifestyle_1: "lifestyle_abachs.png",
     gallery_lifestyle_2: "Brown_card_2.png",
     gallery_lifestyle_3: "lifestyle_congress.png",
