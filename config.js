@@ -119,17 +119,16 @@ const KRAAPHT_CONFIG = {
     order_gallery_1: "paper_brown_card.png",
     order_gallery_2: "paper_brown_80.png",
     order_gallery_3: "paper_chromo.png",
-    order_gallery_4: "Brown_card_2.png",
+    order_gallery_4: "paper_duplex.png",
     order_gallery_5: "lifestyle_abachs.png",
     order_gallery_6: "lifestyle_alounge.png",
-    order_gallery_7: "Chromo_coat_bag.png",
+    order_gallery_7: "lifestyle_congress.png",
 
     // Paper type selector cards (what shows in the paper chooser)
     paper_selector_chromo:       "paper_chromo.png",
     paper_selector_brown_card:   "paper_brown_card.png",
     paper_selector_brown_80:     "paper_brown_80.png",
     paper_selector_duplex:       "paper_duplex.png",
-    paper_matt:                  "matt_paper.png",         // Matt Paper 150gsm
 
     // Logo — appears on every page top nav
     logo: "logo.png",
@@ -150,47 +149,70 @@ const KRAAPHT_CONFIG = {
     stat_delivery:    "7–10",
     stat_eco:         "100%",
   },
-  // ----------------------------------------------------------
-  // IMAGES
-  // Change the filename here to swap any image on the website.
-  // Upload your new image to GitHub with the same filename,
-  // OR change the filename here to match your new file.
-  // All pages update automatically.
-  // ----------------------------------------------------------
+  // =================================================================
+  //  IMAGES
+  //  Change the filename value to swap any image on the website.
+  //  Upload the new file to GitHub with the exact filename you type.
+  //  Leave a value as "" to keep the built-in CSS placeholder.
+  //  All pages update automatically on next deployment.
+  // =================================================================
   images: {
 
-    // ---- HOMEPAGE ----
-    hero_video:          "hero_video.mp4",      // Background video on homepage hero
-    hero_poster:         "bag_lady.png",         // Fallback image if video doesn't play
+    // ── GLOBAL ───────────────────────────────────────────────────────
+    logo:           "logo.png",          // Site logo — top of every page
 
-    // Advertisement section — "Path to Superior Packaging"
-    advert_main:         "bag_lady.png",         // Large left image
+    // ── HOMEPAGE HERO ────────────────────────────────────────────────
+    hero_video:     "hero_video.mp4",    // Background video
+    hero_poster:    "bag_lady.png",      // Fallback image if video fails to play
+    hero_ad_image:  "bag_lady.png",      // "Path to Superior Packaging" left image
 
-    // "Work We Have Delivered" — 4 portfolio cards
-    portfolio_card_1:    "lifestyle_abachs.png",  // Card 1 — The Abachs
-    portfolio_card_2:    "lifestyle_alounge.png", // Card 2 — AL Lounge
-    portfolio_card_3:    "lifestyle_congress.png",// Card 3 — YAWC Congress
-    portfolio_card_4:    "matt_paper.png",                      // Card 4 — Channay (leave empty to keep CSS bag, or add filename)
+    // ── HOMEPAGE PORTFOLIO — 2×2 grid ────────────────────────────────
+    //  Reading order: top-left → top-right → bottom-left → bottom-right
+    //
+    //    [client_bag_1]  [client_bag_2]
+    //    [client_bag_3]  [client_bag_4]
+    //
+    client_bag_1:  "lifestyle_abachs.png",   // top-left
+    client_bag_2:  "lifestyle_alounge.png",  // top-right
+    client_bag_3:  "lifestyle_congress.png", // bottom-left
+    client_bag_4:  "",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
 
-    // ---- ORDER PAGE ----
-    // Paper type selector images — shown when customer picks paper type
-    paper_chromo:        "paper_chromo.png",      // White / Chromo Coat
-    paper_brown_card:    "paper_brown_card.png",  // Brown Card 250gsm
-    paper_brown_80:      "paper_brown_80.png",    // Brown Paper 80gsm
-    paper_matt:          "matt_paper.png",         // Matt Paper 150gsm
-    paper_duplex:        "paper_duplex.png",      // Duplex Board
+    // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
+    //  Reading order: left → right
+    //
+    //    [client_bag_5] [client_bag_6] [client_bag_7] [client_bag_8]
+    //
+    client_bag_5:  "paper_brown_card.png",   // left
+    client_bag_6:  "paper_brown_80.png",     // 2nd
+    client_bag_7:  "paper_chromo.png",       // 3rd
+    client_bag_8:  "paper_duplex.png",       // right
 
-    // Order page gallery — top portfolio strip
-    gallery_1:           "lifestyle_abachs.png",
-    gallery_2:           "Chromo_coat_bag.png",
-    gallery_3:           "food_bag.png",
-    gallery_4:           "matt_paper.png",
-    gallery_lifestyle_1: "lifestyle_abachs.png",
-    gallery_lifestyle_2: "Brown_card_2.png",
-    gallery_lifestyle_3: "lifestyle_congress.png",
+    // ── ORDER PAGE GALLERY — top 4 product shots ─────────────────────
+    //  Reading order: left → right
+    //
+    //    [client_bag_9] [client_bag_10] [client_bag_11] [client_bag_12]
+    //
+    client_bag_9:   "paper_brown_card.png",  // left
+    client_bag_10:  "paper_brown_80.png",    // 2nd
+    client_bag_11:  "paper_chromo.png",      // 3rd
+    client_bag_12:  "paper_duplex.png",      // right
 
-    // ---- GLOBAL ----
-    logo:                "logo.png",             // Logo — top of every page
+    // ── ORDER PAGE GALLERY — lifestyle row ───────────────────────────
+    //  Reading order: left → right
+    //
+    //    [client_bag_13] [client_bag_14] [client_bag_15]
+    //
+    client_bag_13: "lifestyle_abachs.png",   // left
+    client_bag_14: "lifestyle_alounge.png",  // centre
+    client_bag_15: "lifestyle_congress.png", // right
+
+    // ── ORDER PAGE — PAPER TYPE SELECTORS ────────────────────────────
+    //  Shown inside the paper selection cards on the order form
+    chromo_coat_paper:    "paper_chromo.png",      // White / Chromo Coat
+    brown_card_paper:     "paper_brown_card.png",  // Brown Card 250gsm
+    brown_paper_80_paper: "paper_brown_80.png",    // Brown Paper 80gsm
+    duplex_board_paper:   "paper_duplex.png",      // Duplex Board
+    matt_card_paper:      "paper_matt.png",         // Matt Paper 150gsm
 
   },
 
@@ -201,107 +223,108 @@ const KRAAPHT_CONFIG = {
 //  APPLY CONFIG TO PAGE — DO NOT EDIT BELOW THIS LINE
 // ============================================================
 
+// =================================================================
+//  IMAGE UPDATER — runs on every page load
+//  Finds elements with data-img="key" and sets their src from config
+// =================================================================
 document.addEventListener("DOMContentLoaded", function () {
-  var C = KRAAPHT_CONFIG;
+  var C = (typeof KRAAPHT_CONFIG !== "undefined") ? KRAAPHT_CONFIG : null;
+  if (!C) return;
 
-  // Apply WhatsApp links
+  // ── Contact & text ──────────────────────────────────────────────
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(el) {
-    var current = el.getAttribute("href");
-    var hasText = current.includes("?text=");
+    var cur = el.getAttribute("href");
+    var hasText = cur.includes("?text=");
     el.href = "https://wa.me/" + C.contact.whatsapp_number +
-      (hasText ? current.substring(current.indexOf("?text=")) : "");
+      (hasText ? cur.substring(cur.indexOf("?text=")) : "");
   });
-
-  // Apply email links
+  document.querySelectorAll(".whatsapp-number").forEach(function(el) {
+    el.textContent = C.contact.whatsapp_display;
+  });
   document.querySelectorAll('a[href^="mailto:"]').forEach(function(el) {
     el.href = "mailto:" + C.contact.email;
     if (el.textContent.includes("@")) el.textContent = C.contact.email;
   });
-
-  // Apply images — replace every img src and video src
-  // that matches a config key pattern
-  var imgMap = C.images;
-
-  // Helper — find img by current src and replace
-  function replaceImg(currentSrc, newSrc) {
-    if (currentSrc === newSrc) return; // no change needed
-    document.querySelectorAll('img[src="' + currentSrc + '"]').forEach(function(el) {
-      el.src = newSrc;
-    });
-    // Also update video sources
-    document.querySelectorAll('source[src="' + currentSrc + '"]').forEach(function(el) {
-      el.src = newSrc;
-      // Reload the parent video
-      var vid = el.closest('video');
-      if (vid) { vid.load(); vid.play().catch(function(){}); }
-    });
-    // Update logo srcs
-    document.querySelectorAll('img[src="' + currentSrc + '"]').forEach(function(el) {
-      el.src = newSrc;
-    });
-  }
-
-  // Homepage images
-  replaceImg("bag_lady.png",              imgMap.hero_ad_image);
-  replaceImg("lifestyle_abachs.png",      imgMap.portfolio_main);
-  replaceImg("lifestyle_alounge.png",     imgMap.portfolio_right_top);
-  replaceImg("lifestyle_congress.png",    imgMap.portfolio_right_bottom);
-  replaceImg("paper_brown_card.png",      imgMap.product_card_brown_card);
-  replaceImg("paper_brown_80.png",        imgMap.product_card_brown_80);
-  replaceImg("paper_chromo.png",          imgMap.product_card_chromo);
-  replaceImg("paper_duplex.png",          imgMap.product_card_duplex);
-  replaceImg("logo.png",                  imgMap.logo);
-
-  // Video
-  if (imgMap.hero_video !== "hero_video.mp4") {
-    document.querySelectorAll('source[src="hero_video.mp4"]').forEach(function(el) {
-      el.src = imgMap.hero_video;
-      var vid = el.closest('video');
-      if (vid) { vid.load(); vid.play().catch(function(){}); }
-    });
-  }
-
-  // Minimum order qty
   document.querySelectorAll(".min-order-qty").forEach(function(el) {
     el.textContent = C.order.minimum_qty;
   });
-
-  // Delivery cost
   document.querySelectorAll(".delivery-cost").forEach(function(el) {
     el.textContent = "GHS " + C.order.delivery_cost;
   });
 
-  // Homepage stats
+  // ── Homepage stats ──────────────────────────────────────────────
   var stats = {
     "stat-min-order":   C.homepage.stat_min_order,
     "stat-paper-types": C.homepage.stat_paper_types,
     "stat-delivery":    C.homepage.stat_delivery,
     "stat-eco":         C.homepage.stat_eco,
   };
-  Object.entries(stats).forEach(function(entry) {
-    var el = document.getElementById(entry[0]);
-    if (el) el.textContent = entry[1];
+  Object.keys(stats).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = stats[id];
   });
 
-});
+  // ── IMAGE UPDATER ───────────────────────────────────────────────
+  var imgs = C.images;
 
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof KRAAPHT_CONFIG === "undefined") return;
-  const imgs = KRAAPHT_CONFIG.images;
-  document.querySelectorAll("[data-img]").forEach(el => {
-    const key = el.getAttribute("data-img");
-    const src = imgs[key];
+  // 1. All elements with data-img attribute
+  document.querySelectorAll("[data-img]").forEach(function(el) {
+    var key = el.getAttribute("data-img");
+    var src = imgs[key];
     if (!src) return;
-    if (el.tagName === "IMG") el.src = src;
+    if (el.tagName === "IMG") {
+      el.src = src;
+    } else if (el.tagName === "SOURCE") {
+      el.src = src;
+      var vid = el.closest("video");
+      if (vid) { vid.load(); vid.play().catch(function(){}); }
+    } else {
+      el.style.backgroundImage = "url('" + src + "')";
+    }
   });
-  const heroVid = document.getElementById("hero-vid");
-  if (heroVid && imgs.hero_poster) heroVid.poster = imgs.hero_poster;
-  if (heroVid && imgs.hero_video) {
-    const s = heroVid.querySelector("source");
-    if (s) { s.src = imgs.hero_video; heroVid.load(); heroVid.play().catch(()=>{}); }
+
+  // 2. Hero video special handling
+  var heroVid = document.getElementById("hero-vid");
+  if (heroVid) {
+    if (imgs.hero_poster) heroVid.poster = imgs.hero_poster;
+    var heroSrc = heroVid.querySelector("source");
+    if (heroSrc && imgs.hero_video) {
+      heroSrc.src = imgs.hero_video;
+      heroVid.load();
+      heroVid.play().catch(function(){});
+    }
   }
-  const channayCard = document.getElementById("channay-card");
-  if (channayCard && imgs.portfolio_card_4) {
-    channayCard.innerHTML = '<img src="' + imgs.portfolio_card_4 + '" alt="Channay" class="w-full h-full object-cover"/><div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent"></div><div class="absolute bottom-0 left-0 right-0 p-6"><span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Matt Paper 150gsm · 2-Colour Print</span><p class="font-body-lg font-semibold text-white">Channay</p></div>';
+
+  // 3. Channay card (client_bag_4) — swap CSS bag for real image
+  var channayCard = document.getElementById("channay-card");
+  if (channayCard && imgs.client_bag_4) {
+    channayCard.innerHTML =
+      '<img src="' + imgs.client_bag_4 + '" data-img="client_bag_4"' +
+      ' alt="Channay Clothing Line" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>' +
+      '<div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>' +
+      '<div class="absolute bottom-0 left-0 right-0 p-6">' +
+      '<span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Matt Paper 150gsm · 2-Colour Print</span>' +
+      '<p class="font-body-lg font-semibold text-white">Channay</p>' +
+      '<p class="font-body-md text-white/70 text-sm">Clothing &amp; Lifestyle Brand · Accra</p>' +
+      '</div>';
   }
+
+  // 4. Paper price display update on order page
+  var paperPrices = C.paper_prices;
+  var paperMap = {
+    "chromo_coat":    paperPrices.chromo_coat,
+    "brown_card_250": paperPrices.brown_card_250,
+    "brown_paper_80": paperPrices.brown_paper_80,
+    "matt_150":       paperPrices.matt_150,
+    "duplex_300":     paperPrices.duplex_300,
+  };
+  document.querySelectorAll("#paper-options label[data-paper]").forEach(function(label) {
+    var key = label.dataset.paper;
+    if (paperMap[key] !== undefined) {
+      label.dataset.price = paperMap[key];
+      var priceEl = label.querySelector(".paper-price-display");
+      if (priceEl) priceEl.textContent = "GHS " + paperMap[key].toLocaleString() + " / ream";
+    }
+  });
+
 });
