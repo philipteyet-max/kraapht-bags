@@ -212,7 +212,7 @@ const KRAAPHT_CONFIG = {
     brown_card_paper:     "paper_brown_card.png",  // Brown Card 250gsm
     brown_paper_80_paper: "paper_brown_80.png",    // Brown Paper 80gsm
     duplex_board_paper:   "paper_duplex.png",      // Duplex Board
-    matt_card_paper:      "paper_matt.png",         // Matt Paper 150gsm
+    matt_card_paper:      "matt_paper.png",         // Matt Paper 150gsm
 
   },
 
