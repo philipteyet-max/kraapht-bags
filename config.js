@@ -127,27 +127,27 @@ const KRAAPHT_CONFIG = {
     //    [client_bag_1]  [client_bag_2]
     //    [client_bag_3]  [client_bag_4]
     //
-    client_bag_1:  "lifestyle_abachs.png",   // top-left
-    client_bag_2:  "lifestyle_alounge.png",  // top-right
-    client_bag_3:  "lifestyle_congress.png", // bottom-left
-    client_bag_4:  "matt_paper.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
+    client_bag_1:  "client_bag_1.png",   // top-left
+    client_bag_2:  "client_bag_2.png",  // top-right
+    client_bag_3:  "client_bag_3.png", // bottom-left
+    client_bag_4:  "client_bag_4.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
 
     // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
     //  Reading order: left → right
     //
     //    [client_bag_5] [client_bag_6] [client_bag_7] [client_bag_8]
     //
-    client_bag_5:  "paper_brown_card.png",   // left
-    client_bag_6:  "paper_brown_80.png",     // 2nd
-    client_bag_7:  "paper_chromo.png",       // 3rd
-    client_bag_8:  "paper_duplex.png",       // right
+    client_bag_5:  "client_bag_5.png",   // left
+    client_bag_6:  "client_bag_6.png",     // 2nd
+    client_bag_7:  "client_bag_7.png",       // 3rd
+    client_bag_8:  "client_bag_8.png",       // right
 
     // ── ORDER PAGE GALLERY — top 4 product shots ─────────────────────
     //  Reading order: left → right
     //
     //    [client_bag_9] [client_bag_10] [client_bag_11] [client_bag_12]
     //
-    client_bag_9:   "paper_brown_card.png",  // left
+    client_bag_9:   "client_bag_9.png",  // left
     client_bag_10:  "paper_brown_80.png",    // 2nd
     client_bag_11:  "paper_chromo.png",      // 3rd
     client_bag_12:  "paper_duplex.png",      // right
