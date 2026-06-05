@@ -119,7 +119,7 @@ const KRAAPHT_CONFIG = {
     // ── HOMEPAGE HERO ────────────────────────────────────────────────
     hero_video:     "hero_video.mp4",    // Background video
     hero_poster:    "bag_lady.png",      // Fallback image if video fails to play
-    hero_ad_image:  "bag_lady.png",      // "Path to Superior Packaging" left image
+    hero_ad_image:  "lifestyle_hotone.png",      // "Path to Superior Packaging" left image
 
     // ── HOMEPAGE PORTFOLIO — 2×2 grid ────────────────────────────────
     //  Reading order: top-left → top-right → bottom-left → bottom-right
