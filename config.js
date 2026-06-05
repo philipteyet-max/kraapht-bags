@@ -91,52 +91,7 @@ const KRAAPHT_CONFIG = {
   // Change the filename here when you upload a new image
   // to GitHub. Use the exact filename you upload.
   // ----------------------------------------------------------
-  images: {
-
-    // HOMEPAGE
-    // --------
-    // Large hero advertisement image (left panel, "Path to Superior Packaging")
-    hero_ad_image: "bag_lady.png",
-
-    // Portfolio section — large left panel (biggest image on homepage)
-    portfolio_main: "lifestyle_abachs.png",
-
-    // Portfolio section — right top panel
-    portfolio_right_top: "lifestyle_alounge.png",
-
-    // Portfolio section — right bottom panel
-    portfolio_right_bottom: "lifestyle_congress.png",
-
-    // Homepage product grid — bottom 4 cards
-    product_card_brown_card:   "paper_brown_card.png",
-    product_card_brown_80:     "paper_brown_80.png",
-    product_card_chromo:       "paper_chromo.png",
-    product_card_duplex:       "paper_duplex.png",
-
-    // ORDER PAGE
-    // ----------
-    // Top portfolio gallery on order page (6 images)
-    order_gallery_1: "paper_brown_card.png",
-    order_gallery_2: "paper_brown_80.png",
-    order_gallery_3: "paper_chromo.png",
-    order_gallery_4: "paper_duplex.png",
-    order_gallery_5: "lifestyle_abachs.png",
-    order_gallery_6: "lifestyle_alounge.png",
-    order_gallery_7: "lifestyle_congress.png",
-
-    // Paper type selector cards (what shows in the paper chooser)
-    paper_selector_chromo:       "paper_chromo.png",
-    paper_selector_brown_card:   "paper_brown_card.png",
-    paper_selector_brown_80:     "paper_brown_80.png",
-    paper_selector_duplex:       "paper_duplex.png",
-
-    // Logo — appears on every page top nav
-    logo: "logo.png",
-
-    // Hero video — homepage background
-    hero_video: "hero_video.mp4",
-
-  },
+  ,
 
   // ----------------------------------------------------------
   // HOMEPAGE TEXT
@@ -175,7 +130,7 @@ const KRAAPHT_CONFIG = {
     client_bag_1:  "lifestyle_abachs.png",   // top-left
     client_bag_2:  "lifestyle_alounge.png",  // top-right
     client_bag_3:  "lifestyle_congress.png", // bottom-left
-    client_bag_4:  "lifestyle_hotone.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
+    client_bag_4:  "",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
 
     // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
     //  Reading order: left → right
@@ -212,12 +167,11 @@ const KRAAPHT_CONFIG = {
     brown_card_paper:     "paper_brown_card.png",  // Brown Card 250gsm
     brown_paper_80_paper: "paper_brown_80.png",    // Brown Paper 80gsm
     duplex_board_paper:   "paper_duplex.png",      // Duplex Board
-    matt_card_paper:      "matt_paper.png",         // Matt Paper 150gsm
+    matt_card_paper:      "matt_card_paper.png",     // Matt Paper 150gsm
 
   },
 
 };
-
 
 // ============================================================
 //  APPLY CONFIG TO PAGE — DO NOT EDIT BELOW THIS LINE

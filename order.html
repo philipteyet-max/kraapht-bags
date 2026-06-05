@@ -225,7 +225,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <input type="radio" name="paper_type" value="matt_150" class="sr-only"/>
             <span class="check-badge">✓</span>
             <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
-              <img src="paper_matt.png" data-img="matt_card_paper"
+              <img src="matt_card_paper.png" data-img="matt_card_paper"
                    alt="Matt Paper 150gsm bag"
                    class="h-full w-full object-contain p-2 hover:scale-105 transition-transform duration-300"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -292,6 +292,252 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
         </div>
       </div>
+
+
+      <!-- ===== EXPERT ADVICE PANEL ===== -->
+      <div class="bg-surface border border-outline-variant overflow-hidden" id="expert-panel-wrapper">
+
+        <!-- Trigger Button -->
+        <button onclick="toggleExpert()"
+          class="w-full flex items-center justify-between px-7 py-5 text-left hover:bg-surface-container transition-colors group"
+          id="expert-trigger">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-accent text-lg">lightbulb</span>
+            </div>
+            <div>
+              <p class="font-body-md font-semibold text-on-surface">Not sure what size to pick?</p>
+              <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-0.5">Click for expert advice — size guide &amp; recommendations</p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-accent transition-transform duration-300" id="expert-chevron">expand_more</span>
+        </button>
+
+        <!-- Collapsible Content -->
+        <div id="expert-content" class="hidden border-t border-outline-variant">
+          <div class="px-7 py-6 space-y-8">
+
+            <!-- ── RULE ────────────────────────────────────────────── -->
+            <div class="bg-accent/10 border-l-4 border-accent px-5 py-4 flex gap-3">
+              <span class="material-symbols-outlined text-accent flex-shrink-0 mt-0.5">info</span>
+              <p class="font-body-md text-on-surface text-sm leading-relaxed">
+                <strong>The golden rule:</strong> The size and bulkiness of your products determines the type and size of paper bag you need. Use this guide to match your product to the right bag before configuring your order.
+              </p>
+            </div>
+
+            <!-- ── SIDE-BY-SIDE SIZE COMPARISON ───────────────────── -->
+            <div>
+              <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-5">Size comparison — actual scale</p>
+              <div class="flex items-end justify-center gap-4 md:gap-8 pb-4 border-b border-outline-variant overflow-x-auto">
+
+                <!-- A5 Small -->
+                <div class="flex flex-col items-center flex-shrink-0">
+                  <div class="relative mb-3">
+                    <svg viewBox="0 0 80 110" width="80" height="110" xmlns="http://www.w3.org/2000/svg">
+                      <!-- shadow -->
+                      <ellipse cx="40" cy="107" rx="24" ry="4" fill="#2B2B2B" opacity="0.15"/>
+                      <!-- handles -->
+                      <path d="M 28 22 Q 24 8 32 5 Q 40 2 48 5 Q 56 8 52 22" fill="none" stroke="#8B6347" stroke-width="2.5" stroke-linecap="round"/>
+                      <!-- bag body -->
+                      <rect x="10" y="20" width="60" height="82" rx="1" fill="#D8C3A5"/>
+                      <rect x="10" y="20" width="60" height="10" rx="1" fill="#C8B498"/>
+                      <line x1="10" y1="30" x2="70" y2="30" stroke="#B8A688" stroke-width="0.5" opacity="0.6"/>
+                      <line x1="10" y1="92" x2="70" y2="92" stroke="#B8A688" stroke-width="0.5" opacity="0.6"/>
+                      <!-- label -->
+                      <rect x="18" y="82" width="44" height="13" rx="1" fill="#1F4D3A" opacity="0.85"/>
+                      <text x="40" y="92" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="700" fill="#C8A96B" letter-spacing="0.5">A5 / SMALL</text>
+                    </svg>
+                  </div>
+                  <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs font-bold">A5 / Small</p>
+                  <p class="font-label-sm text-label-sm text-on-surface-variant text-xs mt-0.5 text-center">15 × 8 × 21 cm</p>
+                </div>
+
+                <!-- A4 Medium -->
+                <div class="flex flex-col items-center flex-shrink-0">
+                  <div class="relative mb-3">
+                    <svg viewBox="0 0 100 155" width="100" height="155" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="50" cy="152" rx="30" ry="5" fill="#2B2B2B" opacity="0.15"/>
+                      <path d="M 35 30 Q 30 10 40 6 Q 50 2 60 6 Q 70 10 65 30" fill="none" stroke="#8B6347" stroke-width="3" stroke-linecap="round"/>
+                      <rect x="10" y="28" width="80" height="118" rx="1" fill="#D8C3A5"/>
+                      <rect x="10" y="28" width="80" height="13" rx="1" fill="#C8B498"/>
+                      <line x1="10" y1="41" x2="90" y2="41" stroke="#B8A688" stroke-width="0.5" opacity="0.6"/>
+                      <line x1="10" y1="126" x2="90" y2="126" stroke="#B8A688" stroke-width="0.5" opacity="0.6"/>
+                      <!-- food pack icon inside -->
+                      <rect x="35" y="72" width="30" height="30" rx="1" fill="#1F4D3A" opacity="0.12"/>
+                      <text x="50" y="84" text-anchor="middle" font-family="Arial" font-size="7" fill="#1F4D3A" opacity="0.6">9×9×3</text>
+                      <text x="50" y="94" text-anchor="middle" font-family="Arial" font-size="6" fill="#1F4D3A" opacity="0.5">food pack</text>
+                      <rect x="22" y="115" width="56" height="14" rx="1" fill="#1F4D3A" opacity="0.85"/>
+                      <text x="50" y="125" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="700" fill="#C8A96B" letter-spacing="0.5">A4 / MEDIUM</text>
+                    </svg>
+                  </div>
+                  <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs font-bold">A4 / Medium</p>
+                  <p class="font-label-sm text-label-sm text-on-surface-variant text-xs mt-0.5 text-center">24 × 12 × 30 cm</p>
+                </div>
+
+                <!-- A3 Large -->
+                <div class="flex flex-col items-center flex-shrink-0">
+                  <div class="relative mb-3">
+                    <svg viewBox="0 0 130 205" width="130" height="205" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="65" cy="201" rx="40" ry="6" fill="#2B2B2B" opacity="0.15"/>
+                      <path d="M 45 38 Q 38 12 50 7 Q 65 2 80 7 Q 92 12 85 38" fill="none" stroke="#8B6347" stroke-width="3.5" stroke-linecap="round"/>
+                      <rect x="10" y="36" width="110" height="158" rx="1" fill="#D8C3A5"/>
+                      <rect x="10" y="36" width="110" height="16" rx="1" fill="#C8B498"/>
+                      <line x1="10" y1="52" x2="120" y2="52" stroke="#B8A688" stroke-width="0.6" opacity="0.6"/>
+                      <line x1="10" y1="170" x2="120" y2="170" stroke="#B8A688" stroke-width="0.6" opacity="0.6"/>
+                      <!-- dress/clothing icon -->
+                      <path d="M 50 90 L 45 110 L 52 110 L 52 155 L 78 155 L 78 110 L 85 110 L 80 90 Q 73 95 65 93 Q 57 95 50 90Z" fill="#1F4D3A" opacity="0.10"/>
+                      <!-- occasion items -->
+                      <circle cx="38" cy="135" r="10" fill="#1F4D3A" opacity="0.08"/>
+                      <text x="38" y="138" text-anchor="middle" font-family="Arial" font-size="7" fill="#1F4D3A" opacity="0.5">🍶</text>
+                      <rect x="30" y="157" width="70" height="15" rx="1" fill="#1F4D3A" opacity="0.85"/>
+                      <text x="65" y="167" text-anchor="middle" font-family="Arial" font-size="6.5" font-weight="700" fill="#C8A96B" letter-spacing="0.5">A3 / LARGE</text>
+                    </svg>
+                  </div>
+                  <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs font-bold">A3 / Large</p>
+                  <p class="font-label-sm text-label-sm text-on-surface-variant text-xs mt-0.5 text-center">32 × 16 × 40 cm</p>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── USE CASE CARDS ───────────────────────────────────── -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <!-- A5 Card -->
+              <div class="border border-outline-variant p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-7 h-7 bg-primary text-white flex items-center justify-center flex-shrink-0">
+                    <span class="font-label-sm text-label-sm font-bold text-xs">A5</span>
+                  </div>
+                  <p class="font-body-md font-semibold text-sm">Small — Best for accessories &amp; single items</p>
+                </div>
+                <ul class="space-y-1.5 mb-4">
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Watches, jewellery, neckties, wallets
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Single pastry box or slice of cake
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Pharmacy items — small prescriptions, vitamins
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Cosmetics — lip gloss, small cream, perfume miniatures
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Corporate business card &amp; sample packs
+                  </li>
+                </ul>
+                <div class="bg-surface-container p-3">
+                  <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Recommended paper</p>
+                  <p class="font-body-md font-semibold text-xs text-primary">Chromo Coat or Brown Card 250gsm</p>
+                  <p class="text-xs text-on-surface-variant mt-0.5">Premium feel matches the quality of small, high-value items</p>
+                </div>
+              </div>
+
+              <!-- A4 Card -->
+              <div class="border-2 border-primary p-5 relative">
+                <span class="absolute -top-3 left-4 bg-primary text-white font-label-sm text-label-sm text-xs uppercase tracking-widest px-3 py-0.5">Most popular</span>
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-7 h-7 bg-primary text-white flex items-center justify-center flex-shrink-0">
+                    <span class="font-label-sm text-label-sm font-bold text-xs">A4</span>
+                  </div>
+                  <p class="font-body-md font-semibold text-sm">Medium — Food service &amp; general retail</p>
+                </div>
+                <ul class="space-y-1.5 mb-4">
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Standard Ghana food pack (9×9×3 inches) fits perfectly
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Restaurant takeaway — 1 to 2 food packs plus cutlery
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>T-shirts and folded polo shirts
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Children's shoes and sandals
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Conference stationery — notepad, pen, brochure
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Pharmacy items — multiple items, larger prescriptions
+                  </li>
+                </ul>
+                <div class="bg-surface-container p-3">
+                  <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Recommended paper</p>
+                  <p class="font-body-md font-semibold text-xs text-primary">Brown Paper 80gsm (food) · Brown Card 250gsm (retail)</p>
+                  <p class="text-xs text-on-surface-variant mt-0.5">80gsm folded top for food — no handle needed. 250gsm for retail and gifting.</p>
+                </div>
+              </div>
+
+              <!-- A3 Card -->
+              <div class="border border-outline-variant p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-7 h-7 bg-primary text-white flex items-center justify-center flex-shrink-0">
+                    <span class="font-label-sm text-label-sm font-bold text-xs">A3</span>
+                  </div>
+                  <p class="font-body-md font-semibold text-sm">Large — Occasions, boutiques &amp; bulk</p>
+                </div>
+                <ul class="space-y-1.5 mb-4">
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span><strong>Weddings &amp; funerals</strong> — full pack: food + pastries + Alvaro/Fan Milk
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Boutiques &amp; clothing shops — shirts, dresses, folded kaftans
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Adult shoes and sandals (bulky items)
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Event &amp; conference delegate bags — multiple items
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Corporate gift sets — multiple branded items in one bag
+                  </li>
+                  <li class="flex items-start gap-2 text-xs text-on-surface-variant">
+                    <span class="text-accent mt-0.5 flex-shrink-0">✦</span>Grocery and supermarket shopping
+                  </li>
+                </ul>
+                <div class="bg-surface-container p-3">
+                  <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Recommended paper</p>
+                  <p class="font-body-md font-semibold text-xs text-primary">Duplex Board (bulk) · Chromo Coat (events/weddings)</p>
+                  <p class="text-xs text-on-surface-variant mt-0.5">Duplex for large volume orders. Chromo Coat for occasions where bag presentation matters.</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── FOOD BOWL TIP ───────────────────────────────────── -->
+            <div class="bg-primary/8 border border-primary/20 p-5 flex gap-4 items-start" style="background:rgba(31,77,58,0.06);">
+              <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5 text-xl">restaurant</span>
+              <div>
+                <p class="font-body-md font-semibold text-sm mb-1">Running a food business?</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">Pair your A4 paper bag with a <strong class="text-on-surface">Kraapht Paper Food Bowl</strong> for a complete branded packaging solution. The food bowl sits inside the bag — your brand is visible on both. Select <em>Paper Food Bowl</em> as your product type above to add it to your order.</p>
+              </div>
+            </div>
+
+            <!-- ── CUSTOM SIZE NOTE ────────────────────────────────── -->
+            <div class="bg-surface-container border border-outline-variant p-5 flex gap-4 items-start">
+              <span class="material-symbols-outlined text-accent flex-shrink-0 mt-0.5 text-xl">tune</span>
+              <div>
+                <p class="font-body-md font-semibold text-sm mb-1">None of these fit your product?</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">If your item is unusually large, bulky, or has specific dimensions — choose <strong class="text-on-surface">Custom size</strong> in the selector below and enter your exact measurements. We cut a new die-board to your specification. Custom sizes carry a one-time die-cut board cost of GHS 300, waived on all repeat orders of the same size.</p>
+              </div>
+            </div>
+
+            <!-- ── CLOSE BUTTON ───────────────────────────────────── -->
+            <div class="text-right">
+              <button onclick="toggleExpert()"
+                class="inline-flex items-center gap-2 font-label-sm text-label-sm uppercase tracking-widest text-xs text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-sm">expand_less</span>Close guide
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- ===== END EXPERT ADVICE PANEL ===== -->
 
       <!-- 3. SIZE -->
       <div class="bg-surface border border-outline-variant p-7">
@@ -770,5 +1016,21 @@ calcPrice();
 })();
 
 </script>
+
+// ===== EXPERT ADVICE PANEL TOGGLE =====
+function toggleExpert() {
+  var content  = document.getElementById('expert-content');
+  var chevron  = document.getElementById('expert-chevron');
+  var isHidden = content.classList.contains('hidden');
+  content.classList.toggle('hidden', !isHidden);
+  chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+  if (isHidden) {
+    // Smooth scroll to panel
+    document.getElementById('expert-panel-wrapper').scrollIntoView({
+      behavior: 'smooth', block: 'nearest'
+    });
+  }
+}
+
 </body>
 </html>
