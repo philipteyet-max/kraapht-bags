@@ -130,7 +130,7 @@ const KRAAPHT_CONFIG = {
     client_bag_1:  "lifestyle_abachs.png",   // top-left
     client_bag_2:  "lifestyle_alounge.png",  // top-right
     client_bag_3:  "lifestyle_congress.png", // bottom-left
-    client_bag_4:  "lifestyle_hotone.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
+    client_bag_4:  "matt_paper.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
 
     // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
     //  Reading order: left → right
@@ -167,7 +167,7 @@ const KRAAPHT_CONFIG = {
     brown_card_paper:     "paper_brown_card.png",  // Brown Card 250gsm
     brown_paper_80_paper: "paper_brown_80.png",    // Brown Paper 80gsm
     duplex_board_paper:   "paper_duplex.png",      // Duplex Board
-    matt_card_paper:      "matt_card_paper.png",     // Matt Paper 150gsm
+    matt_card_paper:      "matt_paper.png",     // Matt Paper 150gsm
 
   },
 
