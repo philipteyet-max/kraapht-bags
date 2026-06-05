@@ -130,7 +130,7 @@ const KRAAPHT_CONFIG = {
     client_bag_1:  "lifestyle_abachs.png",   // top-left
     client_bag_2:  "lifestyle_alounge.png",  // top-right
     client_bag_3:  "lifestyle_congress.png", // bottom-left
-    client_bag_4:  "",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
+    client_bag_4:  "lifestyle_hotone.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
 
     // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
     //  Reading order: left → right
