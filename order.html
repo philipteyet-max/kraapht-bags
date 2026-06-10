@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="config.js?v=2"></script>
+<script src="config.js?v=3"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Configure Your Order | Kraapht Bags Ltd</title>
@@ -930,17 +930,17 @@ document.getElementById('save-design').addEventListener('change', function() {
 
 // ===== PRICING CALCULATOR — reads from config.js =====
 function calcPrice() {
-  // Read directly from config.js (loaded in <head> before this script)
-  const C = KRAAPHT_CONFIG;
+  // Safe config read — falls back to hardcoded values if config.js not loaded
+  var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
 
-  const printCosts   = {0:0, 1:C.printing.one_colour, 2:C.printing.two_colour, 3:C.printing.three_colour, 4:C.printing.full_colour};
-  const plateCosts   = {0:0, 1:C.plate_making.one_colour, 2:C.plate_making.two_colour, 3:C.plate_making.three_colour, 4:C.plate_making.full_colour};
-  const dieCutBoard  = C.order.die_cut_board;
-  const dieCutRun    = C.order.die_cut_run;
-  const labourPerBag = C.order.labour_per_bag;
-  const delivery     = C.order.delivery_cost;
-  const designerFee  = C.order.designer_fee;
-  const minQty       = C.order.minimum_qty;
+  var printCosts   = C ? {0:0, 1:C.printing.one_colour,    2:C.printing.two_colour,    3:C.printing.three_colour,    4:C.printing.full_colour}    : {0:0,1:50,2:100,3:150,4:200};
+  var plateCosts   = C ? {0:0, 1:C.plate_making.one_colour, 2:C.plate_making.two_colour, 3:C.plate_making.three_colour, 4:C.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
+  var dieCutBoard  = C ? C.order.die_cut_board  : 300;
+  var dieCutRun    = C ? C.order.die_cut_run    : 60;
+  var labourPerBag = C ? C.order.labour_per_bag : 1;
+  var delivery     = C ? C.order.delivery_cost  : 30;
+  var designerFee  = C ? C.order.designer_fee   : 100;
+  var minQty       = C ? C.order.minimum_qty    : 200;
 
   const qtyInput = document.getElementById('qty-custom-val');
   const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
@@ -1017,20 +1017,21 @@ calcPrice();
 
 </script>
 
+<script>
 // ===== EXPERT ADVICE PANEL TOGGLE =====
 function toggleExpert() {
-  var content  = document.getElementById('expert-content');
-  var chevron  = document.getElementById('expert-chevron');
+  var content = document.getElementById('expert-content');
+  var chevron = document.getElementById('expert-chevron');
+  if (!content || !chevron) return;
   var isHidden = content.classList.contains('hidden');
   content.classList.toggle('hidden', !isHidden);
   chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
   if (isHidden) {
-    // Smooth scroll to panel
     document.getElementById('expert-panel-wrapper').scrollIntoView({
       behavior: 'smooth', block: 'nearest'
     });
   }
 }
-
+</script>
 </body>
 </html>
