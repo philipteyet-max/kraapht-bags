@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Payment | Kraapht Bags Ltd</title>
-<script src="config.js?v=3"></script>
+<script src="config.js?v=4"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -54,6 +54,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <style>
   .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
 </style>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body class="bg-background text-on-surface font-sans antialiased">
 <nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
@@ -224,8 +225,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div class="flex justify-between text-xl font-bold mb-8">
             <span>Total</span><span class="text-accent">GHS 917.95</span>
           </div>
-          <button onclick="handlePayment()" class="w-full bg-accent text-white py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined">lock</span>Pay GHS 917.95 Now
+          <button onclick="handlePayment()" id="pay-btn" class="w-full bg-accent text-white py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">lock</span>Pay <span id="pay-btn-amount">Now</span>
           </button>
           <div class="flex items-center justify-center gap-2 mt-4 opacity-40">
             <span class="material-symbols-outlined text-sm">lock</span>
@@ -296,18 +297,116 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </footer>
 
 <script>
-document.querySelectorAll('[name="pay_method"]').forEach(r => {
+// ── Payment method toggle ──────────────────────────────────────────
+document.querySelectorAll('[name="pay_method"]').forEach(function(r) {
   r.addEventListener('change', function() {
     document.getElementById('momo-details').classList.toggle('hidden', this.value !== 'momo');
     document.getElementById('bank-details').classList.toggle('hidden', this.value !== 'bank');
   });
 });
+
+// ── Load order from localStorage ──────────────────────────────────
+var ORDER = {};
+try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
+
+window.addEventListener('DOMContentLoaded', function() {
+  // Populate order summary from saved order
+  if (ORDER.total) {
+    // Update sidebar totals
+    var totalEl = document.getElementById('summary-total');
+    if (totalEl) totalEl.textContent = ORDER.total;
+
+    // Update pay button amount
+    var btnAmt = document.getElementById('pay-btn-amount');
+    if (btnAmt) btnAmt.textContent = ORDER.total + ' Now';
+
+    // Update line items if available
+    if (ORDER.paperCost) {
+      var pcEl = document.getElementById('sum-subtotal');
+      if (pcEl) pcEl.textContent = ORDER.paperCost;
+    }
+    if (ORDER.qty) {
+      var qEl = document.getElementById('sum-qty');
+      if (qEl) qEl.textContent = ORDER.qty + ' units';
+    }
+  }
+
+  // Load config key
+  if (typeof KRAAPHT_CONFIG !== 'undefined' && KRAAPHT_CONFIG.paystack) {
+    window._PS_KEY = KRAAPHT_CONFIG.paystack.public_key;
+  } else {
+    window._PS_KEY = 'pk_test_335b7466d67dd7d8b8360c338983a6f1fb7193c8';
+  }
+});
+
+// ── Main payment handler ───────────────────────────────────────────
 function handlePayment() {
-  if(!document.getElementById('terms').checked) {
-    alert('Please agree to the payment terms before proceeding.');
+  if (!document.getElementById('terms').checked) {
+    alert('Please tick the box to agree to the payment terms before proceeding.');
     return;
   }
-  window.location.href = 'confirmation.html';
+
+  var email = document.querySelector('[type="email"]')?.value?.trim();
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address to receive your order confirmation.');
+    document.querySelector('[type="email"]')?.focus();
+    return;
+  }
+
+  var bizName = document.querySelector('[type="text"]')?.value?.trim() || 'Customer';
+
+  // Parse amount from ORDER or fall back to displayed total
+  var totalText = ORDER.total || 'GHS 917.95';
+  var amountGHS = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 917.95;
+  var amountPesewas = Math.round(amountGHS * 100); // Paystack uses smallest unit
+
+  // Generate unique reference
+  var ref = ORDER.ref || ('KBL-' + Date.now());
+
+  // Save reference for confirmation page
+  ORDER.ref   = ref;
+  ORDER.email = email;
+  ORDER.biz   = bizName;
+  try { localStorage.setItem('kraapht_order', JSON.stringify(ORDER)); } catch(e) {}
+
+  // ── Launch Paystack popup ────────────────────────────────────────
+  var handler = PaystackPop.setup({
+    key:      window._PS_KEY || 'pk_test_335b7466d67dd7d8b8360c338983a6f1fb7193c8',
+    email:    email,
+    amount:   amountPesewas,
+    currency: 'GHS',
+    ref:      ref,
+    label:    'Kraapht Bags Ltd — ' + bizName,
+    metadata: {
+      custom_fields: [
+        { display_name: 'Business Name', variable_name: 'biz_name',   value: bizName },
+        { display_name: 'Order Ref',     variable_name: 'order_ref',  value: ref },
+        { display_name: 'Quantity',      variable_name: 'quantity',   value: ORDER.qty || '' },
+      ]
+    },
+    channels: ['mobile_money', 'bank'],
+    callback: function(response) {
+      // Payment successful — save transaction ID and go to confirmation
+      ORDER.txn_ref = response.reference;
+      try { localStorage.setItem('kraapht_order', JSON.stringify(ORDER)); } catch(e) {}
+      window.location.href = 'confirmation.html';
+    },
+    onClose: function() {
+      // User closed popup without completing
+      var btn = document.getElementById('pay-btn');
+      if (btn) {
+        btn.textContent = 'Payment cancelled — try again';
+        btn.classList.add('bg-red-700');
+        setTimeout(function() {
+          btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Pay ' +
+            (ORDER.total || '') + ' Now';
+          btn.classList.remove('bg-red-700');
+        }, 3000);
+      }
+    }
+  });
+
+  handler.openIframe();
 }
 </script>
 </body>

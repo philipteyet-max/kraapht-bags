@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Order Confirmed | Kraapht Bags Ltd</title>
-<script src="config.js?v=3"></script>
+<script src="config.js?v=4"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -180,7 +180,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <div class="bg-charcoal text-white p-7">
         <h3 class="text-xl font-bold mb-6">Invoice</h3>
         <div class="space-y-3 text-sm mb-6 pb-6 border-b border-white/20">
-          <div class="flex justify-between"><span class="opacity-60">Order Ref</span><span class="text-accent">KBL-2026-00148</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Order Ref</span><span class="text-accent" id="invoice-ref">KBL-2026-00148</span></div>
           <div class="flex justify-between"><span class="opacity-60">Date</span><span id="order-date"></span></div>
           <div class="flex justify-between"><span class="opacity-60">Paper + Labour</span><span>GHS 870.00</span></div>
           <div class="flex justify-between"><span class="opacity-60">Delivery</span><span>GHS 30.00</span></div>
@@ -248,7 +248,52 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </footer>
 
 <script>
-document.getElementById('order-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+// ── Read order from localStorage ──────────────────────────────────
+var ORDER = {};
+try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
+
+window.addEventListener('DOMContentLoaded', function() {
+  // Date
+  var dateEl = document.getElementById('order-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  // Order reference — use real ref from order or Paystack txn_ref
+  var ref = ORDER.txn_ref || ORDER.ref || 'KBL-2026-' + Math.floor(10000 + Math.random()*90000);
+  document.querySelectorAll('#order-ref, #ref-inline').forEach(function(el) {
+    el.textContent = ref;
+  });
+
+  // Update WhatsApp link with real ref
+  document.querySelectorAll('a[href*="wa.me"]').forEach(function(a) {
+    if (a.href.includes('order+ref')) {
+      a.href = 'https://wa.me/233558619224?text=Hi+Kraapht+Bags%2C+my+order+ref+is+' + encodeURIComponent(ref);
+    }
+  });
+
+  // Total paid
+  if (ORDER.total) {
+    document.querySelectorAll('.total-paid').forEach(function(el) {
+      el.textContent = ORDER.total;
+    });
+  }
+
+  // Quantity
+  if (ORDER.qty) {
+    document.querySelectorAll('.order-qty').forEach(function(el) {
+      el.textContent = ORDER.qty + ' units';
+    });
+  }
+
+  // Invoice ref
+  var invRef = document.getElementById('invoice-ref');
+  if (invRef) invRef.textContent = ref;
+
+  // Clear the order from localStorage after reading
+  // (keep it for 10 mins in case user refreshes)
+  setTimeout(function() {
+    try { localStorage.removeItem('kraapht_order'); } catch(e) {}
+  }, 600000);
+});
 </script>
 </body>
 </html>
