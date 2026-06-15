@@ -7,100 +7,134 @@
 <script src="config.js?v=4"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <style>
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
   .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
-  .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
-  .carousel-item{transition:opacity 0.8s ease-in-out;}
-  input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+  .blueprint-grid{background-image:radial-gradient(circle,#D8C3A522 1px,transparent 1px);background-size:24px 24px;}
+  .sparkline{stroke-dasharray:200;stroke-dashoffset:200;animation:dash 2.5s ease-in-out forwards;}
+  @keyframes dash{to{stroke-dashoffset:0;}}
+
+  /* Tab sections */
+  .tab-section{display:none;}
+  .tab-section.active{display:block;}
+
+  /* Nav active state */
+  .nav-link{position:relative;transition:color 0.2s;}
+  .nav-link.active{color:#1F4D3A;}
+  .nav-link.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:#C8A96B;}
+
+  /* Stage pill */
+  .stage-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+
+  /* Production stage track */
+  .stage-track{display:flex;align-items:center;gap:0;}
+  .stage-node{flex:1;text-align:center;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:5px 4px;border:1px solid;position:relative;}
+  .stage-node.done{background:#1F4D3A;color:white;border-color:#1F4D3A;}
+  .stage-node.active{background:#C8A96B;color:white;border-color:#C8A96B;}
+  .stage-node.skip{background:#F7F4EF;color:#8B7355;border-color:#D8C3A5;opacity:0.5;font-style:italic;}
+  .stage-node.pending{background:#F7F4EF;color:#8B7355;border-color:#D8C3A5;}
+
+  /* Modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
+  .modal-backdrop.hidden{display:none;}
+  .modal-box{background:white;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;}
+
+  /* Finance bar chart */
+  .bar-chart-bar{transition:height 0.6s ease;}
+
+  /* Table row hover */
+  tr.clickable:hover{background:#F7F4EF;cursor:pointer;}
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:4px;height:4px;}
+  ::-webkit-scrollbar-track{background:#F7F4EF;}
+  ::-webkit-scrollbar-thumb{background:#D8C3A5;}
+
+  /* Status badges */
+  .badge-new{background:#EDE9E2;color:#4A4035;}
+  .badge-printing{background:#DBEAFE;color:#1D4ED8;}
+  .badge-cutting{background:#EDE9FE;color:#6D28D9;}
+  .badge-lamination{background:#FEF3C7;color:#B45309;}
+  .badge-folding{background:#D1FAE5;color:#065F46;}
+  .badge-qc{background:#FEF9C3;color:#92400E;}
+  .badge-dispatch{background:#DBEAFE;color:#1E40AF;}
+  .badge-delivered{background:#DCFCE7;color:#166534;}
+  .badge-cancelled{background:#FEE2E2;color:#991B1B;}
+
+  /* Client card hover */
+  .client-card:hover{border-color:#1F4D3A;}
+
+  /* Toast */
+  #toast{position:fixed;bottom:24px;right:24px;z-index:200;transition:opacity 0.3s,transform 0.3s;}
+  #toast.hidden{opacity:0;transform:translateY(8px);pointer-events:none;}
 </style>
 <script id="tailwind-config">
 tailwind.config={darkMode:"class",theme:{extend:{colors:{
-  "primary":"#1F4D3A",
-  "primary-light":"#2D6B52",
-  "on-primary":"#FFFFFF",
-  "primary-container":"#C5E8D8",
-  "on-primary-container":"#002114",
-  "secondary":"#D8C3A5",
-  "on-secondary":"#2B2B2B",
-  "tertiary":"#2B2B2B",
-  "accent":"#C8A96B",
-  "on-accent":"#FFFFFF",
-  "background":"#F7F4EF",
-  "on-background":"#2B2B2B",
-  "surface":"#FFFFFF",
-  "on-surface":"#2B2B2B",
-  "surface-container":"#EDE9E2",
-  "surface-container-low":"#F7F4EF",
-  "surface-container-high":"#E5E1DA",
-  "on-surface-variant":"#4A4035",
-  "inverse-surface":"#2B2B2B",
-  "inverse-on-surface":"#F7F4EF",
-  "inverse-primary":"#C8A96B",
-  "outline":"#8B7355",
-  "outline-variant":"#D8C3A5",
-  "error":"#BA1A1A",
-  "kraft":"#D8C3A5",
-  "forest":"#1F4D3A",
-  "gold":"#C8A96B",
-  "charcoal":"#2B2B2B"
+  "primary":"#1F4D3A","primary-light":"#2D6B52","on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8","on-primary-container":"#002114",
+  "secondary":"#D8C3A5","on-secondary":"#2B2B2B","tertiary":"#2B2B2B",
+  "accent":"#C8A96B","on-accent":"#FFFFFF","background":"#F7F4EF",
+  "on-background":"#2B2B2B","surface":"#FFFFFF","on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2","surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA","on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B","inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B","outline":"#8B7355","outline-variant":"#D8C3A5",
+  "error":"#BA1A1A","kraft":"#D8C3A5","forest":"#1F4D3A","gold":"#C8A96B","charcoal":"#2B2B2B"
 },
-"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
-"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"]},
 "borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
 </script>
-<style>
-  .sparkline{stroke-dasharray:200;stroke-dashoffset:200;animation:dash 2.5s ease-in-out forwards;}
-  @keyframes dash{to{stroke-dashoffset:0;}}
-  .blueprint-grid{background-image:radial-gradient(circle,#D8C3A522 1px,transparent 1px);background-size:24px 24px;}
-</style>
 </head>
 <body class="bg-background text-on-surface font-sans antialiased blueprint-grid min-h-screen">
 
-<!-- Admin Nav -->
+<!-- ═══════════════════════════════════ NAV ═══════════════════════════════════ -->
 <nav class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur border-b border-outline-variant shadow-sm">
-  <div class="max-w-[1440px] mx-auto px-8 flex justify-between items-center h-16">
-    <div class="flex items-center gap-6">
+  <div class="max-w-[1440px] mx-auto px-6 flex justify-between items-center h-16">
+    <div class="flex items-center gap-5">
       <a href="index.html"><img alt="Kraapht Bags Ltd" class="h-8 w-auto" src="logo.png" data-img="logo"/></a>
-      <span class="font-label-sm text-label-sm text-accent uppercase tracking-widest px-3 py-1 bg-primary/10 border border-primary/20">Admin</span>
-      <div class="hidden md:flex gap-6">
-        <a class="font-body-md text-primary border-b border-accent pb-0.5 text-sm" href="#">Dashboard</a>
-        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Orders</a>
-        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Production</a>
-        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Clients</a>
-        <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Finance</a>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent px-3 py-1 bg-primary/10 border border-primary/20">Admin</span>
+      <div class="hidden md:flex gap-5">
+        <button onclick="showTab('dashboard')" class="nav-link active text-sm" data-tab="dashboard">Dashboard</button>
+        <button onclick="showTab('orders')" class="nav-link text-sm text-on-surface-variant hover:text-primary transition-colors" data-tab="orders">Orders</button>
+        <button onclick="showTab('production')" class="nav-link text-sm text-on-surface-variant hover:text-primary transition-colors" data-tab="production">Production</button>
+        <button onclick="showTab('clients')" class="nav-link text-sm text-on-surface-variant hover:text-primary transition-colors" data-tab="clients">Clients</button>
+        <button onclick="showTab('finance')" class="nav-link text-sm text-on-surface-variant hover:text-primary transition-colors" data-tab="finance">Finance</button>
       </div>
     </div>
     <div class="flex items-center gap-3">
       <div class="flex items-center gap-2 bg-surface-container border border-outline-variant px-3 py-2">
-        <span class="material-symbols-outlined text-outline text-sm">search</span>
-        <input class="bg-transparent border-none focus:ring-0 font-label-sm text-sm w-32 outline-none" placeholder="Search orders..." type="text"/>
+        <span class="material-symbols-outlined text-outline" style="font-size:16px;">search</span>
+        <input id="global-search" class="bg-transparent border-none focus:ring-0 text-sm w-36 outline-none placeholder:text-on-surface-variant/50" placeholder="Search orders, clients…" type="text" oninput="handleSearch(this.value)"/>
       </div>
       <div class="flex items-center gap-2 px-4 py-2 bg-primary text-white">
-        <span class="material-symbols-outlined text-sm">person</span>
-        <span class="font-label-sm text-label-sm uppercase tracking-widest text-xs hidden md:block">Founder</span>
+        <span class="material-symbols-outlined" style="font-size:16px;">person</span>
+        <span class="text-xs font-bold tracking-[0.15em] uppercase hidden md:block">Founder</span>
       </div>
     </div>
   </div>
 </nav>
 
-<main class="max-w-[1440px] mx-auto px-8 pt-24 pb-16">
+<div id="loading-banner" class="hidden fixed top-16 left-0 right-0 z-40 bg-accent text-white text-center text-xs font-bold tracking-widest uppercase py-2">
+  Loading orders from database…
+</div>
 
-  <!-- Header -->
+<main class="max-w-[1440px] mx-auto px-6 pt-24 pb-16">
+
+<!-- ════════════════════════════ DASHBOARD TAB ════════════════════════════ -->
+<div id="tab-dashboard" class="tab-section active">
   <header class="mb-8 flex justify-between items-end flex-wrap gap-4">
     <div>
-      <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.2em] mb-2 block text-xs">System Operational</span>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-2 block">System Operational</span>
       <h1 class="text-3xl font-bold">Command Centre</h1>
     </div>
     <div class="flex gap-3">
       <div class="p-4 bg-surface border border-outline-variant text-right">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Live Time</p>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Live Time</p>
         <p class="text-xl font-bold" id="clock">--:--:--</p>
       </div>
       <div class="p-4 bg-surface border border-outline-variant text-right">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Today</p>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Today</p>
         <p class="text-xl font-bold" id="today-date">--</p>
       </div>
     </div>
@@ -110,22 +144,22 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-surface border border-outline-variant p-6">
       <div class="flex items-start justify-between mb-3">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Today's Revenue</p>
-        <span class="material-symbols-outlined text-primary text-lg">payments</span>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Today's Revenue</p>
+        <span class="material-symbols-outlined text-primary" style="font-size:20px;">payments</span>
       </div>
       <p class="text-3xl font-bold">GHS 3,840</p>
-      <p class="font-label-sm text-label-sm text-green-600 uppercase tracking-widest text-xs mt-2">↑ +18% vs yesterday</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-green-600 mt-2">↑ +18% vs yesterday</p>
       <svg class="w-full h-8 mt-3" viewBox="0 0 100 20">
         <path class="sparkline" d="M0 16 Q15 8,25 12 T50 6 T75 10 T100 4" fill="none" stroke="#C8A96B" stroke-width="2"/>
       </svg>
     </div>
     <div class="bg-surface border border-outline-variant p-6">
       <div class="flex items-start justify-between mb-3">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Active Orders</p>
-        <span class="material-symbols-outlined text-primary text-lg">inbox</span>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Active Orders</p>
+        <span class="material-symbols-outlined text-primary" style="font-size:20px;">inbox</span>
       </div>
       <p class="text-3xl font-bold">7</p>
-      <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-2">3 producing · 4 pending</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2">3 producing · 4 pending</p>
       <div class="flex gap-1 mt-3">
         <div class="h-2 bg-primary" style="width:43%"></div>
         <div class="h-2 bg-primary/20" style="width:57%"></div>
@@ -133,119 +167,55 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     </div>
     <div class="bg-surface border border-outline-variant p-6">
       <div class="flex items-start justify-between mb-3">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Bags This Month</p>
-        <span class="material-symbols-outlined text-primary text-lg">shopping_bag</span>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Bags This Month</p>
+        <span class="material-symbols-outlined text-primary" style="font-size:20px;">shopping_bag</span>
       </div>
       <p class="text-3xl font-bold">6,240</p>
-      <p class="font-label-sm text-label-sm text-green-600 uppercase tracking-widest text-xs mt-2">↑ +34% vs last month</p>
-      <div class="h-1.5 bg-surface-container-high mt-4">
-        <div class="h-full bg-primary" style="width:62%"></div>
-      </div>
+      <p class="text-xs font-bold tracking-widest uppercase text-green-600 mt-2">↑ +34% vs last month</p>
+      <div class="h-1.5 bg-surface-container-high mt-4"><div class="h-full bg-primary" style="width:62%"></div></div>
     </div>
     <div class="bg-primary text-white p-6">
       <div class="flex items-start justify-between mb-3">
-        <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs opacity-70">Monthly Revenue</p>
-        <span class="material-symbols-outlined text-accent text-lg">trending_up</span>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-70">Monthly Revenue</p>
+        <span class="material-symbols-outlined text-accent" style="font-size:20px;">trending_up</span>
       </div>
       <p class="text-3xl font-bold">GHS 24,180</p>
-      <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mt-2 opacity-70">Target: GHS 35,000</p>
-      <div class="h-1.5 bg-white/20 mt-3">
-        <div class="h-full bg-accent" style="width:69%"></div>
-      </div>
-      <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mt-1 opacity-50">69% of target</p>
+      <p class="text-xs font-bold tracking-widest uppercase mt-2 opacity-70">Target: GHS 35,000</p>
+      <div class="h-1.5 bg-white/20 mt-3"><div class="h-full bg-accent" style="width:69%"></div></div>
+      <p class="text-xs font-bold tracking-widest uppercase mt-1 opacity-50">69% of target</p>
     </div>
   </div>
 
   <!-- Main Grid -->
   <div class="grid grid-cols-12 gap-6">
 
-    <!-- Orders Table -->
+    <!-- Live Order Queue -->
     <section class="col-span-12 lg:col-span-8 bg-surface border border-outline-variant p-6">
       <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
         <h2 class="text-xl font-bold flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">list_alt</span>Live Order Queue
+          <span class="material-symbols-outlined text-primary" style="font-size:22px;">list_alt</span>Live Order Queue
         </h2>
-        <div class="flex gap-2 flex-wrap">
-          <button class="px-3 py-1 bg-primary text-white font-label-sm text-label-sm uppercase tracking-widest text-xs">All</button>
-          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Production</button>
-          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Pending</button>
-          <button class="px-3 py-1 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs hover:border-primary transition-colors">Delivered</button>
-        </div>
+        <button onclick="showTab('orders')" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">View All →</button>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
             <tr class="border-b border-outline-variant">
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Ref</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Client</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Paper · Product</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Qty</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Amount</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 pr-4 text-xs">Status</th>
-              <th class="text-left font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest pb-3 text-xs">Due</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Ref</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Client</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Product</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Qty</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Amount</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3 pr-4">Stage</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant pb-3">Due</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-outline-variant">
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00148</td>
-              <td class="py-3 pr-4">Accra Bakery</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Chromo Coat · Flat Bottom</td>
-              <td class="py-3 pr-4">200</td>
-              <td class="py-3 pr-4 font-semibold">GHS 918</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-accent/20 text-accent font-label-sm text-label-sm uppercase tracking-widest text-xs">Production</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">3 Jun</td>
-            </tr>
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00147</td>
-              <td class="py-3 pr-4">Tema Pharmacy</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Brown Card 250gsm · Flat Bottom</td>
-              <td class="py-3 pr-4">1,000</td>
-              <td class="py-3 pr-4 font-semibold">GHS 4,960</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-primary text-white font-label-sm text-label-sm uppercase tracking-widest text-xs">Production</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">5 Jun</td>
-            </tr>
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00146</td>
-              <td class="py-3 pr-4">East Legon Events</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Matt Paper 150gsm · Custom Print</td>
-              <td class="py-3 pr-4">500</td>
-              <td class="py-3 pr-4 font-semibold">GHS 3,850</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-label-sm text-label-sm uppercase tracking-widest text-xs">QC Check</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">1 Jun</td>
-            </tr>
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00145</td>
-              <td class="py-3 pr-4">Osu Restaurant</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Duplex Board · Food Bowl</td>
-              <td class="py-3 pr-4">300</td>
-              <td class="py-3 pr-4 font-semibold">GHS 1,260</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-blue-100 text-blue-700 font-label-sm text-label-sm uppercase tracking-widest text-xs">Dispatched</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">Today</td>
-            </tr>
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00144</td>
-              <td class="py-3 pr-4">Labone Boutique</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Brown Card 250gsm · Large</td>
-              <td class="py-3 pr-4">200</td>
-              <td class="py-3 pr-4 font-semibold">GHS 1,460</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-surface-container border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-xs text-on-surface-variant">New Order</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">8 Jun</td>
-            </tr>
-            <tr class="hover:bg-surface-container transition-colors">
-              <td class="py-3 pr-4 font-semibold text-xs">KBL-00143</td>
-              <td class="py-3 pr-4">AL Lounge</td>
-              <td class="py-3 pr-4 text-on-surface-variant text-xs">Duplex Board · 2 Colour Print</td>
-              <td class="py-3 pr-4">500</td>
-              <td class="py-3 pr-4 font-semibold">GHS 2,060</td>
-              <td class="py-3 pr-4"><span class="px-2 py-1 bg-green-100 text-green-700 font-label-sm text-label-sm uppercase tracking-widest text-xs">Delivered</span></td>
-              <td class="py-3 text-on-surface-variant text-xs">Done</td>
-            </tr>
-          </tbody>
+          <tbody id="dashboard-order-rows" class="divide-y divide-outline-variant"></tbody>
         </table>
       </div>
       <div class="mt-5 pt-4 border-t border-outline-variant flex justify-between items-center">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Showing 6 of 148 total orders</p>
-        <a href="#" class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs hover:text-accent transition-colors">View All →</a>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Showing 6 of <span id="total-orders-count">--</span> total orders</p>
+        <button onclick="showTab('orders')" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">View All →</button>
       </div>
     </section>
 
@@ -254,43 +224,16 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
       <!-- Production Status -->
       <div class="bg-surface border border-outline-variant p-6">
-        <h2 class="text-xl font-bold flex items-center gap-2 mb-6">
-          <span class="material-symbols-outlined text-primary">precision_manufacturing</span>Production
+        <h2 class="text-xl font-bold flex items-center gap-2 mb-5">
+          <span class="material-symbols-outlined text-primary" style="font-size:22px;">precision_manufacturing</span>In Production
         </h2>
-        <div class="space-y-5">
-          <div>
-            <div class="flex justify-between mb-2">
-              <div><p class="font-body-md font-semibold text-sm">KBL-00148 · Accra Bakery</p><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">200 bags · Day 2 of 7</p></div>
-              <span class="text-xl font-bold text-accent">28%</span>
-            </div>
-            <div class="h-2 bg-surface-container">
-              <div class="h-full bg-accent transition-all" style="width:28%"></div>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between mb-2">
-              <div><p class="font-body-md font-semibold text-sm">KBL-00147 · Tema Pharmacy</p><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">1,000 bags · Day 4 of 7</p></div>
-              <span class="text-xl font-bold text-primary">57%</span>
-            </div>
-            <div class="h-2 bg-surface-container">
-              <div class="h-full bg-primary transition-all" style="width:57%"></div>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between mb-2">
-              <div><p class="font-body-md font-semibold text-sm">KBL-00146 · East Legon Events</p><p class="font-label-sm text-label-sm text-amber-600 uppercase tracking-widest text-xs">QC in progress</p></div>
-              <span class="text-xl font-bold text-amber-600">95%</span>
-            </div>
-            <div class="h-2 bg-surface-container">
-              <div class="h-full bg-amber-500 transition-all" style="width:95%"></div>
-            </div>
-          </div>
-        </div>
+        <div id="dashboard-production" class="space-y-5"></div>
+        <button onclick="showTab('production')" class="mt-4 text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Full Production Board →</button>
       </div>
 
       <!-- Revenue Summary -->
       <div class="bg-charcoal text-white p-6">
-        <h2 class="text-xl font-bold mb-5">Revenue · June 2026</h2>
+        <h2 class="text-xl font-bold mb-5">Revenue · <span id="current-month-label">June 2026</span></h2>
         <div class="space-y-3 text-sm mb-4 pb-4 border-b border-white/20">
           <div class="flex justify-between"><span class="opacity-60">Received</span><span class="font-semibold">GHS 24,180</span></div>
           <div class="flex justify-between"><span class="opacity-60">In production</span><span class="font-semibold">GHS 9,028</span></div>
@@ -300,74 +243,1222 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="flex justify-between text-xl font-bold">
           <span>Net Profit</span><span class="text-accent">GHS 11,076</span>
         </div>
-        <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs opacity-40 mt-1">45.8% margin</p>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-40 mt-1">45.8% margin</p>
+        <button onclick="showTab('finance')" class="mt-4 text-xs font-bold tracking-widest uppercase text-accent/70 hover:text-accent transition-colors">Finance Detail →</button>
       </div>
 
       <!-- Quick Actions -->
       <div class="bg-surface border border-outline-variant p-5">
-        <h3 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-4 text-xs">Quick Actions</h3>
+        <h3 class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-4">Quick Actions</h3>
         <div class="space-y-1">
-          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm"><span class="material-symbols-outlined text-primary text-lg">add</span>Create Manual Order</button>
-          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm"><span class="material-symbols-outlined text-primary text-lg">update</span>Update Production Status</button>
-          <a href="https://wa.me/233558619224" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm"><span class="material-symbols-outlined text-primary text-lg">chat</span>WhatsApp Client</a>
-          <button class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm"><span class="material-symbols-outlined text-primary text-lg">download</span>Export Monthly Report</button>
-          <a href="index.html" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm"><span class="material-symbols-outlined text-primary text-lg">open_in_new</span>View Public Website</a>
+          <button onclick="showTab('production')" class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">update</span>Update Production Stage
+          </button>
+          <button onclick="showTab('orders')" class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">list_alt</span>View All Orders
+          </button>
+          <button onclick="showTab('clients')" class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">groups</span>Client Directory
+          </button>
+          <a href="https://wa.me/233558619224" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">chat</span>WhatsApp Client
+          </a>
+          <button onclick="exportMonthlyReport()" class="w-full text-left flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">download</span>Export Monthly Report
+          </button>
+          <a href="index.html" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-sm">
+            <span class="material-symbols-outlined text-primary" style="font-size:18px;">open_in_new</span>View Public Site
+          </a>
         </div>
       </div>
     </div>
 
-    <!-- Bottom: Top Clients -->
+    <!-- Top Clients -->
     <section class="col-span-12 bg-surface border border-outline-variant p-6">
-      <h2 class="text-xl font-bold flex items-center gap-2 mb-6">
-        <span class="material-symbols-outlined text-primary">groups</span>Top Clients — June 2026
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
-          <div class="flex justify-between items-start mb-3">
-            <p class="font-body-md font-semibold">Tema Pharmacy</p>
-            <span class="px-2 py-0.5 bg-primary text-white font-label-sm text-label-sm text-xs uppercase tracking-widest">#1</span>
-          </div>
-          <p class="text-2xl font-bold text-primary">GHS 7,600</p>
-          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-2">2,000 bags · 2 orders</p>
-        </div>
-        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
-          <div class="flex justify-between items-start mb-3">
-            <p class="font-body-md font-semibold">East Legon Events</p>
-            <span class="px-2 py-0.5 bg-accent/20 text-accent font-label-sm text-label-sm text-xs uppercase tracking-widest">#2</span>
-          </div>
-          <p class="text-2xl font-bold text-primary">GHS 5,200</p>
-          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-2">1,100 bags · 2 orders</p>
-        </div>
-        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
-          <div class="flex justify-between items-start mb-3">
-            <p class="font-body-md font-semibold">AL Lounge</p>
-            <span class="px-2 py-0.5 bg-accent/20 text-accent font-label-sm text-label-sm text-xs uppercase tracking-widest">#3</span>
-          </div>
-          <p class="text-2xl font-bold text-primary">GHS 4,120</p>
-          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-2">900 bags · 3 orders</p>
-        </div>
-        <div class="p-5 border border-outline-variant hover:border-primary transition-colors">
-          <div class="flex justify-between items-start mb-3">
-            <p class="font-body-md font-semibold">Accra Bakery</p>
-            <span class="px-2 py-0.5 bg-accent/20 text-accent font-label-sm text-label-sm text-xs uppercase tracking-widest">#4</span>
-          </div>
-          <p class="text-2xl font-bold text-primary">GHS 3,870</p>
-          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-2">850 bags · 3 orders</p>
-        </div>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary" style="font-size:22px;">groups</span>Top Clients — <span id="top-clients-month">June 2026</span>
+        </h2>
+        <button onclick="showTab('clients')" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">All Clients →</button>
       </div>
+      <div id="top-clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
     </section>
-
   </div>
+</div>
+
+<!-- ════════════════════════════ ORDERS TAB ════════════════════════════ -->
+<div id="tab-orders" class="tab-section">
+  <header class="mb-6 flex justify-between items-end flex-wrap gap-4">
+    <div>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-2 block">Live Queue</span>
+      <h1 class="text-3xl font-bold">Orders</h1>
+    </div>
+    <div class="flex gap-2 flex-wrap items-center">
+      <input id="order-search" type="text" placeholder="Search ref, client, product…" oninput="filterOrders()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary w-52"/>
+      <select id="order-status-filter" onchange="filterOrders()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="">All Stages</option>
+        <option value="New Order">New Order</option>
+        <option value="Printing">Printing</option>
+        <option value="Die Cutting">Die Cutting</option>
+        <option value="Lamination">Lamination</option>
+        <option value="Folding">Folding</option>
+        <option value="QC Check">QC Check</option>
+        <option value="Dispatched">Dispatched</option>
+        <option value="Delivered">Delivered</option>
+      </select>
+      <select id="order-sort" onchange="filterOrders()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="amount-high">Amount: high to low</option>
+        <option value="amount-low">Amount: low to high</option>
+        <option value="due">Due date</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Summary strip -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Total Orders</p>
+      <p class="text-2xl font-bold" id="orders-total-count">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">New / Queued</p>
+      <p class="text-2xl font-bold text-blue-700" id="orders-new-count">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">In Production</p>
+      <p class="text-2xl font-bold text-accent" id="orders-prod-count">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Dispatched</p>
+      <p class="text-2xl font-bold text-primary" id="orders-dispatch-count">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Delivered</p>
+      <p class="text-2xl font-bold text-green-700" id="orders-done-count">--</p>
+    </div>
+  </div>
+
+  <div class="bg-surface border border-outline-variant overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-outline-variant bg-surface-container-low">
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Ref</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Client</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Paper · Product</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Lamination</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Qty</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Amount</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Materials</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Labour</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Margin</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Stage</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Due</th>
+            <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-4">Action</th>
+          </tr>
+        </thead>
+        <tbody id="orders-table-body" class="divide-y divide-outline-variant"></tbody>
+      </table>
+    </div>
+    <div class="p-4 border-t border-outline-variant flex justify-between items-center">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant" id="orders-showing-label">Showing -- orders</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════ PRODUCTION TAB ════════════════════════════ -->
+<div id="tab-production" class="tab-section">
+  <header class="mb-6 flex justify-between items-end flex-wrap gap-4">
+    <div>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-2 block">Shop Floor</span>
+      <h1 class="text-3xl font-bold">Production Board</h1>
+    </div>
+    <div class="flex gap-2 items-center">
+      <select id="prod-filter" onchange="renderProductionBoard()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="active">Active only</option>
+        <option value="all">All orders</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Stage legend -->
+  <div class="bg-surface border border-outline-variant p-4 mb-6 flex flex-wrap gap-3 items-center">
+    <span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mr-2">Stage Key:</span>
+    <span class="stage-pill bg-primary text-white">✓ Done</span>
+    <span class="stage-pill bg-accent text-white">▶ Active</span>
+    <span class="stage-pill bg-surface-container text-on-surface-variant border border-outline-variant">· Pending</span>
+    <span class="stage-pill bg-surface-container/50 text-on-surface-variant/50 italic border border-dashed border-outline-variant">— Skipped</span>
+  </div>
+
+  <!-- Kanban-style stage columns summary -->
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6" id="stage-column-summary"></div>
+
+  <!-- Production cards -->
+  <div id="production-cards" class="space-y-4"></div>
+</div>
+
+<!-- ════════════════════════════ CLIENTS TAB ════════════════════════════ -->
+<div id="tab-clients" class="tab-section">
+  <header class="mb-6 flex justify-between items-end flex-wrap gap-4">
+    <div>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-2 block">Client Directory</span>
+      <h1 class="text-3xl font-bold">Clients</h1>
+    </div>
+    <div class="flex gap-2 items-center flex-wrap">
+      <input id="client-search" type="text" placeholder="Search name, business, industry…" oninput="filterClients()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary w-56"/>
+      <select id="client-industry-filter" onchange="filterClients()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="">All Industries</option>
+        <option value="Bakery">Bakery</option>
+        <option value="Pharmacy">Pharmacy</option>
+        <option value="Restaurant">Restaurant</option>
+        <option value="Events">Events</option>
+        <option value="Retail">Retail</option>
+        <option value="Lounge / Bar">Lounge / Bar</option>
+        <option value="Supermarket">Supermarket</option>
+        <option value="Corporate">Corporate</option>
+      </select>
+      <select id="client-sort" onchange="filterClients()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="revenue">Revenue: highest</option>
+        <option value="orders">Most orders</option>
+        <option value="name">A – Z</option>
+        <option value="recent">Most recent</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Client stats strip -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Total Clients</p>
+      <p class="text-2xl font-bold" id="clients-total">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Active This Month</p>
+      <p class="text-2xl font-bold text-primary" id="clients-active">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Total Revenue</p>
+      <p class="text-2xl font-bold text-accent" id="clients-revenue">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-4">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Avg Order Value</p>
+      <p class="text-2xl font-bold" id="clients-avg">--</p>
+    </div>
+  </div>
+
+  <div id="clients-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+
+<!-- ════════════════════════════ FINANCE TAB ════════════════════════════ -->
+<div id="tab-finance" class="tab-section">
+  <header class="mb-6 flex justify-between items-end flex-wrap gap-4">
+    <div>
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-2 block">Financial Overview</span>
+      <h1 class="text-3xl font-bold">Finance</h1>
+    </div>
+    <div class="flex gap-2 items-center">
+      <select id="finance-month-filter" onchange="renderFinance()" class="border border-outline-variant bg-surface px-3 py-2 text-sm outline-none focus:border-primary">
+        <option value="June 2026">June 2026</option>
+        <option value="May 2026">May 2026</option>
+        <option value="April 2026">April 2026</option>
+      </select>
+      <button onclick="exportMonthlyReport()" class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold tracking-wide hover:bg-primary-light transition-colors">
+        <span class="material-symbols-outlined" style="font-size:16px;">download</span>Export CSV
+      </button>
+    </div>
+  </header>
+
+  <!-- Finance KPIs -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="bg-primary text-white p-6">
+      <p class="text-xs font-bold tracking-widest uppercase opacity-70 mb-2">Revenue Received</p>
+      <p class="text-3xl font-bold" id="fin-revenue">--</p>
+      <p class="text-xs font-bold tracking-widest uppercase opacity-50 mt-2" id="fin-revenue-sub">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-6">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Total Costs</p>
+      <p class="text-3xl font-bold text-error" id="fin-costs">--</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant/60 mt-2" id="fin-costs-sub">--</p>
+    </div>
+    <div class="bg-surface border border-outline-variant p-6">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Net Profit</p>
+      <p class="text-3xl font-bold text-primary" id="fin-profit">--</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant/60 mt-2" id="fin-margin">--</p>
+    </div>
+    <div class="bg-accent/10 border border-accent/30 p-6">
+      <p class="text-xs font-bold tracking-widest uppercase text-accent mb-2">Monthly Target</p>
+      <p class="text-3xl font-bold" id="fin-target-pct">--</p>
+      <div class="h-1.5 bg-accent/20 mt-3"><div id="fin-target-bar" class="h-full bg-accent transition-all" style="width:0%"></div></div>
+      <p class="text-xs font-bold tracking-widest uppercase text-accent/70 mt-1" id="fin-target-label">--</p>
+    </div>
+  </div>
+
+  <!-- Two column layout -->
+  <div class="grid grid-cols-12 gap-6">
+
+    <!-- Cost breakdown chart -->
+    <div class="col-span-12 lg:col-span-5 bg-surface border border-outline-variant p-6">
+      <h2 class="text-lg font-bold mb-5">Cost Breakdown</h2>
+      <div class="space-y-4" id="fin-cost-breakdown"></div>
+    </div>
+
+    <!-- Monthly revenue vs target bar chart -->
+    <div class="col-span-12 lg:col-span-7 bg-surface border border-outline-variant p-6">
+      <h2 class="text-lg font-bold mb-1">Revenue vs Target — 2026</h2>
+      <p class="text-xs text-on-surface-variant mb-5">Jun–Dec projection based on bootstrap plan</p>
+      <div class="flex items-end gap-2 h-40" id="fin-bar-chart"></div>
+      <div class="flex gap-4 mt-3">
+        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-primary"></div><span class="text-xs text-on-surface-variant">Actual</span></div>
+        <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-accent/40 border border-accent/60"></div><span class="text-xs text-on-surface-variant">Target</span></div>
+      </div>
+    </div>
+
+    <!-- Per-order cost table -->
+    <div class="col-span-12 bg-surface border border-outline-variant p-6">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-lg font-bold">Per-Order Cost Breakdown</h2>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant" id="fin-order-month-label">--</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-outline-variant bg-surface-container-low">
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Ref</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Client</th>
+              <th class="text-left text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Qty</th>
+              <th class="text-right text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Revenue</th>
+              <th class="text-right text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Materials</th>
+              <th class="text-right text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Labour</th>
+              <th class="text-right text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Gross Profit</th>
+              <th class="text-right text-xs font-bold tracking-widest uppercase text-on-surface-variant p-3">Margin</th>
+            </tr>
+          </thead>
+          <tbody id="fin-order-table" class="divide-y divide-outline-variant"></tbody>
+          <tfoot>
+            <tr class="border-t-2 border-primary/30 bg-primary/5">
+              <td class="p-3 font-bold text-xs" colspan="3">Total</td>
+              <td class="p-3 font-bold text-right" id="fin-total-rev">--</td>
+              <td class="p-3 font-bold text-right text-error" id="fin-total-mat">--</td>
+              <td class="p-3 font-bold text-right text-error" id="fin-total-lab">--</td>
+              <td class="p-3 font-bold text-right text-primary" id="fin-total-profit">--</td>
+              <td class="p-3 font-bold text-right" id="fin-total-margin">--</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 </main>
 
+<!-- ════════════════════ ORDER DETAIL MODAL ════════════════════ -->
+<div id="order-modal" class="modal-backdrop hidden" onclick="closeOrderModal(event)">
+  <div class="modal-box p-0">
+    <div class="bg-primary text-white p-5 flex justify-between items-start">
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-70 mb-1">Order Detail</p>
+        <h2 class="text-xl font-bold" id="modal-ref">--</h2>
+        <p class="text-sm opacity-70" id="modal-client-name">--</p>
+      </div>
+      <button onclick="document.getElementById('order-modal').classList.add('hidden')" class="text-white/70 hover:text-white mt-1">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-5 space-y-5">
+      <!-- Order info grid -->
+      <div class="grid grid-cols-2 gap-3" id="modal-info-grid"></div>
+
+      <!-- Stage track -->
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-3">Production Stage</p>
+        <div class="stage-track" id="modal-stage-track"></div>
+      </div>
+
+      <!-- Advance stage -->
+      <div id="modal-advance-section">
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Advance Stage</p>
+        <div class="flex gap-2 flex-wrap" id="modal-stage-buttons"></div>
+      </div>
+
+      <!-- Cost summary -->
+      <div class="border border-outline-variant">
+        <div class="p-3 bg-surface-container-low border-b border-outline-variant">
+          <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Cost Summary</p>
+        </div>
+        <div class="p-3 space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-on-surface-variant">Revenue</span><span class="font-semibold" id="modal-revenue">--</span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Materials cost</span><span class="font-semibold text-error" id="modal-materials">--</span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Labour cost</span><span class="font-semibold text-error" id="modal-labour">--</span></div>
+          <div class="flex justify-between border-t border-outline-variant pt-2 font-bold"><span>Gross Profit</span><span class="text-primary" id="modal-profit">--</span></div>
+          <div class="flex justify-between text-xs text-on-surface-variant"><span>Margin</span><span id="modal-margin">--</span></div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Order Notes</p>
+        <p class="text-sm text-on-surface-variant" id="modal-notes">—</p>
+      </div>
+
+      <!-- Client contact -->
+      <div class="flex gap-2">
+        <a id="modal-whatsapp" href="#" class="flex-1 flex items-center justify-center gap-2 py-2 bg-green-600 text-white text-sm font-bold hover:bg-green-700 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">chat</span>WhatsApp
+        </a>
+        <a id="modal-phone" href="#" class="flex-1 flex items-center justify-center gap-2 py-2 bg-surface border border-outline-variant text-sm font-bold hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">call</span>Call
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ CLIENT DETAIL MODAL ════════════════════ -->
+<div id="client-modal" class="modal-backdrop hidden" onclick="closeClientModal(event)">
+  <div class="modal-box p-0">
+    <div class="bg-charcoal text-white p-5 flex justify-between items-start">
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-60 mb-1">Client Profile</p>
+        <h2 class="text-xl font-bold" id="cmodal-business">--</h2>
+        <p class="text-sm opacity-60" id="cmodal-name">--</p>
+      </div>
+      <button onclick="document.getElementById('client-modal').classList.add('hidden')" class="text-white/60 hover:text-white">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-5 space-y-5">
+      <div class="grid grid-cols-2 gap-3" id="cmodal-info"></div>
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-3">Order History</p>
+        <div id="cmodal-orders" class="space-y-2"></div>
+      </div>
+      <div class="border border-outline-variant p-3">
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div><p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Total Spent</p><p class="text-lg font-bold text-primary" id="cmodal-total">--</p></div>
+          <div><p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Orders</p><p class="text-lg font-bold" id="cmodal-orders-count">--</p></div>
+          <div><p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Avg Value</p><p class="text-lg font-bold" id="cmodal-avg">--</p></div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a id="cmodal-whatsapp" href="#" class="flex-1 flex items-center justify-center gap-2 py-2 bg-green-600 text-white text-sm font-bold hover:bg-green-700 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">chat</span>WhatsApp
+        </a>
+        <a id="cmodal-phone" href="#" class="flex-1 flex items-center justify-center gap-2 py-2 bg-surface border border-outline-variant text-sm font-bold hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">call</span>Call
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="hidden bg-primary text-white px-5 py-3 shadow-lg flex items-center gap-3 text-sm font-semibold">
+  <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+  <span id="toast-msg">Done</span>
+</div>
+
 <script>
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('today-date').textContent = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+// ═══════════════════════════════════════════════════════
+// CONFIG — Supabase connection
+// ═══════════════════════════════════════════════════════
+const SUPABASE_URL  = 'https://irehhfetxofmhcepluuz.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWhoZmV0eG9mbWhjZXBsdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODM4MjIsImV4cCI6MjA5Njk1OTgyMn0.0qryf15jWiUpZ4fsupKstHR4cUjlvrCzlVtyuu0n9Y8';
+
+// ── Supabase REST helper (no SDK needed — plain fetch) ──
+async function sbQuery(table, params = {}) {
+  const url = new URL(`${SUPABASE_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url, {
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': `Bearer ${SUPABASE_ANON}`,
+      'Accept': 'application/json',
+    }
+  });
+  if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
+  return res.json();
 }
-updateClock();
-setInterval(updateClock, 1000);
+
+async function sbPatch(table, matchCol, matchVal, updates) {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?${matchCol}=eq.${encodeURIComponent(matchVal)}`;
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': `Bearer ${SUPABASE_ANON}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+    },
+    body: JSON.stringify(updates),
+  });
+  if (!res.ok) throw new Error(`Supabase patch error: ${res.status}`);
+  return res.json();
+}
+
+// ── Live data state ──
+let orders = [];
+let isLoading = false;
+
+// ── Normalise a Supabase order row to match the dashboard's field names ──
+function normalise(row) {
+  return {
+    id:           row.ref,
+    ref:          row.ref,
+    dbId:         row.id,
+    // client fields stored flat on the order row
+    clientId:     row.ref,           // no separate client table — use ref as key
+    name:         row.full_name,
+    business:     row.business_name,
+    phone:        row.phone,
+    whatsapp:     row.whatsapp || row.phone,
+    email:        row.email,
+    location:     row.location,
+    // order fields
+    paper:        row.paper_type,
+    product:      row.product_type,
+    size:         row.size,
+    lamination:   row.lamination,
+    customPrint:  row.custom_print,
+    qty:          row.quantity,
+    amount:       Number(row.amount_ghs),
+    materialCost: Number(row.material_cost),
+    labourCost:   Number(row.labour_cost),
+    stage:        row.stage,
+    dueDate:      row.due_date,
+    orderDate:    row.order_date ? row.order_date.slice(0, 10) : '',
+    notes:        row.notes || '',
+    paymentStatus:row.payment_status,
+  };
+}
+
+// ── Load all orders from Supabase ──
+async function loadOrders() {
+  isLoading = true;
+  showLoadingState(true);
+  try {
+    const rows = await sbQuery('orders', {
+      select: '*',
+      order:  'order_date.desc',
+    });
+    orders = rows.map(normalise);
+  } catch (err) {
+    console.error('Failed to load orders:', err);
+    showToast('Could not connect to database');
+  } finally {
+    isLoading = false;
+    showLoadingState(false);
+  }
+}
+
+function showLoadingState(on) {
+  const el = document.getElementById('loading-banner');
+  if (el) el.classList.toggle('hidden', !on);
+}
+
+// ═══════════════════════════════════════════════════════
+// STATIC CONFIG — targets & projections (update in config.js later)
+// ═══════════════════════════════════════════════════════
+const STAGES = ['Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
+const PROD_STAGES = ['Printing','Die Cutting','Lamination','Folding','QC Check'];
+
+const monthlyTargets = {
+  'June 2026':  { target: 35000 },
+  'July 2026':  { target: 15000 },
+  'August 2026':{ target: 25000 },
+};
+
+const projectedMonths = [
+  {month:'Jun', target:35000},
+  {month:'Jul', target:15000},
+  {month:'Aug', target:25000},
+  {month:'Sep', target:40000},
+  {month:'Oct', target:55000},
+  {month:'Nov', target:80000},
+  {month:'Dec', target:110000},
+];
+
+// ── Derive clients from orders (aggregated, no separate table) ──
+function getClients() {
+  const map = {};
+  orders.forEach(o => {
+    if (!map[o.business]) {
+      map[o.business] = {
+        id: o.business,
+        name: o.name,
+        business: o.business,
+        phone: o.phone,
+        whatsapp: o.whatsapp,
+        email: o.email,
+        location: o.location,
+        industry: '',       // not on order form — leave blank or add later
+        activeThisMonth: false,
+      };
+    }
+    // Mark active if they have an order this calendar month
+    const thisMonth = new Date().toISOString().slice(0, 7);
+    if (o.orderDate && o.orderDate.startsWith(thisMonth)) {
+      map[o.business].activeThisMonth = true;
+    }
+  });
+  return Object.values(map);
+}
+
+// ── Client helpers ──
+function clientById(id) {
+  // id can be a business name (our surrogate key) or a ref
+  const o = orders.find(x => x.business === id || x.ref === id);
+  if (!o) return {};
+  return {
+    id: o.business,
+    name: o.name,
+    business: o.business,
+    phone: o.phone,
+    whatsapp: o.whatsapp,
+    email: o.email,
+    location: o.location,
+  };
+}
+
+function ordersForClient(businessName) {
+  return orders.filter(o => o.business === businessName);
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function ghs(n){return 'GHS '+n.toLocaleString('en-GH',{minimumFractionDigits:0});}
+function pct(a,b){return b===0?'0%':Math.round(a/b*100)+'%';}
+function clientById(id){return clients.find(c=>c.id===id)||{};}
+function ordersForClient(id){return orders.filter(o=>o.clientId===id);}
+
+function stageBadge(stage){
+  const map={
+    'New Order':'badge-new','Printing':'badge-printing','Die Cutting':'badge-cutting',
+    'Lamination':'badge-lamination','Folding':'badge-folding','QC Check':'badge-qc',
+    'Dispatched':'badge-dispatch','Delivered':'badge-delivered','Cancelled':'badge-cancelled'
+  };
+  const cls=map[stage]||'badge-new';
+  return `<span class="stage-pill ${cls}">${stage}</span>`;
+}
+
+function isOverdue(dueDate,stage){
+  if(['Delivered','Dispatched'].includes(stage)) return false;
+  return new Date(dueDate)<new Date();
+}
+
+function stageIndex(stage){return STAGES.indexOf(stage);}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.remove('hidden');
+  setTimeout(()=>t.classList.add('hidden'),2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showTab(tab){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>{
+    l.classList.remove('active');
+    l.classList.add('text-on-surface-variant');
+    l.classList.remove('text-primary');
+  });
+  document.getElementById('tab-'+tab).classList.add('active');
+  const activeLink=document.querySelector(`[data-tab="${tab}"]`);
+  if(activeLink){
+    activeLink.classList.add('active');
+    activeLink.classList.remove('text-on-surface-variant');
+    activeLink.classList.add('text-primary');
+  }
+  // render the right tab
+  if(tab==='orders') renderOrders();
+  if(tab==='production') renderProductionBoard();
+  if(tab==='clients') renderClients();
+  if(tab==='finance') renderFinance();
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDashboard(){
+  // clock
+  function updateClock(){
+    const now=new Date();
+    document.getElementById('clock').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('today-date').textContent=now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const mn=now.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    document.getElementById('current-month-label').textContent=mn;
+    document.getElementById('top-clients-month').textContent=mn;
+  }
+  updateClock(); setInterval(updateClock,1000);
+
+  // order count
+  document.getElementById('total-orders-count').textContent=orders.length;
+
+  // dashboard orders table (6 most recent)
+  const recent=[...orders].sort((a,b)=>b.id.localeCompare(a.id)).slice(0,6);
+  document.getElementById('dashboard-order-rows').innerHTML=recent.map(o=>{
+    const c=clientById(o.clientId);
+    const od=isOverdue(o.dueDate,o.stage);
+    return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
+      <td class="py-3 pr-4 font-semibold text-xs">${o.id}</td>
+      <td class="py-3 pr-4 text-sm">${c.business||'—'}</td>
+      <td class="py-3 pr-4 text-xs text-on-surface-variant">${o.paper} · ${o.product}</td>
+      <td class="py-3 pr-4 text-sm">${o.qty.toLocaleString()}</td>
+      <td class="py-3 pr-4 font-semibold text-sm">${ghs(o.amount)}</td>
+      <td class="py-3 pr-4">${stageBadge(o.stage)}</td>
+      <td class="py-3 text-xs ${od?'text-error font-semibold':' text-on-surface-variant'}">${od?'⚠ ':''} ${new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+    </tr>`;
+  }).join('');
+
+  // production cards on dashboard
+  const inProd=orders.filter(o=>!['New Order','Delivered'].includes(o.stage));
+  document.getElementById('dashboard-production').innerHTML=inProd.slice(0,3).map(o=>{
+    const si=stageIndex(o.stage);
+    const total=STAGES.length-1; // up to dispatched
+    const prog=Math.round((si/total)*100);
+    const color=prog>=80?'bg-amber-500':prog>=50?'bg-primary':'bg-accent';
+    const c=clientById(o.clientId);
+    return `<div class="cursor-pointer" onclick="openOrderModal('${o.id}')">
+      <div class="flex justify-between mb-2">
+        <div>
+          <p class="font-semibold text-sm">${o.id} · ${c.business}</p>
+          <p class="text-xs text-on-surface-variant uppercase tracking-wide font-bold">${o.qty.toLocaleString()} ${o.product==='Food Bowl'?'bowls':'bags'} · ${o.stage}</p>
+        </div>
+        <span class="text-xl font-bold ${prog>=80?'text-amber-600':'text-primary'}">${prog}%</span>
+      </div>
+      <div class="h-2 bg-surface-container">
+        <div class="h-full ${color} transition-all" style="width:${prog}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // top clients
+  const clientRevenue=clients.map(c=>{
+    const rev=ordersForClient(c.id).reduce((sum,o)=>sum+o.amount,0);
+    const cnt=ordersForClient(c.id).length;
+    const bags=ordersForClient(c.id).reduce((sum,o)=>sum+o.qty,0);
+    return {...c,revenue:rev,orderCount:cnt,totalBags:bags};
+  }).filter(c=>c.revenue>0).sort((a,b)=>b.revenue-a.revenue).slice(0,4);
+
+  const rankBadge=['bg-primary text-white','bg-accent/20 text-accent','bg-accent/20 text-accent','bg-accent/20 text-accent'];
+  document.getElementById('top-clients-grid').innerHTML=clientRevenue.map((c,i)=>`
+    <div class="p-5 border border-outline-variant hover:border-primary transition-colors cursor-pointer client-card" onclick="openClientModal('${c.id}')">
+      <div class="flex justify-between items-start mb-3">
+        <p class="font-semibold">${c.business}</p>
+        <span class="px-2 py-0.5 ${rankBadge[i]} text-xs font-bold tracking-widest uppercase">#${i+1}</span>
+      </div>
+      <p class="text-2xl font-bold text-primary">${ghs(c.revenue)}</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2">${c.totalBags.toLocaleString()} bags · ${c.orderCount} orders</p>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// ORDERS
+// ═══════════════════════════════════════════════════════
+function filterOrders(){renderOrders();}
+
+function renderOrders(){
+  const search=(document.getElementById('order-search').value||'').toLowerCase();
+  const statusF=document.getElementById('order-status-filter').value;
+  const sort=document.getElementById('order-sort').value;
+
+  let filtered=orders.filter(o=>{
+    const c=clientById(o.clientId);
+    const matchSearch=!search||
+      o.id.toLowerCase().includes(search)||
+      (c.business||'').toLowerCase().includes(search)||
+      o.paper.toLowerCase().includes(search)||
+      o.product.toLowerCase().includes(search);
+    const matchStatus=!statusF||o.stage===statusF;
+    return matchSearch&&matchStatus;
+  });
+
+  if(sort==='newest') filtered.sort((a,b)=>b.id.localeCompare(a.id));
+  else if(sort==='oldest') filtered.sort((a,b)=>a.id.localeCompare(b.id));
+  else if(sort==='amount-high') filtered.sort((a,b)=>b.amount-a.amount);
+  else if(sort==='amount-low') filtered.sort((a,b)=>a.amount-b.amount);
+  else if(sort==='due') filtered.sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+
+  // summary counts
+  document.getElementById('orders-total-count').textContent=orders.length;
+  document.getElementById('orders-new-count').textContent=orders.filter(o=>o.stage==='New Order').length;
+  document.getElementById('orders-prod-count').textContent=orders.filter(o=>PROD_STAGES.includes(o.stage)).length;
+  document.getElementById('orders-dispatch-count').textContent=orders.filter(o=>o.stage==='Dispatched').length;
+  document.getElementById('orders-done-count').textContent=orders.filter(o=>o.stage==='Delivered').length;
+  document.getElementById('orders-showing-label').textContent=`Showing ${filtered.length} order${filtered.length!==1?'s':''}`;
+
+  document.getElementById('orders-table-body').innerHTML=filtered.map(o=>{
+    const c=clientById(o.clientId);
+    const profit=o.amount-o.materialCost-o.labourCost;
+    const margin=pct(profit,o.amount);
+    const od=isOverdue(o.dueDate,o.stage);
+    return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
+      <td class="p-4 font-semibold text-xs">${o.id}</td>
+      <td class="p-4 text-sm">${c.business||'—'}</td>
+      <td class="p-4 text-xs text-on-surface-variant">${o.paper} · ${o.product}</td>
+      <td class="p-4 text-xs">${o.lamination?'<span class="stage-pill bg-primary/10 text-primary border border-primary/20">Yes</span>':'<span class="stage-pill bg-surface-container text-on-surface-variant border border-outline-variant">No</span>'}</td>
+      <td class="p-4 text-sm">${o.qty.toLocaleString()}</td>
+      <td class="p-4 font-semibold text-sm">${ghs(o.amount)}</td>
+      <td class="p-4 text-xs text-error">${ghs(o.materialCost)}</td>
+      <td class="p-4 text-xs text-error">${ghs(o.labourCost)}</td>
+      <td class="p-4 text-xs font-semibold text-primary">${margin}</td>
+      <td class="p-4">${stageBadge(o.stage)}</td>
+      <td class="p-4 text-xs ${od?'text-error font-semibold':'text-on-surface-variant'}">${od?'⚠ ':''}${new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+      <td class="p-4"><button onclick="event.stopPropagation();openOrderModal('${o.id}')" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Detail →</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// PRODUCTION
+// ═══════════════════════════════════════════════════════
+function renderProductionBoard(){
+  const filterVal=document.getElementById('prod-filter').value;
+  const toShow=filterVal==='active'
+    ? orders.filter(o=>!['Delivered','Cancelled'].includes(o.stage))
+    : orders;
+
+  // Stage column summary
+  const stageCounts={};
+  STAGES.forEach(s=>stageCounts[s]=0);
+  orders.forEach(o=>{if(stageCounts[o.stage]!==undefined) stageCounts[o.stage]++;});
+  const stageColors=['bg-blue-100 text-blue-700','bg-purple-100 text-purple-700','bg-amber-100 text-amber-700','bg-green-100 text-green-700','bg-yellow-100 text-yellow-700','bg-blue-200 text-blue-800','bg-green-200 text-green-800'];
+  document.getElementById('stage-column-summary').innerHTML=STAGES.map((s,i)=>`
+    <div class="bg-surface border border-outline-variant p-3 text-center cursor-pointer hover:border-primary transition-colors" onclick="document.getElementById('order-status-filter').value='${s}';showTab('orders')">
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${s}</p>
+      <p class="text-2xl font-bold">${stageCounts[s]}</p>
+      <span class="stage-pill ${stageColors[i]} mt-1">${s==='Delivered'?'done':s==='Dispatched'?'out':'active'}</span>
+    </div>`).join('');
+
+  // Production cards
+  document.getElementById('production-cards').innerHTML=toShow.length===0
+    ? `<div class="bg-surface border border-outline-variant p-8 text-center text-on-surface-variant">No orders in this view.</div>`
+    : toShow.map(o=>renderProductionCard(o)).join('');
+}
+
+function renderProductionCard(o){
+  const c=clientById(o.clientId);
+  const si=stageIndex(o.stage);
+  const od=isOverdue(o.dueDate,o.stage);
+  const profit=o.amount-o.materialCost-o.labourCost;
+
+  const stageTrack=STAGES.map((s,i)=>{
+    let cls='stage-node pending';
+    let label=s;
+    if(s==='Lamination'&&!o.lamination){cls='stage-node skip';label='Lam. (skip)';}
+    else if(i<si) cls='stage-node done';
+    else if(i===si) cls='stage-node active';
+    return `<div class="${cls}" title="${s}">${label}</div>`;
+  }).join('');
+
+  // next stage button
+  const nextStage=si<STAGES.length-1&&o.stage!=='Delivered'?STAGES[si+1]:null;
+  const skipLam=nextStage==='Lamination'&&!o.lamination;
+  const actualNext=skipLam&&si+2<STAGES.length?STAGES[si+2]:nextStage;
+
+  return `<div class="bg-surface border border-outline-variant p-5">
+    <div class="flex justify-between items-start flex-wrap gap-3 mb-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="font-bold text-sm">${o.id}</span>
+          ${od?'<span class="stage-pill bg-red-100 text-red-700">Overdue</span>':''}
+        </div>
+        <p class="text-base font-bold">${c.business||'—'}</p>
+        <p class="text-xs text-on-surface-variant mt-0.5">${o.qty.toLocaleString()} × ${o.product} · ${o.paper}${o.lamination?' · Laminated':''}</p>
+      </div>
+      <div class="text-right">
+        <p class="text-lg font-bold text-primary">${ghs(o.amount)}</p>
+        <p class="text-xs text-on-surface-variant">Margin: ${pct(profit,o.amount)}</p>
+        <p class="text-xs ${od?'text-error font-semibold':'text-on-surface-variant'}">Due: ${new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</p>
+      </div>
+    </div>
+
+    <!-- Stage track -->
+    <div class="stage-track mb-4 overflow-x-auto">${stageTrack}</div>
+
+    <!-- Advance button -->
+    ${o.stage!=='Delivered'&&actualNext?`
+    <div class="flex gap-2 items-center flex-wrap">
+      <button onclick="advanceStage('${o.id}','${actualNext}')" class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold tracking-wide hover:bg-primary-light transition-colors">
+        <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+        Move to: ${actualNext}${skipLam?' (skip Lamination)':''}
+      </button>
+      <button onclick="openOrderModal('${o.id}')" class="px-4 py-2 border border-outline-variant text-xs font-bold tracking-wide hover:bg-surface-container transition-colors">View Detail</button>
+    </div>`:
+    `<div class="flex items-center gap-2 text-green-700 text-xs font-bold tracking-widest uppercase">
+      <span class="material-symbols-outlined" style="font-size:16px;">check_circle</span>
+      ${o.stage} — complete
+    </div>`}
+  </div>`;
+}
+
+async function advanceStage(orderId, newStage){
+  const o=orders.find(x=>x.id===orderId);
+  if(!o) return;
+  // skip lamination if not required
+  if(newStage==='Lamination'&&!o.lamination){
+    const si=stageIndex('Lamination');
+    newStage=STAGES[si+1]||newStage;
+  }
+  // Optimistic update
+  o.stage=newStage;
+  showToast(`${orderId} → ${newStage}`);
+  renderProductionBoard();
+  renderDashboard();
+  // Write to Supabase
+  try {
+    await sbPatch('orders','ref',orderId,{stage:newStage});
+  } catch(err){
+    console.error('Stage update failed:',err);
+    showToast('Stage saved locally — sync failed, retry connection');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// CLIENTS
+// ═══════════════════════════════════════════════════════
+function filterClients(){renderClients();}
+
+function renderClients(){
+  const search=(document.getElementById('client-search').value||'').toLowerCase();
+  const industryF=document.getElementById('client-industry-filter').value;
+  const sortBy=document.getElementById('client-sort').value;
+
+  let enriched=clients.map(c=>{
+    const ords=ordersForClient(c.id);
+    const rev=ords.reduce((s,o)=>s+o.amount,0);
+    const lastOrder=ords.length?new Date(Math.max(...ords.map(o=>new Date(o.orderDate)))):null;
+    return {...c,orders:ords,revenue:rev,lastOrder};
+  });
+
+  enriched=enriched.filter(c=>{
+    const ms=!search||(c.name.toLowerCase().includes(search)||c.business.toLowerCase().includes(search)||c.industry.toLowerCase().includes(search));
+    const mi=!industryF||c.industry===industryF;
+    return ms&&mi;
+  });
+
+  if(sortBy==='revenue') enriched.sort((a,b)=>b.revenue-a.revenue);
+  else if(sortBy==='orders') enriched.sort((a,b)=>b.orders.length-a.orders.length);
+  else if(sortBy==='name') enriched.sort((a,b)=>a.business.localeCompare(b.business));
+  else if(sortBy==='recent') enriched.sort((a,b)=>(b.lastOrder||0)-(a.lastOrder||0));
+
+  // stats
+  const totalRev=clients.reduce((s,c)=>s+ordersForClient(c.id).reduce((x,o)=>x+o.amount,0),0);
+  const totalOrds=orders.length;
+  document.getElementById('clients-total').textContent=clients.length;
+  document.getElementById('clients-active').textContent=clients.filter(c=>c.activeThisMonth).length;
+  document.getElementById('clients-revenue').textContent=ghs(totalRev);
+  document.getElementById('clients-avg').textContent=totalOrds>0?ghs(Math.round(totalRev/totalOrds)):'—';
+
+  document.getElementById('clients-grid').innerHTML=enriched.map(c=>{
+    const avgVal=c.orders.length?Math.round(c.revenue/c.orders.length):0;
+    return `<div class="bg-surface border border-outline-variant p-5 cursor-pointer client-card transition-colors" onclick="openClientModal('${c.id}')">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <p class="font-bold text-base">${c.business}</p>
+          <p class="text-xs text-on-surface-variant">${c.name}</p>
+        </div>
+        <span class="text-xs font-bold tracking-widest uppercase px-2 py-1 ${c.activeThisMonth?'bg-green-100 text-green-700':'bg-surface-container text-on-surface-variant'}">${c.activeThisMonth?'Active':'Inactive'}</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+        <div class="bg-surface-container-low p-2">
+          <p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Revenue</p>
+          <p class="font-bold text-primary text-sm">${ghs(c.revenue)}</p>
+        </div>
+        <div class="bg-surface-container-low p-2">
+          <p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Orders</p>
+          <p class="font-bold text-sm">${c.orders.length}</p>
+        </div>
+        <div class="bg-surface-container-low p-2">
+          <p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Avg</p>
+          <p class="font-bold text-sm">${avgVal?ghs(avgVal):'—'}</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center text-xs text-on-surface-variant">
+        <span>${c.industry}</span>
+        <span>${c.location.split(',')[0]}</span>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <a href="https://wa.me/${c.whatsapp}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition-colors">WhatsApp</a>
+        <a href="tel:${c.phone}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 border border-outline-variant text-xs font-bold hover:bg-surface-container transition-colors">Call</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// FINANCE
+// ═══════════════════════════════════════════════════════
+function renderFinance(){
+  const monthLabel=document.getElementById('finance-month-filter').value; // e.g. "June 2026"
+  // Convert "June 2026" → "2026-06" prefix for date matching
+  const d=new Date(monthLabel+' 1');
+  const prefix=isNaN(d)?'2026-06':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+
+  const monthOrders=orders.filter(o=>o.orderDate&&o.orderDate.startsWith(prefix));
+  const revenue=monthOrders.reduce((s,o)=>s+o.amount,0);
+  const matCost=monthOrders.reduce((s,o)=>s+o.materialCost,0);
+  const labCost=monthOrders.reduce((s,o)=>s+o.labourCost,0);
+  const inProd=orders.filter(o=>PROD_STAGES.includes(o.stage)).reduce((s,o)=>s+o.amount,0);
+  const totalCost=matCost+labCost;
+  const profit=revenue-totalCost;
+  const margin=revenue>0?Math.round(profit/revenue*100):0;
+  const target=(monthlyTargets[monthLabel]||{}).target||35000;
+  const targetPct=Math.min(Math.round(revenue/target*100),100);
+
+  document.getElementById('fin-revenue').textContent=ghs(revenue);
+  document.getElementById('fin-revenue-sub').textContent=`GHS ${(revenue+inProd).toLocaleString()} incl. in-production`;
+  document.getElementById('fin-costs').textContent=ghs(totalCost);
+  document.getElementById('fin-costs-sub').textContent=`Materials ${ghs(matCost)} · Labour ${ghs(labCost)}`;
+  document.getElementById('fin-profit').textContent=ghs(profit);
+  document.getElementById('fin-margin').textContent=`${margin}% net margin`;
+  document.getElementById('fin-target-pct').textContent=`${targetPct}%`;
+  document.getElementById('fin-target-bar').style.width=targetPct+'%';
+  document.getElementById('fin-target-label').textContent=`of GHS ${target.toLocaleString()} target`;
+  document.getElementById('fin-order-month-label').textContent=monthLabel;
+
+  // cost breakdown bars
+  const items=[
+    {label:'Materials',amount:data.matCost,color:'bg-error/70'},
+    {label:'Labour',amount:data.labCost,color:'bg-amber-500/70'},
+    {label:'Net Profit',amount:profit,color:'bg-primary'},
+  ];
+  document.getElementById('fin-cost-breakdown').innerHTML=items.map(item=>{
+    const w=Math.round(item.amount/data.actual*100);
+    return `<div>
+      <div class="flex justify-between text-sm mb-1">
+        <span class="font-semibold">${item.label}</span>
+        <span class="font-bold">${ghs(item.amount)} <span class="text-xs text-on-surface-variant font-normal">(${w}%)</span></span>
+      </div>
+      <div class="h-3 bg-surface-container"><div class="${item.color} h-full transition-all" style="width:${w}%"></div></div>
+    </div>`;
+  }).join('');
+
+  // bar chart
+  const maxVal=Math.max(...projectedMonths.map(m=>m.target));
+  document.getElementById('fin-bar-chart').innerHTML=projectedMonths.map(m=>{
+    const tH=Math.round((m.target/maxVal)*100);
+    const aH=m.actual?Math.round((m.actual/maxVal)*100):0;
+    const isCurrent=m.month==='Jun';
+    return `<div class="flex-1 flex flex-col items-center gap-1 min-w-0">
+      <div class="w-full flex gap-0.5 items-end" style="height:128px;">
+        <div class="flex-1 ${isCurrent?'bg-primary':'bg-primary/30'} transition-all" style="height:${m.actual?aH:0}%; min-height:${m.actual?2:0}px;"></div>
+        <div class="flex-1 bg-accent/30 border border-accent/50" style="height:${tH}%;"></div>
+      </div>
+      <span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">${m.month}</span>
+      <span class="text-xs text-on-surface-variant">${(m.target/1000).toFixed(0)}K</span>
+    </div>`;
+  }).join('');
+
+  // per-order table — use same monthOrders derived above
+  let totR=0,totM=0,totL=0,totP=0;
+  document.getElementById('fin-order-table').innerHTML=monthOrders.map(o=>{
+    const c=clientById(o.clientId);
+    const p=o.amount-o.materialCost-o.labourCost;
+    const mg=pct(p,o.amount);
+    totR+=o.amount; totM+=o.materialCost; totL+=o.labourCost; totP+=p;
+    return `<tr class="hover:bg-surface-container transition-colors cursor-pointer" onclick="openOrderModal('${o.id}')">
+      <td class="p-3 font-semibold text-xs">${o.id}</td>
+      <td class="p-3 text-sm">${c.business||'—'}</td>
+      <td class="p-3 text-sm">${o.qty.toLocaleString()}</td>
+      <td class="p-3 text-right font-semibold text-sm">${ghs(o.amount)}</td>
+      <td class="p-3 text-right text-xs text-error">${ghs(o.materialCost)}</td>
+      <td class="p-3 text-right text-xs text-error">${ghs(o.labourCost)}</td>
+      <td class="p-3 text-right font-bold text-primary text-sm">${ghs(p)}</td>
+      <td class="p-3 text-right text-sm">${mg}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('fin-total-rev').textContent=ghs(totR);
+  document.getElementById('fin-total-mat').textContent=ghs(totM);
+  document.getElementById('fin-total-lab').textContent=ghs(totL);
+  document.getElementById('fin-total-profit').textContent=ghs(totP);
+  document.getElementById('fin-total-margin').textContent=pct(totP,totR);
+}
+
+// ═══════════════════════════════════════════════════════
+// ORDER MODAL
+// ═══════════════════════════════════════════════════════
+function openOrderModal(orderId){
+  const o=orders.find(x=>x.id===orderId);
+  if(!o) return;
+  const c=clientById(o.clientId);
+  const si=stageIndex(o.stage);
+  const profit=o.amount-o.materialCost-o.labourCost;
+  const margin=pct(profit,o.amount);
+
+  document.getElementById('modal-ref').textContent=o.id;
+  document.getElementById('modal-client-name').textContent=c.business+' · '+c.name;
+  document.getElementById('modal-revenue').textContent=ghs(o.amount);
+  document.getElementById('modal-materials').textContent=ghs(o.materialCost);
+  document.getElementById('modal-labour').textContent=ghs(o.labourCost);
+  document.getElementById('modal-profit').textContent=ghs(profit);
+  document.getElementById('modal-margin').textContent=margin+' margin';
+  document.getElementById('modal-notes').textContent=o.notes||'—';
+  document.getElementById('modal-whatsapp').href=`https://wa.me/${c.whatsapp}`;
+  document.getElementById('modal-phone').href=`tel:${c.phone}`;
+
+  // info grid
+  document.getElementById('modal-info-grid').innerHTML=[
+    ['Product',o.product],['Paper',o.paper],
+    ['Size',o.size],['Qty',o.qty.toLocaleString()+' units'],
+    ['Lamination',o.lamination?'Yes — required':'No'],
+    ['Order Date',new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})],
+    ['Due Date',new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})],
+    ['Status',o.stage],
+  ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
+    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
+    <p class="font-semibold text-sm">${v}</p>
+  </div>`).join('');
+
+  // Stage track
+  document.getElementById('modal-stage-track').innerHTML=STAGES.map((s,i)=>{
+    let cls='stage-node pending';
+    if(s==='Lamination'&&!o.lamination) cls='stage-node skip';
+    else if(i<si) cls='stage-node done';
+    else if(i===si) cls='stage-node active';
+    return `<div class="${cls}">${s==='Lamination'&&!o.lamination?'Skip':s}</div>`;
+  }).join('');
+
+  // Advance buttons — show next valid stages
+  const advanceSection=document.getElementById('modal-advance-section');
+  if(o.stage==='Delivered'){
+    advanceSection.innerHTML='<p class="text-xs font-bold tracking-widest uppercase text-green-700">✓ Order complete — delivered</p>';
+  } else {
+    const futurStages=STAGES.slice(si+1).filter(s=>!(s==='Lamination'&&!o.lamination));
+    document.getElementById('modal-stage-buttons').innerHTML=futurStages.slice(0,3).map(s=>`
+      <button onclick="advanceStage('${o.id}','${s}');closeModalAndRefresh()" class="px-4 py-2 bg-primary text-white text-xs font-bold tracking-wide hover:bg-primary-light transition-colors">
+        → ${s}
+      </button>`).join('');
+  }
+
+  document.getElementById('order-modal').classList.remove('hidden');
+}
+
+function closeModalAndRefresh(){
+  document.getElementById('order-modal').classList.add('hidden');
+  const active=document.querySelector('.tab-section.active');
+  if(active){
+    const tabId=active.id.replace('tab-','');
+    if(tabId==='orders') renderOrders();
+    if(tabId==='production') renderProductionBoard();
+    if(tabId==='dashboard') renderDashboard();
+  }
+}
+
+function closeOrderModal(e){
+  if(e.target===document.getElementById('order-modal'))
+    document.getElementById('order-modal').classList.add('hidden');
+}
+
+// ═══════════════════════════════════════════════════════
+// CLIENT MODAL
+// ═══════════════════════════════════════════════════════
+function openClientModal(clientId){
+  const c=clients.find(x=>x.id===clientId);
+  if(!c) return;
+  const ords=ordersForClient(c.id);
+  const rev=ords.reduce((s,o)=>s+o.amount,0);
+
+  document.getElementById('cmodal-business').textContent=c.business;
+  document.getElementById('cmodal-name').textContent=c.name+' · '+c.industry;
+  document.getElementById('cmodal-total').textContent=ghs(rev);
+  document.getElementById('cmodal-orders-count').textContent=ords.length;
+  document.getElementById('cmodal-avg').textContent=ords.length?ghs(Math.round(rev/ords.length)):'—';
+  document.getElementById('cmodal-whatsapp').href=`https://wa.me/${c.whatsapp}`;
+  document.getElementById('cmodal-phone').href=`tel:${c.phone}`;
+
+  document.getElementById('cmodal-info').innerHTML=[
+    ['Full Name',c.name],['Business',c.business],
+    ['Industry',c.industry],['Location',c.location],
+    ['Phone',c.phone],['WhatsApp','+'+c.whatsapp],
+  ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
+    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
+    <p class="font-semibold text-sm">${v}</p>
+  </div>`).join('');
+
+  document.getElementById('cmodal-orders').innerHTML=ords.length===0
+    ? '<p class="text-sm text-on-surface-variant">No orders yet.</p>'
+    : [...ords].sort((a,b)=>b.id.localeCompare(a.id)).map(o=>`
+      <div class="flex justify-between items-center p-3 border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('client-modal').classList.add('hidden');openOrderModal('${o.id}')">
+        <div>
+          <p class="font-semibold text-xs">${o.id}</p>
+          <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${o.product} · ${new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-sm text-primary">${ghs(o.amount)}</p>
+          ${stageBadge(o.stage)}
+        </div>
+      </div>`).join('');
+
+  document.getElementById('client-modal').classList.remove('hidden');
+}
+
+function closeClientModal(e){
+  if(e.target===document.getElementById('client-modal'))
+    document.getElementById('client-modal').classList.add('hidden');
+}
+
+// ═══════════════════════════════════════════════════════
+// GLOBAL SEARCH
+// ═══════════════════════════════════════════════════════
+function handleSearch(val){
+  if(!val) return;
+  // Switch to orders and pre-fill search
+  showTab('orders');
+  document.getElementById('order-search').value=val;
+  filterOrders();
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════
+function exportMonthlyReport(){
+  const month=document.getElementById('finance-month-filter')?.value||'June 2026';
+  const monthOrders=orders.filter(o=>o.orderDate.startsWith('2026-06'));
+  const rows=[
+    ['Ref','Client','Product','Paper','Qty','Revenue (GHS)','Materials (GHS)','Labour (GHS)','Profit (GHS)','Margin','Stage','Due Date'],
+    ...monthOrders.map(o=>{
+      const c=clientById(o.clientId);
+      const p=o.amount-o.materialCost-o.labourCost;
+      return [o.id,c.business,o.product,o.paper,o.qty,o.amount,o.materialCost,o.labourCost,p,pct(p,o.amount),o.stage,o.dueDate];
+    })
+  ];
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`Kraapht_Report_${month.replace(' ','_')}.csv`;
+  a.click();
+  showToast('Report exported as CSV');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT — load live data then render
+// ═══════════════════════════════════════════════════════
+(async () => {
+  await loadOrders();
+  renderDashboard();
+  // Auto-refresh every 60 seconds
+  setInterval(async () => {
+    await loadOrders();
+    // Re-render whichever tab is active
+    const active = document.querySelector('.tab-section.active');
+    if (active) {
+      const tabId = active.id.replace('tab-','');
+      if (tabId === 'dashboard')   renderDashboard();
+      if (tabId === 'orders')      renderOrders();
+      if (tabId === 'production')  renderProductionBoard();
+      if (tabId === 'clients')     renderClients();
+      if (tabId === 'finance')     renderFinance();
+    }
+  }, 60000);
+})();
 </script>
 </body>
 </html>
