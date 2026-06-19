@@ -91,7 +91,6 @@ const KRAAPHT_CONFIG = {
   // Change the filename here when you upload a new image
   // to GitHub. Use the exact filename you upload.
   // ----------------------------------------------------------
-  ,
 
   // ----------------------------------------------------------
   // HOMEPAGE TEXT
@@ -127,39 +126,39 @@ const KRAAPHT_CONFIG = {
     //    [client_bag_1]  [client_bag_2]
     //    [client_bag_3]  [client_bag_4]
     //
-    client_bag_1:  "client_bag_1.png",   // top-left
-    client_bag_2:  "client_bag_2.png",  // top-right
-    client_bag_3:  "client_bag_3.png", // bottom-left
-    client_bag_4:  "client_bag_4.png",                        // bottom-right — upload client_bag_4.png to replace Channay CSS
+    client_bag_1:  "client_bag_1_v2.png",   // top-left
+    client_bag_2:  "client_bag_2_v2.png",   // top-right
+    client_bag_3:  "client_bag_3_v2.png",   // bottom-left
+    client_bag_4:  "client_bag_4_v2.png",   // bottom-right
 
     // ── HOMEPAGE PORTFOLIO — bottom product row ───────────────────────
     //  Reading order: left → right
     //
     //    [client_bag_5] [client_bag_6] [client_bag_7] [client_bag_8]
     //
-    client_bag_5:  "client_bag_5.png",   // left
-    client_bag_6:  "client_bag_6.png",     // 2nd
-    client_bag_7:  "client_bag_7.png",       // 3rd
-    client_bag_8:  "client_bag_8.png",       // right
+    client_bag_5:  "client_bag_5_v2.png",   // left
+    client_bag_6:  "client_bag_6_v2.png",   // 2nd
+    client_bag_7:  "client_bag_7_v2.png",   // 3rd
+    client_bag_8:  "client_bag_8_v2.png",   // right
 
     // ── ORDER PAGE GALLERY — top 4 product shots ─────────────────────
     //  Reading order: left → right
     //
     //    [client_bag_9] [client_bag_10] [client_bag_11] [client_bag_12]
     //
-    client_bag_9:   "client_bag_9.png",  // left
-    client_bag_10:  "client_bag_10.png",    // 2nd
-    client_bag_11:  "client_bag_11.png",      // 3rd
-    client_bag_12:  "client_bag_12.png",      // right
+    client_bag_9:   "client_bag_9_v2.png",  // left
+    client_bag_10:  "client_bag_10_v2.png", // 2nd
+    client_bag_11:  "client_bag_11_v2.png", // 3rd
+    client_bag_12:  "client_bag_12_v2.png", // right
 
     // ── ORDER PAGE GALLERY — lifestyle row ───────────────────────────
     //  Reading order: left → right
     //
     //    [client_bag_13] [client_bag_14] [client_bag_15]
     //
-    client_bag_13: "client_bag_13.png",   // left
-    client_bag_14: "client_bag_14.png",  // centre
-    client_bag_15: "client_bag_15.png", // right
+    client_bag_13: "client_bag_13_v2.png",  // left
+    client_bag_14: "client_bag_14_v2.png",  // centre
+    client_bag_15: "client_bag_15_v2.png",  // right
 
     // ── ORDER PAGE — PAPER TYPE SELECTORS ────────────────────────────
     //  Shown inside the paper selection cards on the order form
