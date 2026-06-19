@@ -808,22 +808,23 @@ function getClients() {
 
 // ── Client helpers ──
 function clientById(id) {
-  // id can be a business name (our surrogate key) or a ref
-  const o = orders.find(x => x.business === id || x.ref === id);
+  // Live orders: clientId === ref, so look up by ref first, then business name
+  const o = orders.find(x => x.ref === id || x.clientId === id || x.business === id);
   if (!o) return {};
   return {
-    id: o.business,
-    name: o.name,
-    business: o.business,
-    phone: o.phone,
-    whatsapp: o.whatsapp,
-    email: o.email,
-    location: o.location,
+    id:       o.business,
+    name:     o.name     || o.full_name     || '',
+    business: o.business || o.business_name || '',
+    phone:    o.phone    || '',
+    whatsapp: o.whatsapp || o.phone || '',
+    email:    o.email    || '',
+    location: o.location || '',
+    industry: o.industry || '',
   };
 }
 
 function ordersForClient(businessName) {
-  return orders.filter(o => o.business === businessName);
+  return orders.filter(o => (o.business||o.business_name||'') === businessName);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -831,7 +832,7 @@ function ordersForClient(businessName) {
 // ═══════════════════════════════════════════════════════
 function ghs(n){return 'GHS '+n.toLocaleString('en-GH',{minimumFractionDigits:0});}
 function pct(a,b){return b===0?'0%':Math.round(a/b*100)+'%';}
-function clientById(id){return clients.find(c=>c.id===id)||{};}
+// legacy stub — superseded by the clientById above
 function ordersForClient(id){return orders.filter(o=>o.clientId===id);}
 
 function stageBadge(stage){
@@ -903,16 +904,17 @@ function renderDashboard(){
   // dashboard orders table (6 most recent)
   const recent=[...orders].sort((a,b)=>b.id.localeCompare(a.id)).slice(0,6);
   document.getElementById('dashboard-order-rows').innerHTML=recent.map(o=>{
-    const c=clientById(o.clientId);
     const od=isOverdue(o.dueDate,o.stage);
+    const biz=o.business||o.business_name||'—';
+    const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="py-3 pr-4 font-semibold text-xs">${o.id}</td>
-      <td class="py-3 pr-4 text-sm">${c.business||'—'}</td>
-      <td class="py-3 pr-4 text-xs text-on-surface-variant">${o.paper} · ${o.product}</td>
+      <td class="py-3 pr-4 text-sm">${biz}</td>
+      <td class="py-3 pr-4 text-xs text-on-surface-variant">${o.paper||o.paper_type||'—'} · ${o.product||o.product_type||'—'}</td>
       <td class="py-3 pr-4 text-sm">${o.qty.toLocaleString()}</td>
       <td class="py-3 pr-4 font-semibold text-sm">${ghs(o.amount)}</td>
       <td class="py-3 pr-4">${stageBadge(o.stage)}</td>
-      <td class="py-3 text-xs ${od?'text-error font-semibold':' text-on-surface-variant'}">${od?'⚠ ':''} ${new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+      <td class="py-3 text-xs ${od?'text-error font-semibold':'text-on-surface-variant'}">${od?'⚠ ':''} ${due}</td>
     </tr>`;
   }).join('');
 
@@ -920,15 +922,16 @@ function renderDashboard(){
   const inProd=orders.filter(o=>!['New Order','Delivered'].includes(o.stage));
   document.getElementById('dashboard-production').innerHTML=inProd.slice(0,3).map(o=>{
     const si=stageIndex(o.stage);
-    const total=STAGES.length-1; // up to dispatched
+    const total=STAGES.length-1;
     const prog=Math.round((si/total)*100);
     const color=prog>=80?'bg-amber-500':prog>=50?'bg-primary':'bg-accent';
-    const c=clientById(o.clientId);
+    const biz=o.business||o.business_name||'—';
+    const prod=o.product||o.product_type||'bag';
     return `<div class="cursor-pointer" onclick="openOrderModal('${o.id}')">
       <div class="flex justify-between mb-2">
         <div>
-          <p class="font-semibold text-sm">${o.id} · ${c.business}</p>
-          <p class="text-xs text-on-surface-variant uppercase tracking-wide font-bold">${o.qty.toLocaleString()} ${o.product==='Food Bowl'?'bowls':'bags'} · ${o.stage}</p>
+          <p class="font-semibold text-sm">${o.id} · ${biz}</p>
+          <p class="text-xs text-on-surface-variant uppercase tracking-wide font-bold">${o.qty.toLocaleString()} ${prod==='Food Bowl'?'bowls':'bags'} · ${o.stage}</p>
         </div>
         <span class="text-xl font-bold ${prog>=80?'text-amber-600':'text-primary'}">${prog}%</span>
       </div>
@@ -939,16 +942,17 @@ function renderDashboard(){
   }).join('');
 
   // top clients
-  const clientRevenue=clients.map(c=>{
-    const rev=ordersForClient(c.id).reduce((sum,o)=>sum+o.amount,0);
-    const cnt=ordersForClient(c.id).length;
-    const bags=ordersForClient(c.id).reduce((sum,o)=>sum+o.qty,0);
+  const clientRevenue=getClients().map(c=>{
+    const ords=ordersForClient(c.business);
+    const rev=ords.reduce((sum,o)=>sum+o.amount,0);
+    const cnt=ords.length;
+    const bags=ords.reduce((sum,o)=>sum+o.qty,0);
     return {...c,revenue:rev,orderCount:cnt,totalBags:bags};
   }).filter(c=>c.revenue>0).sort((a,b)=>b.revenue-a.revenue).slice(0,4);
 
   const rankBadge=['bg-primary text-white','bg-accent/20 text-accent','bg-accent/20 text-accent','bg-accent/20 text-accent'];
   document.getElementById('top-clients-grid').innerHTML=clientRevenue.map((c,i)=>`
-    <div class="p-5 border border-outline-variant hover:border-primary transition-colors cursor-pointer client-card" onclick="openClientModal('${c.id}')">
+    <div class="p-5 border border-outline-variant hover:border-primary transition-colors cursor-pointer client-card" onclick="openClientModal('${c.business.replace(/'/g,"\\'")}')">
       <div class="flex justify-between items-start mb-3">
         <p class="font-semibold">${c.business}</p>
         <span class="px-2 py-0.5 ${rankBadge[i]} text-xs font-bold tracking-widest uppercase">#${i+1}</span>
@@ -994,14 +998,17 @@ function renderOrders(){
   document.getElementById('orders-showing-label').textContent=`Showing ${filtered.length} order${filtered.length!==1?'s':''}`;
 
   document.getElementById('orders-table-body').innerHTML=filtered.map(o=>{
-    const c=clientById(o.clientId);
+    const biz=o.business||o.business_name||'—';
+    const paper=o.paper||o.paper_type||'—';
+    const prod=o.product||o.product_type||'—';
     const profit=o.amount-o.materialCost-o.labourCost;
     const margin=pct(profit,o.amount);
     const od=isOverdue(o.dueDate,o.stage);
+    const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="p-4 font-semibold text-xs">${o.id}</td>
-      <td class="p-4 text-sm">${c.business||'—'}</td>
-      <td class="p-4 text-xs text-on-surface-variant">${o.paper} · ${o.product}</td>
+      <td class="p-4 text-sm">${biz}</td>
+      <td class="p-4 text-xs text-on-surface-variant">${paper} · ${prod}</td>
       <td class="p-4 text-xs">${o.lamination?'<span class="stage-pill bg-primary/10 text-primary border border-primary/20">Yes</span>':'<span class="stage-pill bg-surface-container text-on-surface-variant border border-outline-variant">No</span>'}</td>
       <td class="p-4 text-sm">${o.qty.toLocaleString()}</td>
       <td class="p-4 font-semibold text-sm">${ghs(o.amount)}</td>
@@ -1009,7 +1016,7 @@ function renderOrders(){
       <td class="p-4 text-xs text-error">${ghs(o.labourCost)}</td>
       <td class="p-4 text-xs font-semibold text-primary">${margin}</td>
       <td class="p-4">${stageBadge(o.stage)}</td>
-      <td class="p-4 text-xs ${od?'text-error font-semibold':'text-on-surface-variant'}">${od?'⚠ ':''}${new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+      <td class="p-4 text-xs ${od?'text-error font-semibold':'text-on-surface-variant'}">${od?'⚠ ':''}${due}</td>
       <td class="p-4"><button onclick="event.stopPropagation();openOrderModal('${o.id}')" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Detail →</button></td>
     </tr>`;
   }).join('');
@@ -1043,7 +1050,7 @@ function renderProductionBoard(){
 }
 
 function renderProductionCard(o){
-  const c=clientById(o.clientId);
+  const c={business:o.business||o.business_name||'—',name:o.name||'',phone:o.phone||'',whatsapp:o.whatsapp||o.phone||''};
   const si=stageIndex(o.stage);
   const od=isOverdue(o.dueDate,o.stage);
   const profit=o.amount-o.materialCost-o.labourCost;
@@ -1130,8 +1137,8 @@ function renderClients(){
   const industryF=document.getElementById('client-industry-filter').value;
   const sortBy=document.getElementById('client-sort').value;
 
-  let enriched=clients.map(c=>{
-    const ords=ordersForClient(c.id);
+  let enriched=getClients().map(c=>{
+    const ords=ordersForClient(c.business);
     const rev=ords.reduce((s,o)=>s+o.amount,0);
     const lastOrder=ords.length?new Date(Math.max(...ords.map(o=>new Date(o.orderDate)))):null;
     return {...c,orders:ords,revenue:rev,lastOrder};
@@ -1148,21 +1155,24 @@ function renderClients(){
   else if(sortBy==='name') enriched.sort((a,b)=>a.business.localeCompare(b.business));
   else if(sortBy==='recent') enriched.sort((a,b)=>(b.lastOrder||0)-(a.lastOrder||0));
 
-  // stats
-  const totalRev=clients.reduce((s,c)=>s+ordersForClient(c.id).reduce((x,o)=>x+o.amount,0),0);
+  // stats — derive from live orders
+  const allClients=getClients();
+  const totalRev=orders.reduce((s,o)=>s+o.amount,0);
   const totalOrds=orders.length;
-  document.getElementById('clients-total').textContent=clients.length;
-  document.getElementById('clients-active').textContent=clients.filter(c=>c.activeThisMonth).length;
+  const activeCount=allClients.filter(c=>c.activeThisMonth).length;
+  document.getElementById('clients-total').textContent=allClients.length;
+  document.getElementById('clients-active').textContent=activeCount;
   document.getElementById('clients-revenue').textContent=ghs(totalRev);
   document.getElementById('clients-avg').textContent=totalOrds>0?ghs(Math.round(totalRev/totalOrds)):'—';
 
   document.getElementById('clients-grid').innerHTML=enriched.map(c=>{
     const avgVal=c.orders.length?Math.round(c.revenue/c.orders.length):0;
-    return `<div class="bg-surface border border-outline-variant p-5 cursor-pointer client-card transition-colors" onclick="openClientModal('${c.id}')">
+    const safeKey=c.business.replace(/'/g,"\\'");
+    return `<div class="bg-surface border border-outline-variant p-5 cursor-pointer client-card transition-colors" onclick="openClientModal('${safeKey}')">
       <div class="flex justify-between items-start mb-3">
         <div>
           <p class="font-bold text-base">${c.business}</p>
-          <p class="text-xs text-on-surface-variant">${c.name}</p>
+          <p class="text-xs text-on-surface-variant">${c.name||''}</p>
         </div>
         <span class="text-xs font-bold tracking-widest uppercase px-2 py-1 ${c.activeThisMonth?'bg-green-100 text-green-700':'bg-surface-container text-on-surface-variant'}">${c.activeThisMonth?'Active':'Inactive'}</span>
       </div>
@@ -1181,12 +1191,12 @@ function renderClients(){
         </div>
       </div>
       <div class="flex justify-between items-center text-xs text-on-surface-variant">
-        <span>${c.industry}</span>
-        <span>${c.location.split(',')[0]}</span>
+        <span>${c.industry||'—'}</span>
+        <span>${c.location?(c.location.split(',')[0]):'—'}</span>
       </div>
       <div class="flex gap-2 mt-3">
-        <a href="https://wa.me/${c.whatsapp}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition-colors">WhatsApp</a>
-        <a href="tel:${c.phone}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 border border-outline-variant text-xs font-bold hover:bg-surface-container transition-colors">Call</a>
+        <a href="https://wa.me/${c.whatsapp||c.phone||''}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition-colors">WhatsApp</a>
+        <a href="tel:${c.phone||''}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 border border-outline-variant text-xs font-bold hover:bg-surface-container transition-colors">Call</a>
       </div>
     </div>`;
   }).join('');
@@ -1259,13 +1269,13 @@ function renderFinance(){
   // per-order table — use same monthOrders derived above
   let totR=0,totM=0,totL=0,totP=0;
   document.getElementById('fin-order-table').innerHTML=monthOrders.map(o=>{
-    const c=clientById(o.clientId);
+    const biz=o.business||o.business_name||'—';
     const p=o.amount-o.materialCost-o.labourCost;
     const mg=pct(p,o.amount);
     totR+=o.amount; totM+=o.materialCost; totL+=o.labourCost; totP+=p;
     return `<tr class="hover:bg-surface-container transition-colors cursor-pointer" onclick="openOrderModal('${o.id}')">
       <td class="p-3 font-semibold text-xs">${o.id}</td>
-      <td class="p-3 text-sm">${c.business||'—'}</td>
+      <td class="p-3 text-sm">${biz}</td>
       <td class="p-3 text-sm">${o.qty.toLocaleString()}</td>
       <td class="p-3 text-right font-semibold text-sm">${ghs(o.amount)}</td>
       <td class="p-3 text-right text-xs text-error">${ghs(o.materialCost)}</td>
@@ -1288,29 +1298,34 @@ function renderFinance(){
 function openOrderModal(orderId){
   const o=orders.find(x=>x.id===orderId);
   if(!o) return;
-  const c=clientById(o.clientId);
+  const biz=o.business||o.business_name||'—';
+  const cname=o.name||o.full_name||'';
   const si=stageIndex(o.stage);
   const profit=o.amount-o.materialCost-o.labourCost;
   const margin=pct(profit,o.amount);
 
   document.getElementById('modal-ref').textContent=o.id;
-  document.getElementById('modal-client-name').textContent=c.business+' · '+c.name;
+  document.getElementById('modal-client-name').textContent=biz+(cname?' · '+cname:'');
   document.getElementById('modal-revenue').textContent=ghs(o.amount);
   document.getElementById('modal-materials').textContent=ghs(o.materialCost);
   document.getElementById('modal-labour').textContent=ghs(o.labourCost);
   document.getElementById('modal-profit').textContent=ghs(profit);
   document.getElementById('modal-margin').textContent=margin+' margin';
   document.getElementById('modal-notes').textContent=o.notes||'—';
-  document.getElementById('modal-whatsapp').href=`https://wa.me/${c.whatsapp}`;
-  document.getElementById('modal-phone').href=`tel:${c.phone}`;
+  document.getElementById('modal-whatsapp').href=`https://wa.me/${o.whatsapp||o.phone||''}`;
+  document.getElementById('modal-phone').href=`tel:${o.phone||''}`;
 
   // info grid
+  const orderDate=o.orderDate?new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const dueDate=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
   document.getElementById('modal-info-grid').innerHTML=[
-    ['Product',o.product],['Paper',o.paper],
-    ['Size',o.size],['Qty',o.qty.toLocaleString()+' units'],
+    ['Product',o.product||o.product_type||'—'],
+    ['Paper',o.paper||o.paper_type||'—'],
+    ['Size',o.size||'—'],
+    ['Qty',o.qty.toLocaleString()+' units'],
     ['Lamination',o.lamination?'Yes — required':'No'],
-    ['Order Date',new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})],
-    ['Due Date',new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})],
+    ['Order Date',orderDate],
+    ['Due Date',dueDate],
     ['Status',o.stage],
   ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
     <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
@@ -1361,13 +1376,23 @@ function closeOrderModal(e){
 // CLIENT MODAL
 // ═══════════════════════════════════════════════════════
 function openClientModal(clientId){
-  const c=clients.find(x=>x.id===clientId);
-  if(!c) return;
-  const ords=ordersForClient(c.id);
+  // clientId is business name in live data
+  const ords=ordersForClient(clientId);
+  if(!ords.length) return;
+  const sample=ords[0];
   const rev=ords.reduce((s,o)=>s+o.amount,0);
+  const c={
+    business: sample.business||sample.business_name||clientId,
+    name:     sample.name||sample.full_name||'',
+    industry: sample.industry||'',
+    location: sample.location||'',
+    phone:    sample.phone||'',
+    whatsapp: sample.whatsapp||sample.phone||'',
+    email:    sample.email||'',
+  };
 
   document.getElementById('cmodal-business').textContent=c.business;
-  document.getElementById('cmodal-name').textContent=c.name+' · '+c.industry;
+  document.getElementById('cmodal-name').textContent=c.name+(c.industry?' · '+c.industry:'');
   document.getElementById('cmodal-total').textContent=ghs(rev);
   document.getElementById('cmodal-orders-count').textContent=ords.length;
   document.getElementById('cmodal-avg').textContent=ords.length?ghs(Math.round(rev/ords.length)):'—';
@@ -1375,9 +1400,9 @@ function openClientModal(clientId){
   document.getElementById('cmodal-phone').href=`tel:${c.phone}`;
 
   document.getElementById('cmodal-info').innerHTML=[
-    ['Full Name',c.name],['Business',c.business],
-    ['Industry',c.industry],['Location',c.location],
-    ['Phone',c.phone],['WhatsApp','+'+c.whatsapp],
+    ['Full Name',c.name||'—'],['Business',c.business],
+    ['Industry',c.industry||'—'],['Location',c.location||'—'],
+    ['Phone',c.phone||'—'],['Email',c.email||'—'],
   ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
     <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
     <p class="font-semibold text-sm">${v}</p>
@@ -1385,17 +1410,20 @@ function openClientModal(clientId){
 
   document.getElementById('cmodal-orders').innerHTML=ords.length===0
     ? '<p class="text-sm text-on-surface-variant">No orders yet.</p>'
-    : [...ords].sort((a,b)=>b.id.localeCompare(a.id)).map(o=>`
-      <div class="flex justify-between items-center p-3 border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('client-modal').classList.add('hidden');openOrderModal('${o.id}')">
-        <div>
-          <p class="font-semibold text-xs">${o.id}</p>
-          <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${o.product} · ${new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</p>
-        </div>
-        <div class="text-right">
-          <p class="font-bold text-sm text-primary">${ghs(o.amount)}</p>
-          ${stageBadge(o.stage)}
-        </div>
-      </div>`).join('');
+    : [...ords].sort((a,b)=>b.id.localeCompare(a.id)).map(o=>{
+        const prod=o.product||o.product_type||'—';
+        const date=o.orderDate?new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
+        return `<div class="flex justify-between items-center p-3 border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('client-modal').classList.add('hidden');openOrderModal('${o.id}')">
+          <div>
+            <p class="font-semibold text-xs">${o.id}</p>
+            <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${prod} · ${date}</p>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-sm text-primary">${ghs(o.amount)}</p>
+            ${stageBadge(o.stage)}
+          </div>
+        </div>`;
+      }).join('');
 
   document.getElementById('client-modal').classList.remove('hidden');
 }
@@ -1425,9 +1453,8 @@ function exportMonthlyReport(){
   const rows=[
     ['Ref','Client','Product','Paper','Qty','Revenue (GHS)','Materials (GHS)','Labour (GHS)','Profit (GHS)','Margin','Stage','Due Date'],
     ...monthOrders.map(o=>{
-      const c=clientById(o.clientId);
       const p=o.amount-o.materialCost-o.labourCost;
-      return [o.id,c.business,o.product,o.paper,o.qty,o.amount,o.materialCost,o.labourCost,p,pct(p,o.amount),o.stage,o.dueDate];
+      return [o.id,o.business||o.business_name||'—',o.product||o.product_type,o.paper||o.paper_type,o.qty,o.amount,o.materialCost,o.labourCost,p,pct(p,o.amount),o.stage,o.dueDate];
     })
   ];
   const csv=rows.map(r=>r.join(',')).join('\n');
