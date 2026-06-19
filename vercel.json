@@ -1,6 +1,28 @@
 {
-  "source": "/(.*\\.png|.*\\.jpg|.*\\.webp)",
+  "functions": {
+    "api/webhook.js": { "maxDuration": 10 },
+    "api/orders.js":  { "maxDuration": 10 },
+    "api/finance.js": { "maxDuration": 10 }
+  },
   "headers": [
-    { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=3600" }
+    {
+      "source": "/config.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" },
+        { "key": "Pragma",        "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "/(.*\\.png|.*\\.mp4|.*\\.jpg|.*\\.webp)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=3600" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
   ]
 }
