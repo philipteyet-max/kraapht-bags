@@ -123,10 +123,10 @@ const KRAAPHT_CONFIG = {
 
     // ── ORDER PAGE top 4 hover cards (label + name on hover) ─────────
     //    [card_9] [card_10] [card_11] [card_12]
-    card_9:  { label: "Brown Card 250gsm",   name: "Channay"    },
-    card_10: { label: "Brown Paper 80gsm",   name: "The Freedom Taste"       },
+    card_9:  { label: "Brown Card 250gsm",   name: "Freedom Taste"    },
+    card_10: { label: "Brown Paper 80gsm",   name: "Kassy's Kussine"       },
     card_11: { label: "Black / Chromo Coat", name: "Channay"     },
-    card_12: { label: "Duplex Board",        name: "AL Lounge"        },
+    card_12: { label: "Matt Card",        name: "Channay"        },
 
     // ── ORDER PAGE lifestyle row (label + name, always visible) ──────
     //    [card_13] [card_14] [card_15]
@@ -186,10 +186,10 @@ const KRAAPHT_CONFIG = {
     //
     //    [client_bag_9] [client_bag_10] [client_bag_11] [client_bag_12]
     //
-    client_bag_9:   "client_bag_9_v2.png",  // left
-    client_bag_10:  "client_bag_10_v2.png", // 2nd
-    client_bag_11:  "client_bag_11_v2.png", // 3rd
-    client_bag_12:  "client_bag_12_v2.png", // right
+    client_bag_9:   "client_bag_9_v3.png",  // left
+    client_bag_10:  "client_bag_10_v3.png", // 2nd
+    client_bag_11:  "client_bag_11_v3.png", // 3rd
+    client_bag_12:  "client_bag_12_v3.png", // right
 
     // ── ORDER PAGE GALLERY — lifestyle row ───────────────────────────
     //  Reading order: left → right
