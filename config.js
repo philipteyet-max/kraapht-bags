@@ -92,9 +92,49 @@ const KRAAPHT_CONFIG = {
   // to GitHub. Use the exact filename you upload.
   // ----------------------------------------------------------
 
-  // ----------------------------------------------------------
-  // HOMEPAGE TEXT
-  // ----------------------------------------------------------
+  // =================================================================
+  //  PORTFOLIO CARD LABELS
+  //  Change these to update all card text across index.html
+  //  and order.html automatically. No HTML editing needed.
+  //
+  //  Each card has:
+  //    label  — small gold text  (paper type · category)
+  //    name   — large white text (business name)
+  //    detail — small grey line  (location / tagline)
+  //             only used on 2×2 homepage cards and lifestyle rows
+  //             leave as "" to hide it
+  // =================================================================
+  portfolio: {
+
+    // ── HOMEPAGE 2×2 lifestyle grid ──────────────────────────────────
+    //    [card_1]  [card_2]
+    //    [card_3]  [card_4]
+    card_1: { label: "Brown Paper 80gsm · Gold Print",      name: "The Abachs Cocktail Bar & Grill",  detail: "Dansoman, Accra" },
+    card_2: { label: "Duplex Board · African Print",         name: "AL Lounge Bar & Restaurant",       detail: "Accra, Ghana"    },
+    card_3: { label: "Chromo Coat · Event Bag",              name: "Young African Women Congress",     detail: "Accra, Ghana"    },
+    card_4: { label: "Matt Paper 150gsm · 2-Colour Print",  name: "Channay",                          detail: "Clothing & Lifestyle Brand · Accra" },
+
+    // ── HOMEPAGE product mockup row (label + name, always visible) ───
+    //    [card_5] [card_6] [card_7] [card_8]
+    card_5: { label: "Brown Card 250gsm",   name: "Braised & Assorted"    },
+    card_6: { label: "Brown Paper 80gsm",   name: "The Abachs"       },
+    card_7: { label: "White / Chromo Coat", name: "Clean Canvas"     },
+    card_8: { label: "Duplex Board",        name: "old skull food joint"        },
+
+    // ── ORDER PAGE top 4 hover cards (label + name on hover) ─────────
+    //    [card_9] [card_10] [card_11] [card_12]
+    card_9:  { label: "Brown Card 250gsm",   name: "Channay"    },
+    card_10: { label: "Brown Paper 80gsm",   name: "The Freedom Taste"       },
+    card_11: { label: "Black / Chromo Coat", name: "Channay"     },
+    card_12: { label: "Duplex Board",        name: "AL Lounge"        },
+
+    // ── ORDER PAGE lifestyle row (label + name, always visible) ──────
+    //    [card_13] [card_14] [card_15]
+    card_13: { label: "Brown Paper 80gsm · Lifestyle",  name: "Le Pavillon"       },
+    card_14: { label: "Duplex Board · Street Market",   name: "Nayasha"    },
+    card_15: { label: "Chromo Coat · Event",            name: "Funeral Bag"  },
+
+  },
   homepage: {
     hero_headline:    "Premium Paper Bags Built for Your Brand",
     hero_subtext:     "Custom-printed, eco-friendly flat bottom bags and food bowls. Pre-payment production. Delivered to your business in Accra.",
@@ -162,11 +202,11 @@ const KRAAPHT_CONFIG = {
 
     // ── ORDER PAGE — PAPER TYPE SELECTORS ────────────────────────────
     //  Shown inside the paper selection cards on the order form
-    chromo_coat_paper:    "paper_chromo.png",      // White / Chromo Coat
-    brown_card_paper:     "paper_brown_card.png",  // Brown Card 250gsm
-    brown_paper_80_paper: "paper_brown_80.png",    // Brown Paper 80gsm
-    duplex_board_paper:   "paper_duplex.png",      // Duplex Board
-    matt_card_paper:      "matt_card_paper.png",     // Matt Paper 150gsm
+    chromo_coat_paper:    "paper_chromo_v2.png",      // White / Chromo Coat
+    brown_card_paper:     "paper_brown_card_v2.png",  // Brown Card 250gsm
+    brown_paper_80_paper: "paper_brown_80_v2.png",    // Brown Paper 80gsm
+    duplex_board_paper:   "paper_duplex_v2.png",      // Duplex Board
+    matt_card_paper:      "matt_card_paper_v2.png",     // Matt Paper 150gsm
 
   },
 
@@ -248,18 +288,43 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // 3. Channay card (client_bag_4) — swap CSS bag for real image
+  // 3. Channay card (client_bag_4) — swap CSS bag for real image if uploaded
   var channayCard = document.getElementById("channay-card");
   if (channayCard && imgs.client_bag_4) {
+    var p4 = C.portfolio.card_4;
     channayCard.innerHTML =
       '<img src="' + imgs.client_bag_4 + '" data-img="client_bag_4"' +
-      ' alt="Channay Clothing Line" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>' +
+      ' alt="' + p4.name + '" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>' +
       '<div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>' +
       '<div class="absolute bottom-0 left-0 right-0 p-6">' +
-      '<span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">Matt Paper 150gsm · 2-Colour Print</span>' +
-      '<p class="font-body-lg font-semibold text-white">Channay</p>' +
-      '<p class="font-body-md text-white/70 text-sm">Clothing &amp; Lifestyle Brand · Accra</p>' +
+      '<span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">' + p4.label + '</span>' +
+      '<p class="font-body-lg font-semibold text-white">' + p4.name + '</p>' +
+      (p4.detail ? '<p class="font-body-md text-white/70 text-sm">' + p4.detail + '</p>' : '') +
       '</div>';
+  }
+
+  // ── PORTFOLIO LABEL UPDATER ─────────────────────────────────────
+  var P = C.portfolio;
+
+  // Applies label + name + optional detail to a card element
+  function applyCardLabel(el, card) {
+    if (!el || !card) return;
+    var labelEl  = el.querySelector("[data-card-label]");
+    var nameEl   = el.querySelector("[data-card-name]");
+    var detailEl = el.querySelector("[data-card-detail]");
+    if (labelEl)  labelEl.textContent  = card.label  || "";
+    if (nameEl)   nameEl.textContent   = card.name   || "";
+    if (detailEl) {
+      detailEl.textContent = card.detail || "";
+      detailEl.style.display = card.detail ? "" : "none";
+    }
+  }
+
+  // Apply to all 15 cards by data-card attribute
+  for (var i = 1; i <= 15; i++) {
+    var cardEl  = document.querySelector("[data-card='" + i + "']");
+    var cardCfg = P["card_" + i];
+    applyCardLabel(cardEl, cardCfg);
   }
 
   // 4. Paper price display update on order page
