@@ -6,339 +6,778 @@
 <title>My Account | Kraapht Bags Ltd</title>
 <script src="config.js?v=4"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
   .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
   .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
-  .carousel-item{transition:opacity 0.8s ease-in-out;}
-  input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+  #auth-panel{display:none;}
+  #account-panel{display:none;}
+  #loading-panel{display:flex;}
+  .tab-btn.active{border-bottom:2px solid #C8A96B;color:#1F4D3A;font-weight:700;}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+  .stage-dot-done{background:#1F4D3A;color:white;}
+  .stage-dot-active{background:#C8A96B;color:white;}
+  .stage-dot-pending{background:#EDE9E2;color:#8B7355;}
+  .drag-over{border-color:#1F4D3A !important;background:#F0F7F4 !important;}
 </style>
 <script id="tailwind-config">
 tailwind.config={darkMode:"class",theme:{extend:{colors:{
-  "primary":"#1F4D3A",
-  "primary-light":"#2D6B52",
-  "on-primary":"#FFFFFF",
-  "primary-container":"#C5E8D8",
-  "on-primary-container":"#002114",
-  "secondary":"#D8C3A5",
-  "on-secondary":"#2B2B2B",
-  "tertiary":"#2B2B2B",
-  "accent":"#C8A96B",
-  "on-accent":"#FFFFFF",
-  "background":"#F7F4EF",
-  "on-background":"#2B2B2B",
-  "surface":"#FFFFFF",
-  "on-surface":"#2B2B2B",
-  "surface-container":"#EDE9E2",
-  "surface-container-low":"#F7F4EF",
-  "surface-container-high":"#E5E1DA",
-  "on-surface-variant":"#4A4035",
-  "inverse-surface":"#2B2B2B",
-  "inverse-on-surface":"#F7F4EF",
-  "inverse-primary":"#C8A96B",
-  "outline":"#8B7355",
-  "outline-variant":"#D8C3A5",
-  "error":"#BA1A1A",
-  "kraft":"#D8C3A5",
-  "forest":"#1F4D3A",
-  "gold":"#C8A96B",
-  "charcoal":"#2B2B2B"
+  "primary":"#1F4D3A","primary-light":"#2D6B52","on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8","on-primary-container":"#002114",
+  "secondary":"#D8C3A5","on-secondary":"#2B2B2B","tertiary":"#2B2B2B",
+  "accent":"#C8A96B","on-accent":"#FFFFFF","background":"#F7F4EF",
+  "on-background":"#2B2B2B","surface":"#FFFFFF","on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2","surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA","on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B","inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B","outline":"#8B7355","outline-variant":"#D8C3A5",
+  "error":"#BA1A1A","kraft":"#D8C3A5","forest":"#1F4D3A","gold":"#C8A96B","charcoal":"#2B2B2B"
 },
-"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
-"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"]},
 "borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
 </script>
 </head>
 <body class="bg-background text-on-surface font-sans antialiased">
+
+<!-- ═══════════ NAV ═══════════ -->
 <nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
-<div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
-  <a href="index.html" class="flex items-center gap-3">
-    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png" data-img="logo"/>
-  </a>
-  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="customer.html">My Account</a></div>
-  <div class="flex items-center gap-3">
-    <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
-    <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 flex justify-between items-center h-16 md:h-20">
+    <a href="index.html" class="flex items-center gap-3">
+      <img alt="Kraapht Bags Ltd" class="h-9 md:h-10 w-auto" src="logo.png" data-img="logo"/>
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="index.html">Home</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="order.html">Products &amp; Order</a>
+      <a class="text-primary border-b-2 border-accent pb-1 font-semibold text-sm" href="customer.html">My Account</a>
+    </div>
+    <div class="flex items-center gap-2 md:gap-3">
+      <span id="nav-user-name" class="hidden md:block text-xs font-bold tracking-widest uppercase text-on-surface-variant"></span>
+      <button id="nav-logout-btn" onclick="handleLogout()" class="hidden border border-outline-variant text-on-surface-variant px-4 py-2 text-xs font-bold tracking-widest uppercase hover:border-primary hover:text-primary transition-all">Sign Out</button>
+      <a href="order.html" class="bg-primary text-white px-4 md:px-6 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-accent transition-colors">Order Now</a>
+    </div>
   </div>
-</div>
 </nav>
 
-<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
+<main class="max-w-[1280px] mx-auto px-5 md:px-10 pt-24 md:pt-32 pb-24">
 
-  <!-- Account Header -->
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-    <div>
-      <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-2 block">Customer Portal</span>
-      <h1 class="text-4xl font-bold">Welcome back, Accra Bakery</h1>
-      <p class="font-body-lg text-on-surface-variant mt-2">Manage orders, track production, and view invoices.</p>
+  <!-- ═══════════ LOADING ═══════════ -->
+  <div id="loading-panel" class="flex-col items-center justify-center py-32 gap-4">
+    <div class="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Loading…</p>
+  </div>
+
+  <!-- ═══════════ AUTH PANEL ═══════════ -->
+  <div id="auth-panel" class="max-w-md mx-auto">
+    <div class="text-center mb-10">
+      <span class="text-xs font-bold tracking-[0.3em] uppercase text-accent mb-3 block">Customer Portal</span>
+      <h1 class="text-3xl md:text-4xl font-bold">My Account</h1>
+      <p class="text-on-surface-variant mt-2">Sign in to track orders and manage your profile.</p>
     </div>
-    <div class="flex gap-3 flex-wrap">
-      <div class="p-4 bg-surface border border-outline-variant text-right">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Total Orders</p>
-        <p class="text-2xl font-bold mt-1">12</p>
+
+    <!-- Tab switcher -->
+    <div class="flex border-b border-outline-variant mb-8">
+      <button onclick="switchAuthTab('login')" id="tab-login" class="tab-btn active flex-1 py-3 text-sm tracking-widest uppercase font-bold text-center">Sign In</button>
+      <button onclick="switchAuthTab('signup')" id="tab-signup" class="tab-btn flex-1 py-3 text-sm tracking-widest uppercase font-bold text-center text-on-surface-variant">Create Account</button>
+    </div>
+
+    <!-- Error banner -->
+    <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"></div>
+
+    <!-- Login form -->
+    <div id="form-login" class="tab-content active space-y-4">
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Email Address</label>
+        <input id="login-email" type="email" placeholder="you@yourbusiness.com" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
       </div>
-      <div class="p-4 bg-surface border border-outline-variant text-right">
-        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs">Bags Ordered</p>
-        <p class="text-2xl font-bold mt-1">4,750</p>
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Password</label>
+        <input id="login-password" type="password" placeholder="••••••••" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
       </div>
-      <div class="p-4 bg-primary text-white text-right">
-        <p class="font-label-sm text-label-sm uppercase tracking-widest text-xs opacity-80">Total Spent</p>
-        <p class="text-2xl font-bold mt-1 text-accent">GHS 18,200</p>
+      <button onclick="handleLogin()" class="w-full bg-primary text-white py-3.5 text-sm font-bold tracking-widest uppercase hover:bg-accent transition-colors mt-2">Sign In</button>
+      <div class="text-center">
+        <button onclick="handleForgotPassword()" class="text-xs text-on-surface-variant hover:text-primary transition-colors tracking-widest uppercase font-bold">Forgot Password?</button>
       </div>
+      <div id="forgot-success" class="hidden text-center text-xs text-green-700 font-semibold p-3 bg-green-50 border border-green-200">Reset link sent — check your email.</div>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-3 my-4">
+        <div class="flex-1 h-px bg-outline-variant"></div>
+        <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">or</span>
+        <div class="flex-1 h-px bg-outline-variant"></div>
+      </div>
+      <button onclick="handleGoogleLogin()" class="w-full border border-outline-variant bg-surface text-on-surface py-3.5 text-sm font-bold tracking-wide hover:border-primary transition-colors flex items-center justify-center gap-3">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- Signup form -->
+    <div id="form-signup" class="tab-content space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Full Name *</label>
+          <input id="signup-name" type="text" placeholder="Your name" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Business Name *</label>
+          <input id="signup-business" type="text" placeholder="Your business" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Phone *</label>
+        <input id="signup-phone" type="tel" placeholder="0XX XXX XXXX" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Email Address *</label>
+        <input id="signup-email" type="email" placeholder="you@yourbusiness.com" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Delivery Address</label>
+        <input id="signup-address" type="text" placeholder="Street, area, city" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Password *</label>
+        <input id="signup-password" type="password" placeholder="Min. 8 characters" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+      </div>
+      <button onclick="handleSignup()" class="w-full bg-primary text-white py-3.5 text-sm font-bold tracking-widest uppercase hover:bg-accent transition-colors mt-2">Create Account</button>
+      <div class="flex items-center gap-3 my-4">
+        <div class="flex-1 h-px bg-outline-variant"></div>
+        <span class="text-xs text-on-surface-variant uppercase tracking-widest font-bold">or</span>
+        <div class="flex-1 h-px bg-outline-variant"></div>
+      </div>
+      <button onclick="handleGoogleLogin()" class="w-full border border-outline-variant bg-surface text-on-surface py-3.5 text-sm font-bold tracking-wide hover:border-primary transition-colors flex items-center justify-center gap-3">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- ═══════════ ACCOUNT DASHBOARD ═══════════ -->
+  <div id="account-panel">
 
-    <!-- Orders List -->
-    <div class="lg:col-span-2 space-y-4">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="text-xl font-bold">My Orders</h2>
-        <a href="order.html" class="font-label-sm text-label-sm uppercase tracking-widest text-primary hover:text-accent transition-colors">+ New Order</a>
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <span class="text-xs font-bold tracking-[0.3em] uppercase text-accent mb-2 block">Customer Portal</span>
+        <h1 class="text-3xl md:text-4xl font-bold">Welcome back, <span id="welcome-name">—</span></h1>
+        <p class="text-on-surface-variant mt-2">Manage your orders, designs and account details.</p>
       </div>
-
-      <!-- Active Order -->
-      <div class="bg-surface border-l-4 border-accent border border-outline-variant p-6">
-        <div class="flex items-start justify-between gap-4 mb-5">
-          <div>
-            <div class="flex items-center gap-3 mb-1 flex-wrap">
-              <span class="font-body-md font-semibold">KBL-2026-00148</span>
-              <span class="px-2 py-1 bg-primary text-white font-label-sm text-label-sm uppercase tracking-widest text-xs">In Production</span>
-            </div>
-            <p class="font-body-md text-on-surface-variant text-sm">200× Flat Bottom Bag · Chromo Coat · Twisted Rope Handle</p>
-          </div>
-          <p class="font-body-md font-semibold text-primary flex-shrink-0">GHS 917.95</p>
+      <div class="flex gap-3 flex-wrap">
+        <div class="p-4 bg-surface border border-outline-variant text-right min-w-[100px]">
+          <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Total Orders</p>
+          <p class="text-2xl font-bold mt-1" id="stat-order-count">—</p>
         </div>
-        <!-- Mini progress tracker -->
-        <div class="flex items-center gap-0">
-          <div class="flex flex-col items-center">
-            <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs">✓</div>
-            <p class="font-label-sm text-label-sm mt-1 text-primary uppercase text-center" style="font-size:9px;letter-spacing:0.05em;">Paid</p>
-          </div>
-          <div class="flex-1 h-1 bg-primary mx-1"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs">✓</div>
-            <p class="font-label-sm text-label-sm mt-1 text-primary uppercase text-center" style="font-size:9px;letter-spacing:0.05em;">Started</p>
-          </div>
-          <div class="flex-1 h-1 bg-accent mx-1"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center">
-              <span class="material-symbols-outlined text-sm">precision_manufacturing</span>
-            </div>
-            <p class="font-label-sm text-label-sm mt-1 text-accent uppercase text-center" style="font-size:9px;letter-spacing:0.05em;">Making</p>
-          </div>
-          <div class="flex-1 h-1 bg-outline-variant mx-1"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-8 h-8 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center">
-              <span class="material-symbols-outlined text-sm">fact_check</span>
-            </div>
-            <p class="font-label-sm text-label-sm mt-1 text-on-surface-variant uppercase text-center" style="font-size:9px;letter-spacing:0.05em;">QC</p>
-          </div>
-          <div class="flex-1 h-1 bg-outline-variant mx-1"></div>
-          <div class="flex flex-col items-center">
-            <div class="w-8 h-8 rounded-full border-2 border-outline-variant text-on-surface-variant flex items-center justify-center">
-              <span class="material-symbols-outlined text-sm">local_shipping</span>
-            </div>
-            <p class="font-label-sm text-label-sm mt-1 text-on-surface-variant uppercase text-center" style="font-size:9px;letter-spacing:0.05em;">Dispatch</p>
-          </div>
+        <div class="p-4 bg-surface border border-outline-variant text-right min-w-[100px]">
+          <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Bags Ordered</p>
+          <p class="text-2xl font-bold mt-1" id="stat-bags">—</p>
         </div>
-        <div class="flex gap-4 mt-5">
-          <a href="confirmation.html" class="font-label-sm text-label-sm uppercase tracking-widest text-primary hover:text-accent transition-colors flex items-center gap-1 text-xs">
-            <span class="material-symbols-outlined text-sm">visibility</span>View Details
-          </a>
-          <a href="#" class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-xs">
-            <span class="material-symbols-outlined text-sm">download</span>Invoice
-          </a>
+        <div class="p-4 bg-primary text-white text-right min-w-[100px]">
+          <p class="text-xs font-bold uppercase tracking-widest opacity-80">Total Spent</p>
+          <p class="text-2xl font-bold mt-1 text-accent" id="stat-spent">—</p>
         </div>
-      </div>
-
-      <!-- Past orders -->
-      
-      <div class="bg-surface border border-outline-variant p-6 hover:border-primary transition-colors">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-3 mb-1 flex-wrap">
-              <span class="font-body-md font-semibold">KBL-2026-00131</span>
-              <span class="px-2 py-1 bg-green-100 text-green-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">Delivered</span>
-            </div>
-            <p class="font-body-md text-on-surface-variant text-sm">500× Flat Bottom Bag · Brown Card 250gsm · Twisted Rope</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-1">Delivered 14 May 2026</p>
-          </div>
-          <div class="text-right flex-shrink-0">
-            <p class="font-body-md font-semibold">GHS 2,180</p>
-            <a href="order.html" class="font-label-sm text-label-sm text-accent hover:text-primary uppercase tracking-widest mt-1 block text-xs transition-colors">Reorder</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-surface border border-outline-variant p-6 hover:border-primary transition-colors">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-3 mb-1 flex-wrap">
-              <span class="font-body-md font-semibold">KBL-2026-00118</span>
-              <span class="px-2 py-1 bg-green-100 text-green-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">Delivered</span>
-            </div>
-            <p class="font-body-md text-on-surface-variant text-sm">300× Paper Food Bowl · Chromo Coat · Custom Print</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-1">Delivered 28 Apr 2026</p>
-          </div>
-          <div class="text-right flex-shrink-0">
-            <p class="font-body-md font-semibold">GHS 1,640</p>
-            <a href="order.html" class="font-label-sm text-label-sm text-accent hover:text-primary uppercase tracking-widest mt-1 block text-xs transition-colors">Reorder</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-surface border border-outline-variant p-6 hover:border-primary transition-colors">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-3 mb-1 flex-wrap">
-              <span class="font-body-md font-semibold">KBL-2026-00099</span>
-              <span class="px-2 py-1 bg-green-100 text-green-800 font-label-sm text-label-sm uppercase tracking-widest text-xs">Delivered</span>
-            </div>
-            <p class="font-body-md text-on-surface-variant text-sm">1,000× Flat Bottom Bag · Duplex Board · 2 Colour Print</p>
-            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mt-1">Delivered 10 Apr 2026</p>
-          </div>
-          <div class="text-right flex-shrink-0">
-            <p class="font-body-md font-semibold">GHS 4,960</p>
-            <a href="order.html" class="font-label-sm text-label-sm text-accent hover:text-primary uppercase tracking-widest mt-1 block text-xs transition-colors">Reorder</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Saved Designs -->
-      <div class="bg-surface border border-outline-variant p-6 mt-6">
-        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-          <span class="material-symbols-outlined text-accent">image</span>Saved Designs
-        </h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between p-3 bg-surface-container border border-outline-variant hover:border-primary transition-colors">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary">image</span>
-              <div>
-                <p class="font-body-md font-semibold text-sm">Logo Design v2 — Brown &amp; Gold</p>
-                <p class="font-label-sm text-label-sm text-on-surface-variant text-xs uppercase tracking-widest">Saved 14 May 2026 · Used 3 times</p>
-              </div>
-            </div>
-            <div class="flex gap-3">
-              <a href="order.html" class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs hover:text-accent transition-colors">Use Design</a>
-              <button class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs hover:text-red-600 transition-colors">Delete</button>
-            </div>
-          </div>
-          <div class="flex items-center justify-between p-3 bg-surface-container border border-outline-variant hover:border-primary transition-colors">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary">image</span>
-              <div>
-                <p class="font-body-md font-semibold text-sm">Event Bag Design — YAWC Congress</p>
-                <p class="font-label-sm text-label-sm text-on-surface-variant text-xs uppercase tracking-widest">Saved 28 Apr 2026 · Used 1 time</p>
-              </div>
-            </div>
-            <div class="flex gap-3">
-              <a href="order.html" class="font-label-sm text-label-sm text-primary uppercase tracking-widest text-xs hover:text-accent transition-colors">Use Design</a>
-              <button class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs hover:text-red-600 transition-colors">Delete</button>
-            </div>
-          </div>
-        </div>
-        <a href="order.html" class="mt-4 inline-flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-sm">add</span>Upload New Design
-        </a>
       </div>
     </div>
 
-    <!-- Right sidebar -->
-    <div class="lg:col-span-1 space-y-4">
+    <!-- Section tabs -->
+    <div class="flex border-b border-outline-variant mb-8 overflow-x-auto">
+      <button onclick="switchDashTab('orders')" id="dtab-orders" class="tab-btn active whitespace-nowrap px-4 py-3 text-xs font-bold tracking-widest uppercase text-center">My Orders</button>
+      <button onclick="switchDashTab('designs')" id="dtab-designs" class="tab-btn whitespace-nowrap px-4 py-3 text-xs font-bold tracking-widest uppercase text-center text-on-surface-variant">My Designs</button>
+      <button onclick="switchDashTab('profile')" id="dtab-profile" class="tab-btn whitespace-nowrap px-4 py-3 text-xs font-bold tracking-widest uppercase text-center text-on-surface-variant">Profile</button>
+    </div>
 
-      <!-- Account details -->
-      <div class="bg-charcoal text-white p-7">
-        <h3 class="text-xl font-bold mb-6">Account Details</h3>
-        <div class="space-y-4 text-sm">
-          <div><p class="font-label-sm text-label-sm uppercase tracking-widest opacity-40 mb-1">Business</p><p>Accra Bakery Ltd</p></div>
-          <div><p class="font-label-sm text-label-sm uppercase tracking-widest opacity-40 mb-1">Contact</p><p>Kwame Mensah</p></div>
-          <div><p class="font-label-sm text-label-sm uppercase tracking-widest opacity-40 mb-1">WhatsApp</p><p>+233 24 XXX XXXX</p></div>
-          <div><p class="font-label-sm text-label-sm uppercase tracking-widest opacity-40 mb-1">Email</p><p>kwame@accrabakery.com</p></div>
-          <div><p class="font-label-sm text-label-sm uppercase tracking-widest opacity-40 mb-1">Customer Since</p><p>January 2026</p></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+
+        <!-- ORDERS TAB -->
+        <div id="dtab-orders-content" class="tab-content active space-y-4">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-bold">My Orders</h2>
+            <a href="order.html" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">+ New Order</a>
+          </div>
+          <div id="orders-list">
+            <div class="text-center py-12 text-on-surface-variant">
+              <span class="material-symbols-outlined text-4xl mb-3 block">inbox</span>
+              <p class="font-bold">No orders yet</p>
+              <a href="order.html" class="mt-3 inline-block text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Place your first order →</a>
+            </div>
+          </div>
         </div>
-        <button class="mt-6 w-full border border-white/20 text-white py-3 font-label-sm text-label-sm uppercase tracking-widest text-xs hover:bg-white/10 transition-colors">
-          Edit Details
-        </button>
+
+        <!-- DESIGNS TAB -->
+        <div id="dtab-designs-content" class="tab-content space-y-5">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xl font-bold">My Designs</h2>
+          </div>
+
+          <!-- Upload area -->
+          <div id="upload-drop-zone" class="border-2 border-dashed border-outline-variant p-8 text-center transition-colors cursor-pointer hover:border-primary" onclick="document.getElementById('artwork-file-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleFileDrop(event)">
+            <span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3 block">upload_file</span>
+            <p class="font-bold text-sm">Tap to upload or drag your artwork here</p>
+            <p class="text-xs text-on-surface-variant mt-1">JPG, PNG, PDF, SVG or AI · Max 10MB</p>
+            <input id="artwork-file-input" type="file" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.svg,.ai,application/postscript" onchange="handleFileSelect(this)"/>
+          </div>
+
+          <!-- Upload form (shows after file selected) -->
+          <div id="upload-form" class="hidden border border-outline-variant p-5 space-y-3">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="material-symbols-outlined text-primary">description</span>
+              <div>
+                <p class="font-bold text-sm" id="upload-file-name">—</p>
+                <p class="text-xs text-on-surface-variant" id="upload-file-size">—</p>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Design Label</label>
+              <input id="artwork-label" type="text" placeholder="e.g. Logo v2 — Brown & Gold" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+            </div>
+            <div>
+              <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Link to Order (optional)</label>
+              <input id="artwork-order-ref" type="text" placeholder="e.g. KBL-00148" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="submitArtworkUpload()" class="flex-1 bg-primary text-white py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent transition-colors">Upload Design</button>
+              <button onclick="cancelUpload()" class="px-5 border border-outline-variant text-xs font-bold tracking-widest uppercase hover:bg-surface-container transition-colors">Cancel</button>
+            </div>
+            <div id="upload-progress" class="hidden">
+              <div class="h-1.5 bg-surface-container"><div id="upload-progress-bar" class="h-full bg-primary transition-all" style="width:0%"></div></div>
+              <p class="text-xs text-on-surface-variant mt-1 text-center" id="upload-progress-label">Uploading…</p>
+            </div>
+          </div>
+
+          <div id="artwork-list" class="space-y-3">
+            <p class="text-sm text-on-surface-variant text-center py-6">No saved designs yet. Upload your first artwork above.</p>
+          </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div id="dtab-profile-content" class="tab-content">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold">Profile Details</h2>
+            <button onclick="toggleProfileEdit()" id="profile-edit-btn" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Edit Profile</button>
+          </div>
+          <div class="bg-surface border border-outline-variant p-6 space-y-4" id="profile-view">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Full Name</p><p class="font-semibold" id="pv-name">—</p></div>
+              <div><p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Business Name</p><p class="font-semibold" id="pv-business">—</p></div>
+              <div><p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Phone</p><p class="font-semibold" id="pv-phone">—</p></div>
+              <div><p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Email</p><p class="font-semibold" id="pv-email">—</p></div>
+              <div class="md:col-span-2"><p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">Delivery Address</p><p class="font-semibold" id="pv-address">—</p></div>
+            </div>
+          </div>
+          <div class="bg-surface border border-outline-variant p-6 space-y-4 hidden" id="profile-edit">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Full Name</label>
+                <input id="pe-name" type="text" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+              </div>
+              <div>
+                <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Business Name</label>
+                <input id="pe-business" type="text" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+              </div>
+              <div>
+                <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Phone</label>
+                <input id="pe-phone" type="tel" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+              </div>
+              <div>
+                <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Email</label>
+                <input id="pe-email" type="email" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-2">Delivery Address</label>
+                <input id="pe-address" type="text" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+              </div>
+            </div>
+            <div id="profile-save-msg" class="hidden text-xs text-green-700 font-bold tracking-widest uppercase">Profile saved.</div>
+            <div class="flex gap-3">
+              <button onclick="saveProfile()" class="flex-1 bg-primary text-white py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent transition-colors">Save Changes</button>
+              <button onclick="toggleProfileEdit()" class="px-5 border border-outline-variant text-xs font-bold tracking-widest uppercase hover:bg-surface-container transition-colors">Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Loyalty status -->
-      <div class="bg-primary text-white p-6">
-        <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-70 mb-1 text-xs">Loyalty Status</p>
-        <p class="text-xl font-bold mb-1">Regular Client</p>
-        <p class="text-sm text-white/70 mb-4">12 orders · Plate &amp; die-cut costs waived on repeat orders</p>
-        <div class="w-full bg-white/20 h-1.5 mb-1">
-          <div class="h-full bg-accent" style="width:47%"></div>
+      <!-- Sidebar -->
+      <div class="lg:col-span-1 space-y-4">
+        <div class="bg-charcoal text-white p-7">
+          <h3 class="text-xl font-bold mb-6">Account Details</h3>
+          <div class="space-y-4 text-sm">
+            <div><p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-1">Business</p><p id="sb-business">—</p></div>
+            <div><p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-1">Contact</p><p id="sb-name">—</p></div>
+            <div><p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-1">Phone</p><p id="sb-phone">—</p></div>
+            <div><p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-1">Email</p><p id="sb-email">—</p></div>
+            <div><p class="text-xs font-bold uppercase tracking-widest opacity-40 mb-1">Delivery Address</p><p id="sb-address">—</p></div>
+          </div>
+          <button onclick="switchDashTab('profile');toggleProfileEdit()" class="mt-6 w-full border border-white/20 text-white py-3 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-colors">Edit Details</button>
         </div>
-        <p class="font-label-sm text-label-sm uppercase tracking-widest opacity-50 text-xs">4,750 / 10,000 bags to Premium status</p>
-      </div>
 
-      <!-- Quick actions -->
-      <div class="bg-surface border border-outline-variant p-6">
-        <h3 class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-4">Quick Actions</h3>
-        <div class="space-y-1">
-          <a href="order.html" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors rounded-sm">
-            <span class="material-symbols-outlined text-primary">add_shopping_cart</span>
-            <span class="font-body-md text-sm">Place New Order</span>
-          </a>
-          <a href="#" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors rounded-sm">
-            <span class="material-symbols-outlined text-primary">download</span>
-            <span class="font-body-md text-sm">Download All Invoices</span>
-          </a>
-          <a href="https://wa.me/233558619224" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors rounded-sm">
-            <span class="material-symbols-outlined text-primary">chat</span>
-            <span class="font-body-md text-sm">WhatsApp Kraapht</span>
-          </a>
+        <div class="bg-primary text-white p-6">
+          <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Loyalty Status</p>
+          <p class="text-xl font-bold mb-1" id="loyalty-status">—</p>
+          <p class="text-sm text-white/70 mb-4" id="loyalty-detail">—</p>
+          <div class="w-full bg-white/20 h-1.5 mb-1">
+            <div class="h-full bg-accent transition-all" id="loyalty-bar" style="width:0%"></div>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-widest opacity-50" id="loyalty-progress">—</p>
+        </div>
+
+        <div class="bg-surface border border-outline-variant p-6">
+          <h3 class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-4">Quick Actions</h3>
+          <div class="space-y-1">
+            <a href="order.html" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors">
+              <span class="material-symbols-outlined text-primary">add_shopping_cart</span>
+              <span class="text-sm">Place New Order</span>
+            </a>
+            <button onclick="switchDashTab('designs')" class="w-full flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-left">
+              <span class="material-symbols-outlined text-primary">upload_file</span>
+              <span class="text-sm">Upload Artwork</span>
+            </button>
+            <a href="https://wa.me/233558619224" class="flex items-center gap-3 p-3 hover:bg-surface-container transition-colors">
+              <span class="material-symbols-outlined text-primary">chat</span>
+              <span class="text-sm">WhatsApp Kraapht</span>
+            </a>
+            <button onclick="handleLogout()" class="w-full flex items-center gap-3 p-3 hover:bg-surface-container transition-colors text-left text-error">
+              <span class="material-symbols-outlined text-error">logout</span>
+              <span class="text-sm">Sign Out</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<footer class="bg-charcoal text-inverse-on-surface w-full">
-<div class="max-w-[1280px] mx-auto px-10 py-16">
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-    <div class="md:col-span-1">
-      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png" data-img="logo"/>
-      <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
+<footer class="bg-charcoal text-inverse-on-surface w-full mt-16">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+      <div class="col-span-2 md:col-span-1">
+        <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-4" src="logo.png" data-img="logo"/>
+        <p class="opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana.</p>
+      </div>
+      <div>
+        <h5 class="text-xs font-bold uppercase tracking-widest mb-4 text-accent">Products</h5>
+        <ul class="space-y-2 text-sm opacity-70">
+          <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
+          <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
+          <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-xs font-bold uppercase tracking-widest mb-4 text-accent">Company</h5>
+        <ul class="space-y-2 text-sm opacity-70">
+          <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
+          <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-xs font-bold uppercase tracking-widest mb-4 text-accent">Contact</h5>
+        <ul class="space-y-2 text-sm opacity-70">
+          <li><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
+          <li><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
+          <li>Accra, Ghana</li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Products</h5>
-      <ul class="space-y-3 font-body-md text-sm opacity-70">
-        <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
-        <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
-        <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print Bags</a></li>
-        <li><a class="hover:text-accent transition-colors" href="order.html">Bulk Orders</a></li>
-      </ul>
-    </div>
-    <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
-      <ul class="space-y-3 font-body-md text-sm opacity-70">
-        <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
-        <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
-        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
-      </ul>
-    </div>
-    <div>
-      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
-      <ul class="space-y-3 font-body-md text-sm opacity-70">
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
-      </ul>
-    </div>
-  </div>
-  <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
-    <p class="font-label-sm text-label-sm opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
-    <div class="flex gap-6 opacity-40">
-      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Privacy</a>
-      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Terms</a>
+    <div class="border-t border-white/10 pt-6 text-center">
+      <p class="text-xs opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
     </div>
   </div>
-</div>
 </footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// SUPABASE INIT
+// ═══════════════════════════════════════════════════════
+const SUPABASE_URL  = 'https://irehhfetxofmhcepluuz.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWhoZmV0eG9mbWhjZXBsdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODM4MjIsImV4cCI6MjA5Njk1OTgyMn0.0qryf15jWiUpZ4fsupKstHR4cUjlvrCzlVtyuu0n9Y8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser   = null;
+let currentProfile = null;
+let selectedFile  = null;
+
+// ═══════════════════════════════════════════════════════
+// INIT — check session on load
+// ═══════════════════════════════════════════════════════
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    currentUser = session.user;
+    await loadAccountData();
+    showPanel('account');
+  } else {
+    showPanel('auth');
+  }
+  // Handle OAuth redirect
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      currentUser = session.user;
+      await loadAccountData();
+      showPanel('account');
+    }
+    if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      showPanel('auth');
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════════════
+// PANEL SWITCHING
+// ═══════════════════════════════════════════════════════
+function showPanel(panel) {
+  document.getElementById('loading-panel').style.display = 'none';
+  document.getElementById('auth-panel').style.display    = panel === 'auth'    ? 'block' : 'none';
+  document.getElementById('account-panel').style.display = panel === 'account' ? 'block' : 'none';
+  if (panel === 'account') {
+    document.getElementById('nav-logout-btn').classList.remove('hidden');
+  } else {
+    document.getElementById('nav-logout-btn').classList.add('hidden');
+  }
+}
+
+function switchAuthTab(tab) {
+  ['login','signup'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
+    document.getElementById('form-'+t).classList.toggle('active', t === tab);
+    if (t !== tab) document.getElementById('tab-'+t).classList.add('text-on-surface-variant');
+    else document.getElementById('tab-'+t).classList.remove('text-on-surface-variant');
+  });
+  clearAuthError();
+}
+
+function switchDashTab(tab) {
+  ['orders','designs','profile'].forEach(t => {
+    document.getElementById('dtab-'+t).classList.toggle('active', t === tab);
+    document.getElementById('dtab-'+t+'-content').classList.toggle('active', t === tab);
+    if (t !== tab) document.getElementById('dtab-'+t).classList.add('text-on-surface-variant');
+    else document.getElementById('dtab-'+t).classList.remove('text-on-surface-variant');
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTH HELPERS
+// ═══════════════════════════════════════════════════════
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+function clearAuthError() {
+  document.getElementById('auth-error').classList.add('hidden');
+}
+
+async function handleLogin() {
+  clearAuthError();
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) return showAuthError('Please enter your email and password.');
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) showAuthError(error.message);
+}
+
+async function handleSignup() {
+  clearAuthError();
+  const name     = document.getElementById('signup-name').value.trim();
+  const business = document.getElementById('signup-business').value.trim();
+  const phone    = document.getElementById('signup-phone').value.trim();
+  const email    = document.getElementById('signup-email').value.trim();
+  const address  = document.getElementById('signup-address').value.trim();
+  const password = document.getElementById('signup-password').value;
+  if (!name || !business || !phone || !email || !password) return showAuthError('Please fill in all required fields.');
+  if (password.length < 8) return showAuthError('Password must be at least 8 characters.');
+
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: { data: { full_name: name } }
+  });
+  if (error) return showAuthError(error.message);
+
+  // Save extra profile fields immediately
+  if (data.user) {
+    await sb.from('profiles').upsert({
+      id: data.user.id,
+      full_name: name, business_name: business,
+      phone, email, delivery_address: address,
+    });
+  }
+  showAuthError('Account created! Check your email to confirm, then sign in.');
+  document.getElementById('auth-error').className = 'mb-4 p-3 bg-green-50 border border-green-200 text-green-700 text-sm font-semibold';
+}
+
+async function handleGoogleLogin() {
+  await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/customer.html' }
+  });
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+  showPanel('auth');
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) return showAuthError('Enter your email address first, then click Forgot Password.');
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/customer.html',
+  });
+  if (error) return showAuthError(error.message);
+  document.getElementById('forgot-success').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════════════════════
+// ACCOUNT DATA LOAD
+// ═══════════════════════════════════════════════════════
+async function loadAccountData() {
+  const [profileRes, ordersRes, artworkRes] = await Promise.all([
+    sb.from('profiles').select('*').eq('id', currentUser.id).single(),
+    sb.from('orders').select('*').eq('user_id', currentUser.id).order('order_date', { ascending: false }),
+    sb.from('artwork').select('*').eq('user_id', currentUser.id).order('uploaded_at', { ascending: false }),
+  ]);
+
+  currentProfile = profileRes.data || {};
+  const orders   = ordersRes.data  || [];
+  const artworks = artworkRes.data || [];
+
+  renderAccountHeader(currentProfile, orders);
+  renderOrders(orders);
+  renderArtwork(artworks);
+  renderProfileView(currentProfile);
+  renderSidebar(currentProfile);
+}
+
+function renderAccountHeader(p, orders) {
+  const name = p.business_name || p.full_name || currentUser.email;
+  document.getElementById('welcome-name').textContent = name;
+  document.getElementById('nav-user-name').textContent = name;
+  document.getElementById('stat-order-count').textContent = orders.length;
+  const bags  = orders.reduce((s, o) => s + (o.quantity || 0), 0);
+  const spent = orders.reduce((s, o) => s + Number(o.amount_ghs || 0), 0);
+  document.getElementById('stat-bags').textContent  = bags.toLocaleString();
+  document.getElementById('stat-spent').textContent = 'GHS ' + spent.toLocaleString();
+  // Loyalty
+  const tiers = [{min:0, label:'New Client', detail:'Place your first order to unlock repeat-order discounts'}, {min:1, label:'Regular Client', detail:'Plate & die-cut costs waived on repeat orders'}, {min:10, label:'Loyal Client', detail:'Priority production scheduling'}, {min:20, label:'Premium Client', detail:'Dedicated account manager + bulk discounts'}];
+  const tier  = [...tiers].reverse().find(t => orders.length >= t.min) || tiers[0];
+  const nextTier = tiers.find(t => t.min > orders.length);
+  const progress = nextTier ? Math.round(orders.length / nextTier.min * 100) : 100;
+  document.getElementById('loyalty-status').textContent  = tier.label;
+  document.getElementById('loyalty-detail').textContent  = tier.detail;
+  document.getElementById('loyalty-bar').style.width     = progress + '%';
+  document.getElementById('loyalty-progress').textContent = nextTier ? `${orders.length} / ${nextTier.min} orders to ${nextTier.label}` : 'Top tier achieved';
+}
+
+// ═══════════════════════════════════════════════════════
+// ORDERS RENDER
+// ═══════════════════════════════════════════════════════
+const STAGES = ['Paid','Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
+
+function renderOrders(orders) {
+  const el = document.getElementById('orders-list');
+  if (!orders.length) {
+    el.innerHTML = `<div class="text-center py-12 text-on-surface-variant">
+      <span class="material-symbols-outlined text-4xl mb-3 block">inbox</span>
+      <p class="font-bold">No orders yet</p>
+      <a href="order.html" class="mt-3 inline-block text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Place your first order →</a>
+    </div>`;
+    return;
+  }
+  el.innerHTML = orders.map(o => {
+    const si = STAGES.indexOf(o.stage);
+    const stageTrack = STAGES.map((s, i) => {
+      const cls = i < si ? 'stage-dot-done' : i === si ? 'stage-dot-active' : 'stage-dot-pending';
+      return `<div class="flex flex-col items-center flex-1">
+        <div class="w-7 h-7 rounded-full ${cls} flex items-center justify-center text-xs font-bold">${i < si ? '✓' : i + 1}</div>
+        <p class="text-center mt-1 hidden md:block" style="font-size:8px;letter-spacing:0.04em;text-transform:uppercase;">${s}</p>
+      </div>
+      ${i < STAGES.length - 1 ? `<div class="flex-1 h-0.5 mt-3.5 ${i < si ? 'bg-primary' : 'bg-outline-variant'}"></div>` : ''}`;
+    }).join('');
+    const isActive = !['Delivered','Cancelled'].includes(o.stage);
+    const due = o.due_date ? new Date(o.due_date).toLocaleDateString('en-GB', {day:'numeric',month:'short'}) : '—';
+    return `<div class="bg-surface border-l-4 ${isActive?'border-accent':'border-outline-variant'} border border-outline-variant p-5 mb-4">
+      <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <span class="font-semibold text-sm">${o.ref}</span>
+            <span class="px-2 py-0.5 ${isActive?'bg-primary text-white':'bg-surface-container text-on-surface-variant'} text-xs font-bold tracking-widest uppercase">${o.stage}</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">${o.quantity?.toLocaleString()} × ${o.product_type} · ${o.paper_type}</p>
+          <p class="text-xs text-on-surface-variant mt-0.5">Due: ${due}</p>
+        </div>
+        <p class="font-semibold text-primary">GHS ${Number(o.amount_ghs).toLocaleString()}</p>
+      </div>
+      <div class="flex items-center gap-0 overflow-x-auto">${stageTrack}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// ARTWORK RENDER
+// ═══════════════════════════════════════════════════════
+function renderArtwork(artworks) {
+  const el = document.getElementById('artwork-list');
+  if (!artworks.length) {
+    el.innerHTML = '<p class="text-sm text-on-surface-variant text-center py-6">No saved designs yet. Upload your first artwork above.</p>';
+    return;
+  }
+  el.innerHTML = artworks.map(a => {
+    const date = new Date(a.uploaded_at).toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+    return `<div class="flex items-center justify-between p-4 bg-surface-container border border-outline-variant hover:border-primary transition-colors">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">description</span>
+        <div>
+          <p class="font-semibold text-sm">${a.label || a.file_name}</p>
+          <p class="text-xs text-on-surface-variant uppercase tracking-widest">Uploaded ${date} · Used ${a.use_count} time${a.use_count !== 1 ? 's' : ''}</p>
+        </div>
+      </div>
+      <div class="flex gap-3 flex-shrink-0">
+        <a href="order.html?design=${a.id}" class="text-xs font-bold tracking-widest uppercase text-primary hover:text-accent transition-colors">Use</a>
+        <button onclick="deleteArtwork('${a.id}','${a.file_path}')" class="text-xs font-bold tracking-widest uppercase text-on-surface-variant hover:text-error transition-colors">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function deleteArtwork(id, filePath) {
+  if (!confirm('Delete this design? This cannot be undone.')) return;
+  await Promise.all([
+    sb.from('artwork').delete().eq('id', id),
+    sb.storage.from('artwork').remove([filePath]),
+  ]);
+  await loadAccountData();
+}
+
+// ═══════════════════════════════════════════════════════
+// ARTWORK UPLOAD
+// ═══════════════════════════════════════════════════════
+function handleFileSelect(input) {
+  if (input.files && input.files[0]) setSelectedFile(input.files[0]);
+}
+
+function handleFileDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-drop-zone').classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) setSelectedFile(e.dataTransfer.files[0]);
+}
+
+function setSelectedFile(file) {
+  selectedFile = file;
+  document.getElementById('upload-file-name').textContent = file.name;
+  document.getElementById('upload-file-size').textContent = (file.size / 1024).toFixed(0) + ' KB';
+  document.getElementById('upload-form').classList.remove('hidden');
+  document.getElementById('upload-drop-zone').classList.add('hidden');
+}
+
+function cancelUpload() {
+  selectedFile = null;
+  document.getElementById('upload-form').classList.add('hidden');
+  document.getElementById('upload-drop-zone').classList.remove('hidden');
+  document.getElementById('artwork-file-input').value = '';
+}
+
+async function submitArtworkUpload() {
+  if (!selectedFile || !currentUser) return;
+  const label    = document.getElementById('artwork-label').value.trim() || selectedFile.name;
+  const orderRef = document.getElementById('artwork-order-ref').value.trim();
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+
+  // Show progress
+  document.getElementById('upload-progress').classList.remove('hidden');
+  document.getElementById('upload-progress-bar').style.width = '30%';
+  document.getElementById('upload-progress-label').textContent = 'Uploading…';
+
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  formData.append('label', label);
+  if (orderRef) formData.append('order_ref', orderRef);
+
+  try {
+    document.getElementById('upload-progress-bar').style.width = '60%';
+    const res = await fetch('/api/artwork-upload', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + session.access_token },
+      body: formData,
+    });
+    const result = await res.json();
+    document.getElementById('upload-progress-bar').style.width = '100%';
+    document.getElementById('upload-progress-label').textContent = res.ok ? 'Upload complete!' : (result.error || 'Upload failed');
+    if (res.ok) {
+      setTimeout(async () => {
+        cancelUpload();
+        await loadAccountData();
+        switchDashTab('designs');
+      }, 1000);
+    }
+  } catch (err) {
+    document.getElementById('upload-progress-label').textContent = 'Upload failed. Check connection.';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PROFILE VIEW / EDIT
+// ═══════════════════════════════════════════════════════
+function renderProfileView(p) {
+  document.getElementById('pv-name').textContent     = p.full_name        || '—';
+  document.getElementById('pv-business').textContent = p.business_name    || '—';
+  document.getElementById('pv-phone').textContent    = p.phone            || '—';
+  document.getElementById('pv-email').textContent    = p.email || currentUser?.email || '—';
+  document.getElementById('pv-address').textContent  = p.delivery_address || '—';
+}
+
+function renderSidebar(p) {
+  document.getElementById('sb-business').textContent = p.business_name    || '—';
+  document.getElementById('sb-name').textContent     = p.full_name        || '—';
+  document.getElementById('sb-phone').textContent    = p.phone            || '—';
+  document.getElementById('sb-email').textContent    = p.email || currentUser?.email || '—';
+  document.getElementById('sb-address').textContent  = p.delivery_address || '—';
+}
+
+function toggleProfileEdit() {
+  const view = document.getElementById('profile-view');
+  const edit = document.getElementById('profile-edit');
+  const isEditing = !edit.classList.contains('hidden');
+  if (isEditing) {
+    edit.classList.add('hidden');
+    view.classList.remove('hidden');
+    document.getElementById('profile-edit-btn').textContent = 'Edit Profile';
+  } else {
+    // Pre-fill edit fields
+    const p = currentProfile;
+    document.getElementById('pe-name').value     = p.full_name        || '';
+    document.getElementById('pe-business').value = p.business_name    || '';
+    document.getElementById('pe-phone').value    = p.phone            || '';
+    document.getElementById('pe-email').value    = p.email || currentUser?.email || '';
+    document.getElementById('pe-address').value  = p.delivery_address || '';
+    edit.classList.remove('hidden');
+    view.classList.add('hidden');
+    document.getElementById('profile-edit-btn').textContent = 'Cancel';
+  }
+}
+
+async function saveProfile() {
+  const updates = {
+    full_name:        document.getElementById('pe-name').value.trim(),
+    business_name:    document.getElementById('pe-business').value.trim(),
+    phone:            document.getElementById('pe-phone').value.trim(),
+    email:            document.getElementById('pe-email').value.trim(),
+    delivery_address: document.getElementById('pe-address').value.trim(),
+  };
+  const { error } = await sb.from('profiles').upsert({ id: currentUser.id, ...updates });
+  if (error) return;
+  currentProfile = { ...currentProfile, ...updates };
+  renderProfileView(currentProfile);
+  renderSidebar(currentProfile);
+  document.getElementById('profile-save-msg').classList.remove('hidden');
+  setTimeout(() => {
+    document.getElementById('profile-save-msg').classList.add('hidden');
+    toggleProfileEdit();
+  }, 1500);
+}
+</script>
 </body>
 </html>
