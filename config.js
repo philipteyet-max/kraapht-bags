@@ -21,6 +21,15 @@
 const KRAAPHT_CONFIG = {
 
   // ----------------------------------------------------------
+  // PAYSTACK
+  // Switch from test to live by updating public_key below.
+  // Also update PAYSTACK_SECRET_KEY in Vercel environment variables.
+  // ----------------------------------------------------------
+  paystack: {
+    public_key: "sk_test_d689d91e71b61e83eb894c8d1a1ffcdc3083f4b3",
+  },
+
+  // ----------------------------------------------------------
   // CONTACT DETAILS
   // ----------------------------------------------------------
   contact: {
@@ -39,8 +48,8 @@ const KRAAPHT_CONFIG = {
     delivery_cost:  30,
     designer_fee:   100,
     die_cut_run:    60,
-    die_cut_board:  300,
-    labour_per_bag: 1,
+    die_cut_board:  100,
+    labour_per_bag: 0.50,
   },
 
   // ----------------------------------------------------------
@@ -109,30 +118,30 @@ const KRAAPHT_CONFIG = {
     // ── HOMEPAGE 2×2 lifestyle grid ──────────────────────────────────
     //    [card_1]  [card_2]
     //    [card_3]  [card_4]
-    card_1: { label: "Brown Paper 80gsm · Gold Print",      name: "The Abachs Cocktail Bar & Grill",  detail: "Dansoman, Accra" },
-    card_2: { label: "Duplex Board · African Print",         name: "AL Lounge Bar & Restaurant",       detail: "Accra, Ghana"    },
+    card_1: { label: "Brown Paper 80gsm · Gold Print",      name: "The Abacus Cocktail Bar & Grill",  detail: "Dansoman, Accra" },
+    card_2: { label: "Duplex Board · ",         name: "Hussy's Kitchen",       detail: "Accra, Ghana"    },
     card_3: { label: "Chromo Coat · Event Bag",              name: "Young African Women Congress",     detail: "Accra, Ghana"    },
-    card_4: { label: "Matt Paper 150gsm · 2-Colour Print",  name: "Channay",                          detail: "Clothing & Lifestyle Brand · Accra" },
+    card_4: { label: "Matt Paper · 2-Colour Print",  name: "Channay",                   detail: "Clothing & Lifestyle Brand · " },
 
     // ── HOMEPAGE product mockup row (label + name, always visible) ───
     //    [card_5] [card_6] [card_7] [card_8]
-    card_5: { label: "Brown Card 250gsm",   name: "Braised & Assorted"    },
-    card_6: { label: "Brown Paper 80gsm",   name: "The Abachs"       },
-    card_7: { label: "White / Chromo Coat", name: "Clean Canvas"     },
-    card_8: { label: "Duplex Board",        name: "old skull food joint"        },
+    card_5: { label: "Chromo Coat",   name: "Braised & Assorted"    },
+    card_6: { label: "Brown Paper 80gsm",   name: " "       },
+    card_7: { label: "Chromo Coat", name: "AL Lounge Bar & Restaurant"     },
+    card_8: { label: "Brown Card",        name: "old skull food joint"        },
 
     // ── ORDER PAGE top 4 hover cards (label + name on hover) ─────────
     //    [card_9] [card_10] [card_11] [card_12]
-    card_9:  { label: "Brown Card 250gsm",   name: "Freedom Taste"    },
+    card_9:  { label: "Brown Card ",   name: "Freedom Taste"    },
     card_10: { label: "Brown Paper 80gsm",   name: "Kassy's Kussine"       },
     card_11: { label: "Black / Chromo Coat", name: "Channay"     },
     card_12: { label: "Matt Card",        name: "Channay"        },
 
     // ── ORDER PAGE lifestyle row (label + name, always visible) ──────
     //    [card_13] [card_14] [card_15]
-    card_13: { label: "Brown Paper 80gsm · Lifestyle",  name: "Le Pavillon"       },
-    card_14: { label: "Duplex Board · Street Market",   name: "Nayasha"    },
-    card_15: { label: "Chromo Coat · Event",            name: "Funeral Bag"  },
+    card_13: { label: "Brown Card · ",  name: "Le Pavillon"       },
+    card_14: { label: "Brown Card · ",   name: "Nayasha"    },
+    card_15: { label: "Chromo Coat · ",            name: "Funeral Celebration"  },
 
   },
   homepage: {
