@@ -27,7 +27,7 @@ const KRAAPHT_CONFIG = {
     whatsapp_number:  "233558619224",
     whatsapp_display: "+233 558 619 224",
     email:            "kraaphtbags@gmail.com",
-    website:          "https://project-sb5ta.vercel.app",
+    website:          "https://kraaphtbags.com",
     location:         "Accra, Ghana",
   },
 
