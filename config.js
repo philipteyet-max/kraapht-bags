@@ -35,7 +35,7 @@ const KRAAPHT_CONFIG = {
   contact: {
     whatsapp_number:  "233558619224",
     whatsapp_display: "+233 558 619 224",
-    email:            "kraaphtbags@gmail.com",
+    email:            "info@kraaphtbags.com",
     website:          "https://kraaphtbags.com",
     location:         "Accra, Ghana",
   },
