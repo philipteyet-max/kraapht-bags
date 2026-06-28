@@ -1,7 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="config.js?v=4"></script>
+<script src="config.js?v=4">
+// ── BOWL ADD-ON TOGGLE ───────────────────────────────────────────
+let bowlAddonOpen = false;
+function toggleAddBowl() {
+  bowlAddonOpen = !bowlAddonOpen;
+  const addon  = document.getElementById('bowl-addon');
+  const btn    = document.getElementById('add-bowl-btn');
+  const icon   = document.getElementById('add-bowl-icon');
+  const label  = document.getElementById('add-bowl-label');
+  if (addon) addon.classList.toggle('hidden', !bowlAddonOpen);
+  if (icon)  icon.textContent  = bowlAddonOpen ? 'remove_circle' : 'add_circle';
+  if (label) label.textContent = bowlAddonOpen ? '− Remove Bowl Add-on' : '+ Add Paper Bowls to this order';
+  calcPrice();
+}
+
+// ── BOWL TYPE SELECTOR (standalone bowl mode) ────────────────────
+function setBowlType(type) {
+  ['standard','trap'].forEach(t => {
+    const el = document.getElementById('bowl-type-'+t+'-lbl');
+    if (el) {
+      el.classList.toggle('border-primary', t === (type==='standard'?'standard':'trap'));
+      el.classList.toggle('border-outline-variant', t !== (type==='standard'?'standard':'trap'));
+    }
+  });
+  calcPrice();
+}
+
+// ── ADDON BOWL TYPE ───────────────────────────────────────────────
+function setAddonBowlType(type) {
+  ['standard','trap'].forEach(t => {
+    const el = document.getElementById('addon-bowl-'+t+'-lbl');
+    if (el) {
+      el.classList.toggle('border-primary', t === (type==='standard'?'standard':'trap'));
+      el.classList.toggle('border-outline-variant', t !== (type==='standard'?'standard':'trap'));
+    }
+  });
+  calcPrice();
+}
+
+// ── ADDON PRINT TOGGLE ────────────────────────────────────────────
+state.addonBowlPrintColors = 0;
+function setAddonPrint(val) {
+  const plainLbl = document.getElementById('addon-plain-lbl');
+  const printLbl = document.getElementById('addon-print-lbl');
+  const colorDiv = document.getElementById('addon-print-colors');
+  if (plainLbl) { plainLbl.classList.toggle('border-primary', val==='none'); plainLbl.classList.toggle('border-outline-variant', val!=='none'); }
+  if (printLbl) { printLbl.classList.toggle('border-primary', val==='print'); printLbl.classList.toggle('border-outline-variant', val!=='print'); }
+  if (colorDiv) colorDiv.classList.toggle('hidden', val!=='print');
+  if (val === 'none') state.addonBowlPrintColors = 0;
+  if (val === 'print' && state.addonBowlPrintColors === 0) {
+    state.addonBowlPrintColors = 1;
+    const fc = document.querySelector('[data-addon-colors="1"]');
+    if (fc) { fc.classList.add('border-primary'); fc.classList.remove('border-outline-variant'); fc.querySelector('input').checked = true; }
+  }
+  calcPrice();
+}
+
+// Addon colour picker
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('[data-addon-colors]').forEach(lbl => {
+    lbl.addEventListener('click', function() {
+      state.addonBowlPrintColors = parseInt(this.dataset.addonColors);
+      document.querySelectorAll('[data-addon-colors]').forEach(l => {
+        l.classList.remove('border-primary'); l.classList.add('border-outline-variant');
+      });
+      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      calcPrice();
+    });
+  });
+
+  // Addon qty picker
+  document.querySelectorAll('[data-addon-qty]').forEach(lbl => {
+    lbl.addEventListener('click', function() {
+      const val = this.dataset.addonQty;
+      document.querySelectorAll('[data-addon-qty]').forEach(l => {
+        l.classList.remove('border-primary'); l.classList.add('border-outline-variant');
+      });
+      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      const customInput = document.getElementById('custom-addon-qty-input');
+      if (customInput) customInput.classList.toggle('hidden', val !== 'custom_addon');
+      if (val !== 'custom_addon') { state.addonBowlQty = parseInt(val) || 200; calcPrice(); }
+    });
+  });
+
+  // Bowl artwork file handlers
+  let bowlSelectedFile = null;
+  window.handleBowlFileSelect = function(input) { if (input.files[0]) setBowlFile(input.files[0]); };
+  window.handleBowlFileDrop = function(e) {
+    e.preventDefault();
+    document.getElementById('bowl-drop-zone')?.classList.remove('border-primary','bg-primary/5');
+    if (e.dataTransfer.files[0]) setBowlFile(e.dataTransfer.files[0]);
+  };
+  function setBowlFile(file) {
+    bowlSelectedFile = file;
+    document.getElementById('bowl-file-name').textContent = file.name;
+    document.getElementById('bowl-file-selected')?.classList.remove('hidden');
+    document.getElementById('bowl-drop-zone')?.classList.add('border-primary');
+    document.getElementById('bowl-drop-label').textContent = '✓ File ready';
+  }
+  window.clearBowlFile = function() {
+    bowlSelectedFile = null;
+    document.getElementById('bowl-artwork-input').value = '';
+    document.getElementById('bowl-file-selected')?.classList.add('hidden');
+    document.getElementById('bowl-drop-zone')?.classList.remove('border-primary');
+    document.getElementById('bowl-drop-label').textContent = 'Tap to select or drag file';
+  };
+});
+
+</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Configure Your Order | Kraapht Bags Ltd</title>
@@ -167,7 +275,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <!-- 1. PAPER TYPE — with real product images -->
       <div class="bg-surface border border-outline-variant p-7">
         <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">layers</span>Step 1 — Select Paper Type
+          <span class="material-symbols-outlined text-primary">layers</span>Step 2 — Select Paper Type
         </h2>
         <p class="font-body-md text-on-surface-variant text-sm mb-6">Your paper choice determines bag strength, print quality, and cost. Tap a paper to select.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="paper-options">
@@ -185,7 +293,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-primary text-white text-xs font-label-sm uppercase tracking-widest">Popular</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Glossy white. Best for full-colour logo printing. Sharp &amp; premium.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 525 / ream</span></p>
             </div>
           </label>
 
@@ -199,7 +306,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div class="p-4">
               <p class="font-body-md font-semibold mb-1">Brown Card 250gsm</p>
               <p class="text-sm text-on-surface-variant mb-2">Heavy kraft board. Strong &amp; premium. Ideal for retail &amp; boutique bags.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 550 / ream</span></p>
             </div>
           </label>
 
@@ -216,7 +322,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-label-sm uppercase tracking-widest">Folded Top</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Lightweight kraft. Folded top — no handle. High-volume food &amp; pharmacy orders.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 420 / ream</span></p>
             </div>
           </label>
 
@@ -240,7 +345,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-accent/20 text-accent text-xs font-label-sm uppercase tracking-widest">Premium</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Smooth matte finish. Non-glare. Perfect for luxury brands and corporate gifting.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 695 / ream</span></p>
             </div>
           </label>
 
@@ -257,7 +361,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-label-sm uppercase tracking-widest">Most Affordable</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-3">Two-layer grey-back board. Stiff and durable. Best unit rate for large volume orders with printed designs.</p>
-              <p class="font-label-sm text-label-sm text-primary uppercase tracking-widest"><span class="paper-price-display">GHS 300 / ream</span></p>
             </div>
           </label>
 
@@ -269,10 +372,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         </div>
       </div>
 
-      <!-- 2. PRODUCT TYPE -->
+      <!-- 1. PRODUCT TYPE — moved to top -->
       <div class="bg-surface border border-outline-variant p-7">
         <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">shopping_bag</span>Step 2 — Product Type
+          <span class="material-symbols-outlined text-primary">shopping_bag</span>Step 1 — What are you ordering?
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label class="option-card selected border-2 border-primary p-5 flex items-start gap-4 relative" id="lbl-flat-bottom">
@@ -292,22 +395,125 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
         </div>
 
-        <!-- ── BOWL OPTIONS (hidden by default) ── -->
+        <!-- + Add Bowl button (shown when Flat Bottom Bag is selected) -->
+        <div id="add-bowl-btn-wrap" class="mt-5 pt-5 border-t border-outline-variant">
+          <button type="button" onclick="toggleAddBowl()" id="add-bowl-btn" class="flex items-center gap-2 text-sm font-bold tracking-wide text-primary hover:text-accent transition-colors border border-primary/30 hover:border-accent px-5 py-3 w-full justify-center">
+            <span class="material-symbols-outlined" style="font-size:18px;" id="add-bowl-icon">add_circle</span>
+            <span id="add-bowl-label">+ Add Paper Bowls to this order</span>
+          </button>
+        </div>
+
+        <!-- Bowl add-on panel (shown when + Add Bowl clicked) -->
+        <div id="bowl-addon" class="hidden mt-4 border border-outline-variant p-5 space-y-5 bg-surface-container-low">
+          <div class="flex items-center justify-between">
+            <p class="font-semibold text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary" style="font-size:18px;">soup_kitchen</span>Paper Bowl Add-on</p>
+            <button type="button" onclick="toggleAddBowl()" class="text-xs text-on-surface-variant hover:text-error transition-colors">Remove</button>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Type</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="option-card selected border-2 border-primary p-3 cursor-pointer" id="addon-bowl-standard-lbl" onclick="setAddonBowlType('standard')">
+                <input type="radio" name="addon_bowl_type" value="standard" class="sr-only" checked/>
+                <p class="font-semibold text-sm">Standard Tray — 150×100×50mm</p>
+                <p class="text-xs text-on-surface-variant">5.9×3.9×2.0 in · 2 per A4 sheet</p>
+              </label>
+              <label class="option-card border-2 border-outline-variant p-3 cursor-pointer" id="addon-bowl-trap-lbl" onclick="setAddonBowlType('trap')">
+                <input type="radio" name="addon_bowl_type" value="trapezoidal" class="sr-only"/>
+                <p class="font-semibold text-sm">Trapezoidal — 160×90×55mm</p>
+                <p class="text-xs text-on-surface-variant">6.3×3.5×2.2 in · 2 per A4 sheet</p>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Paper</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="option-card selected border-2 border-primary p-3 text-sm cursor-pointer" id="addon-paper-chromo-lbl" onclick="this.querySelector('input').checked=true;state.addonBowlPaper='chromo_coat';calcPrice();document.getElementById('addon-paper-brown-lbl').classList.replace('border-primary','border-outline-variant');this.classList.replace('border-outline-variant','border-primary')">
+                <input type="radio" name="addon_bowl_paper" value="chromo_coat" class="sr-only" checked/>White / Chromo Coat
+              </label>
+              <label class="option-card border-2 border-outline-variant p-3 text-sm cursor-pointer" id="addon-paper-brown-lbl" onclick="this.querySelector('input').checked=true;state.addonBowlPaper='brown_card';calcPrice();document.getElementById('addon-paper-chromo-lbl').classList.replace('border-primary','border-outline-variant');this.classList.replace('border-outline-variant','border-primary')">
+                <input type="radio" name="addon_bowl_paper" value="brown_card" class="sr-only"/>Brown Card 250gsm
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Quantity</label>
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-2">
+              <label class="option-card selected border-2 border-primary p-3 text-center text-sm cursor-pointer" data-addon-qty="200"><input type="radio" name="addon_bowl_qty" value="200" class="sr-only" checked/>200</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-qty="500"><input type="radio" name="addon_bowl_qty" value="500" class="sr-only"/>500</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-qty="1000"><input type="radio" name="addon_bowl_qty" value="1000" class="sr-only"/>1,000</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-qty="2000"><input type="radio" name="addon_bowl_qty" value="2000" class="sr-only"/>2,000</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-qty="custom_addon"><input type="radio" name="addon_bowl_qty" value="custom_addon" class="sr-only"/>Custom</label>
+            </div>
+            <div id="custom-addon-qty-input" class="hidden mt-2">
+              <input id="addon-qty-val" type="number" min="200" step="100" placeholder="Min. 200" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none text-sm" oninput="state.addonBowlQty=parseInt(this.value)||200;calcPrice()"/>
+            </div>
+          </div>
+          <div>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Print</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="option-card selected border-2 border-primary p-3 text-center text-sm cursor-pointer" id="addon-plain-lbl"><input type="radio" name="addon_bowl_print" value="none" class="sr-only" checked onchange="setAddonPrint('none')"/>Plain</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" id="addon-print-lbl"><input type="radio" name="addon_bowl_print" value="print" class="sr-only" onchange="setAddonPrint('print')"/>Custom Print</label>
+            </div>
+            <div id="addon-print-colors" class="hidden mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-colors="1"><input type="radio" name="addon_colors" value="1" class="sr-only"/>1 Colour</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-colors="2"><input type="radio" name="addon_colors" value="2" class="sr-only"/>2 Colours</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-colors="3"><input type="radio" name="addon_colors" value="3" class="sr-only"/>3 Colours</label>
+              <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-addon-colors="4"><input type="radio" name="addon_colors" value="4" class="sr-only"/>Full Colour</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BOWL OPTIONS (shown when Bowl product selected) ── -->
         <div id="bowl-options" class="hidden mt-6 space-y-5 border-t border-outline-variant pt-6">
 
-          <!-- Bowl size dropdown -->
+          <!-- Bowl types with SVG illustrations -->
           <div>
-            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Size</label>
-            <div class="relative">
-              <select id="bowl-size" onchange="calcPrice()" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary appearance-none pr-10 font-sans">
-                <option value="standard" data-bps="2">9 × 9 × 3 inches — Standard Square Bowl</option>
-              </select>
-              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Bowl Type</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label class="option-card selected border-2 border-primary p-4 cursor-pointer" id="bowl-type-standard-lbl" onclick="setBowlType('standard')">
+                <input type="radio" name="bowl_type" value="standard" class="sr-only" checked/>
+                <div class="flex gap-3 items-center">
+                  <svg viewBox="0 0 80 60" width="80" height="60" class="flex-shrink-0">
+                    <ellipse cx="40" cy="57" rx="28" ry="3" fill="#2B2B2B" opacity="0.1"/>
+                    <path d="M6 18 L74 18 L66 54 L14 54 Z" fill="#D8C3A5"/>
+                    <path d="M6 18 L74 18 L80 6 L0 6 Z" fill="#C8B498"/>
+                    <line x1="6" y1="18" x2="74" y2="18" stroke="#B8A688" stroke-width="1"/>
+                    <path d="M16 54 L66 54 L62 42 L18 42 Z" fill="#C4AB8A" opacity="0.4"/>
+                    <rect x="18" y="30" width="44" height="10" rx="1" fill="#1F4D3A" opacity="0.85"/>
+                    <text x="40" y="38" text-anchor="middle" font-family="Arial" font-size="5.5" font-weight="700" fill="#C8A96B">STANDARD</text>
+                  </svg>
+                  <div>
+                    <p class="font-semibold text-sm">Standard Tray</p>
+                    <p class="text-xs text-on-surface-variant">150 × 100 × 50 mm</p>
+                    <p class="text-xs text-on-surface-variant">5.9 × 3.9 × 2.0 in</p>
+                    <p class="text-xs text-primary font-semibold mt-1">2 per A4 sheet</p>
+                  </div>
+                </div>
+              </label>
+              <label class="option-card border-2 border-outline-variant p-4 cursor-pointer" id="bowl-type-trap-lbl" onclick="setBowlType('trap')">
+                <input type="radio" name="bowl_type" value="trapezoidal" class="sr-only"/>
+                <div class="flex gap-3 items-center">
+                  <svg viewBox="0 0 80 60" width="80" height="60" class="flex-shrink-0">
+                    <ellipse cx="40" cy="57" rx="28" ry="3" fill="#2B2B2B" opacity="0.1"/>
+                    <path d="M2 18 L78 18 L64 54 L16 54 Z" fill="#D8C3A5"/>
+                    <path d="M2 18 L78 18 L84 6 L-4 6 Z" fill="#C8B498"/>
+                    <line x1="2" y1="18" x2="78" y2="18" stroke="#B8A688" stroke-width="1"/>
+                    <path d="M18 54 L64 54 L60 42 L22 42 Z" fill="#C4AB8A" opacity="0.4"/>
+                    <rect x="16" y="30" width="48" height="10" rx="1" fill="#1F4D3A" opacity="0.85"/>
+                    <text x="40" y="38" text-anchor="middle" font-family="Arial" font-size="5" font-weight="700" fill="#C8A96B">TRAPEZOIDAL</text>
+                  </svg>
+                  <div>
+                    <p class="font-semibold text-sm">Trapezoidal Bowl</p>
+                    <p class="text-xs text-on-surface-variant">160 × 90 × 55 mm</p>
+                    <p class="text-xs text-on-surface-variant">6.3 × 3.5 × 2.2 in</p>
+                    <p class="text-xs text-primary font-semibold mt-1">2 per A4 sheet</p>
+                  </div>
+                </div>
+              </label>
             </div>
-            <p class="text-xs text-on-surface-variant mt-1">2 bowls cut per sheet · Chromo Coat or Brown Card paper</p>
           </div>
 
-          <!-- Bowl paper choice — only Chromo Coat + Brown Card -->
+          <!-- Bowl paper choice -->
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Paper Type</label>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="bowl-paper-options">
@@ -315,7 +521,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <input type="radio" name="bowl_paper" value="chromo_coat" class="accent-primary" checked onchange="state.paperPrice=525;state.bowlPaper='chromo_coat';calcPrice()"/>
                 <div>
                   <p class="font-semibold text-sm">White / Chromo Coat</p>
-                  <p class="text-xs text-on-surface-variant">GHS 525 / ream · Glossy white · Best for printed bowls</p>
+                  <p class="text-xs text-on-surface-variant">Glossy white · Best for printed bowls</p>
                 </div>
                 <span class="check-badge" style="display:flex;">✓</span>
               </label>
@@ -323,7 +529,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <input type="radio" name="bowl_paper" value="brown_card_250" class="accent-primary" onchange="state.paperPrice=550;state.bowlPaper='brown_card_250';calcPrice()"/>
                 <div>
                   <p class="font-semibold text-sm">Brown Card 250gsm</p>
-                  <p class="text-xs text-on-surface-variant">GHS 550 / ream · Natural kraft · Plain bowls</p>
+                  <p class="text-xs text-on-surface-variant">Natural kraft · Plain bowls</p>
                 </div>
                 <span class="check-badge">✓</span>
               </label>
@@ -835,45 +1041,79 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <div class="lg:col-span-1">
       <div class="sticky top-24 space-y-4">
         <div class="bg-charcoal text-white p-7">
-          <h3 class="text-xl font-bold mb-6">Live Price Estimate</h3>
-          <div class="space-y-2 text-sm mb-4 pb-4 border-b border-white/20">
-            <div class="flex justify-between"><span class="opacity-60">Paper cost</span><span id="sb-paper">—</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Printing</span><span id="sb-printing">None</span></div>
-            <div class="flex justify-between" id="plate-row"><span class="opacity-60">Plate making</span><span id="sb-plate">—</span></div>
-            <div class="flex justify-between" id="diecut-row"><span class="opacity-60">Die cut board</span><span id="sb-diecutboard">GHS 300</span></div>
-            <div class="flex justify-between" id="diecut-run-row"><span class="opacity-60">Die cutting</span><span id="sb-diecut">GHS 60</span></div>
-            <div class="flex justify-between"><span class="opacity-60" id="labour-label">Folding labour</span><span id="sb-labour">—</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Delivery (Accra)</span><span>GHS 30</span></div>
-            <div class="flex justify-between" id="designer-cost-row" style="display:none;"><span class="opacity-60">Designer fee</span><span class="text-accent">GHS 100</span></div>
+          <h3 class="text-xl font-bold mb-5">Live Price Estimate</h3>
+
+          <!-- BAG SECTION -->
+          <div id="estimate-bag-section">
+            <p class="text-xs font-bold tracking-widest uppercase text-accent mb-3 opacity-80">Flat Bottom Bags</p>
+            <div class="space-y-2 text-sm mb-3">
+              <div class="flex justify-between"><span class="opacity-60">Paper</span><span id="sb-paper">—</span></div>
+              <div class="flex justify-between"><span class="opacity-60">Print</span><span id="sb-printing">None</span></div>
+              <div class="flex justify-between"><span class="opacity-60">Quantity</span><span id="sb-qty-display">—</span></div>
+              <div class="flex justify-between text-xs opacity-50" id="plate-row"><span>Plate making</span><span id="sb-plate">—</span></div>
+              <div class="flex justify-between text-xs opacity-50" id="diecut-row"><span>Die cut board</span><span id="sb-diecutboard">GHS 300</span></div>
+              <div class="flex justify-between text-xs opacity-50" id="diecut-run-row"><span>Die cutting</span><span id="sb-diecut">GHS 60</span></div>
+              <div class="flex justify-between text-xs opacity-50"><span id="labour-label">Assembly</span><span id="sb-labour">—</span></div>
+            </div>
+            <div id="discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-3">
+              <span>Repeat order saving</span><span id="sb-discount">—</span>
+            </div>
+            <div class="flex justify-between font-bold text-base border-t border-white/20 pt-3 mb-1">
+              <span>Bag Total</span><span class="text-accent" id="sb-bag-total">GHS —</span>
+            </div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="opacity-50" id="per-unit-label">Per bag</span>
+              <span class="opacity-70" id="sb-per-bag">— / bag</span>
+            </div>
+            <div class="flex justify-between text-xs" id="designer-cost-row" style="display:none;">
+              <span class="opacity-50">Designer fee</span><span class="text-accent">GHS 100</span>
+            </div>
           </div>
-          <div id="discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-4 pb-4 border-b border-white/20">
-            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">loyalty</span>Returning customer saving</span>
-            <span id="sb-discount">—</span>
+
+          <!-- BOWL ADD-ON SECTION -->
+          <div id="estimate-bowl-section" class="hidden">
+            <div class="border-t border-white/20 my-4"></div>
+            <p class="text-xs font-bold tracking-widest uppercase text-accent mb-3 opacity-80">Paper Bowls</p>
+            <div class="space-y-2 text-sm mb-3">
+              <div class="flex justify-between"><span class="opacity-60">Paper</span><span id="sb-bowl-paper">—</span></div>
+              <div class="flex justify-between"><span class="opacity-60">Print</span><span id="sb-bowl-print">None</span></div>
+              <div class="flex justify-between"><span class="opacity-60">Quantity</span><span id="sb-bowl-qty-display">—</span></div>
+              <div class="flex justify-between text-xs opacity-50"><span>Assembly</span><span id="sb-bowl-labour">—</span></div>
+            </div>
+            <div class="flex justify-between font-bold text-base border-t border-white/20 pt-3 mb-1">
+              <span>Bowl Total</span><span class="text-accent" id="sb-bowl-total">GHS —</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="opacity-50">Per bowl</span>
+              <span class="opacity-70" id="sb-per-bowl">— / bowl</span>
+            </div>
           </div>
-          <div class="flex justify-between text-xl font-bold mb-1">
-            <span>Total</span><span class="text-accent" id="sb-total">GHS —</span>
+
+          <!-- GRAND TOTAL -->
+          <div class="border-t border-white/30 mt-4 pt-4">
+            <div class="flex justify-between text-xl font-bold mb-1">
+              <span>Grand Total</span><span class="text-accent" id="sb-total">GHS —</span>
+            </div>
+            <div class="flex justify-between text-xs opacity-50 mt-1">
+              <span>Delivery (Accra)</span><span>GHS 30</span>
+            </div>
           </div>
-          <div class="flex justify-between text-sm mb-6">
-            <span class="opacity-50" id="per-unit-label">Per bag</span><span class="opacity-80" id="sb-per-bag">— / bag</span>
-          </div>
-          <div class="bg-white/10 p-4 mb-4 text-sm">
+
+          <div class="bg-white/10 p-4 mt-5 mb-4 text-sm">
             <p class="opacity-60 font-label-sm uppercase tracking-widest text-xs mb-1">Payment Policy</p>
             <p class="opacity-80">100% pre-payment. Production starts after payment is confirmed.</p>
           </div>
           <p class="text-xs text-white/30 text-center mb-5 uppercase tracking-widest leading-5">First orders include plate &amp; die-cut setup costs. Returning customers save these on repeat orders.</p>
         </div>
 
-        <!-- Place Order — right-aligned -->
-        <div class="flex justify-end">
-          <button onclick="goToPayment()" class="w-full bg-accent text-white py-5 px-8 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined">shopping_cart_checkout</span>Place Order
-          </button>
-        </div>
+        <button onclick="goToPayment()" class="w-full bg-accent text-white py-5 px-8 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">shopping_cart_checkout</span>Place Order
+        </button>
         <p class="text-center font-label-sm text-label-sm text-on-surface-variant text-xs uppercase tracking-widest">Secured by Paystack</p>
       </div>
     </div>
   </div>
-</main>
+
 
 <footer class="bg-charcoal text-inverse-on-surface w-full">
 <div class="max-w-[1280px] mx-auto px-10 py-16">
@@ -1100,8 +1340,51 @@ function calcPrice() {
   document.getElementById('sb-plate').textContent       = `GHS ${plateCost}`;
   document.getElementById('sb-diecutboard').textContent = `GHS ${dieCutBoard}`;
   document.getElementById('sb-labour').textContent      = `GHS ${labour.toLocaleString()}`;
-  document.getElementById('sb-total').textContent       = `GHS ${total.toLocaleString()}`;
+  document.getElementById('sb-bag-total').textContent   = `GHS ${total.toLocaleString()}`;
   document.getElementById('sb-per-bag').textContent     = `GHS ${perBag} / bag`;
+  document.getElementById('sb-qty-display').textContent = qty.toLocaleString() + ' bags';
+
+  // Bowl add-on calc
+  const bowlAddonActive = !document.getElementById('bowl-addon')?.classList.contains('hidden');
+  const bowlEstSection  = document.getElementById('estimate-bowl-section');
+  let bowlTotal = 0;
+  if (bowlAddonActive && bowlEstSection) {
+    const BOWLS_PER_SHEET = 2;
+    const LABOUR_PER_BOWL = 0.50;
+    const SHEETS_PER_REAM = 100;
+    const addonBowlQtyEl = document.querySelector('[name="addon_bowl_qty"]:checked');
+    let addonQty = 200;
+    if (addonBowlQtyEl?.value === 'custom_addon') {
+      addonQty = parseInt(document.getElementById('addon-qty-val')?.value) || 200;
+    } else {
+      addonQty = parseInt(addonBowlQtyEl?.value) || 200;
+    }
+    const addonPaperVal = document.querySelector('[name="addon_bowl_paper"]:checked')?.value || 'chromo_coat';
+    const C2 = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+    const addonPaperPrice = addonPaperVal === 'brown_card' ? (C2?.paper_prices?.brown_card_250 || 550) : (C2?.paper_prices?.chromo_coat || 525);
+    const addonSheets = Math.ceil(addonQty / BOWLS_PER_SHEET);
+    const addonReams  = Math.ceil(addonSheets / SHEETS_PER_REAM);
+    const addonPaperCost = addonReams * addonPaperPrice;
+    const addonLabour    = addonQty * LABOUR_PER_BOWL;
+    const addonPrintColors = state.addonBowlPrintColors || 0;
+    const pCosts = {0:0,1:50,2:100,3:150,4:200};
+    const addonPrintCost = pCosts[addonPrintColors] || 0;
+    bowlTotal = addonPaperCost + addonLabour + addonPrintCost;
+    const perBowl = (bowlTotal / addonQty).toFixed(2);
+    bowlEstSection.classList.remove('hidden');
+    document.getElementById('sb-bowl-paper').textContent    = addonPaperVal === 'brown_card' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
+    document.getElementById('sb-bowl-print').textContent    = addonPrintColors > 0 ? addonPrintColors + ' colour' : 'None';
+    document.getElementById('sb-bowl-qty-display').textContent = addonQty.toLocaleString() + ' bowls';
+    document.getElementById('sb-bowl-labour').textContent   = `GHS ${addonLabour.toFixed(0)}`;
+    document.getElementById('sb-bowl-total').textContent    = `GHS ${bowlTotal.toLocaleString()}`;
+    document.getElementById('sb-per-bowl').textContent      = `GHS ${perBowl} / bowl`;
+  } else if (bowlEstSection) {
+    bowlEstSection.classList.add('hidden');
+  }
+
+  // Grand total
+  const grandTotal = total + bowlTotal;
+  document.getElementById('sb-total').textContent = `GHS ${grandTotal.toLocaleString()}`;
   document.getElementById('per-unit-label').textContent = 'Per bag';
   document.getElementById('labour-label').textContent   = 'Folding labour';
 
@@ -1210,7 +1493,7 @@ calcPrice();
       label.dataset.price = priceMap[key];
       // Update the visible GHS text in the card
       const priceEl = label.querySelector('.paper-price-display');
-      if (priceEl) priceEl.textContent = 'GHS ' + priceMap[key].toLocaleString() + ' / ream';
+      // ream price display removed
     }
   });
   // Set initial state.paperPrice to config value for default selected paper
@@ -1302,5 +1585,6 @@ function clearOrderFile() {
 }
 
 </script>
+</main>
 </body>
 </html>
