@@ -403,6 +403,37 @@ let selectedFile  = null;
 // INIT — check session on load
 // ═══════════════════════════════════════════════════════
 (async () => {
+  // ── Step 1: Handle Google OAuth redirect ──────────────────────
+  // When Google redirects back, the URL contains either:
+  //   ?code=xxx  (PKCE flow) or  #access_token=xxx (implicit flow)
+  // Supabase must exchange these FIRST before getSession() works.
+  const url = new URL(window.location.href);
+  const hasCode  = url.searchParams.has('code');
+  const hasToken = url.hash.includes('access_token');
+  const hasError = url.searchParams.has('error');
+
+  if (hasError) {
+    // OAuth error — show auth panel with message
+    const desc = url.searchParams.get('error_description') || 'Sign-in failed. Please try again.';
+    showPanel('auth');
+    showAuthError(desc.replace(/\+/g,' '));
+    // Clean the URL
+    window.history.replaceState({}, '', '/customer.html');
+    return;
+  }
+
+  if (hasCode || hasToken) {
+    // Show loading while Supabase exchanges the code
+    document.getElementById('loading-panel').style.display = 'flex';
+    // exchangeCodeForSession handles the PKCE code exchange automatically
+    if (hasCode) {
+      await sb.auth.exchangeCodeForSession(window.location.href).catch(() => {});
+    }
+    // Clean the URL so refresh doesn't re-process
+    window.history.replaceState({}, '', '/customer.html');
+  }
+
+  // ── Step 2: Check for existing session ────────────────────────
   const { data: { session } } = await sb.auth.getSession();
   if (session?.user) {
     currentUser = session.user;
@@ -411,7 +442,8 @@ let selectedFile  = null;
   } else {
     showPanel('auth');
   }
-  // Handle OAuth redirect
+
+  // ── Step 3: Listen for future auth state changes ───────────────
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
       currentUser = session.user;
@@ -421,6 +453,9 @@ let selectedFile  = null;
     if (event === 'SIGNED_OUT') {
       currentUser = null;
       showPanel('auth');
+    }
+    if (event === 'TOKEN_REFRESHED' && session?.user) {
+      currentUser = session.user;
     }
   });
 })();
@@ -509,10 +544,15 @@ async function handleSignup() {
 }
 
 async function handleGoogleLogin() {
-  await sb.auth.signInWithOAuth({
+  const redirectTo = window.location.origin + '/customer.html';
+  const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/customer.html' }
+    options: {
+      redirectTo,
+      queryParams: { access_type: 'offline', prompt: 'consent' },
+    }
   });
+  if (error) showAuthError(error.message);
 }
 
 async function handleLogout() {
