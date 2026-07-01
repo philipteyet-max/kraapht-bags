@@ -441,5 +441,11 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </div>
 </div>
 </footer>
+  <script>
+// Forward OAuth token from homepage to customer portal
+if (window.location.hash.includes('access_token')) {
+  window.location.replace('/customer.html' + window.location.hash);
+}
+</script>
 </body>
 </html>
