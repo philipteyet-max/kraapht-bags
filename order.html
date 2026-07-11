@@ -1,6 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="config.js?v=4"></script>
+<script>
+// ── BOWL TYPE SWITCHER ───────────────────────────────────────────
+function setBowlType(type) {
+  const stdLbl  = document.getElementById('bowl-type-standard-lbl');
+  const trapLbl = document.getElementById('bowl-type-trap-lbl');
+  if (stdLbl)  { stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
+  if (trapLbl) { trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
+  calcPrice();
+}
+
+// ── ADDON BOWL TYPE ──────────────────────────────────────────────
+function setAddonBowlType(type) {
+  const stdLbl  = document.getElementById('addon-bowl-standard-lbl');
+  const trapLbl = document.getElementById('addon-bowl-trap-lbl');
+  if (stdLbl)  { stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
+  if (trapLbl) { trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
+  calcPrice();
+}
+
+// ── TOGGLE ADD BOWL ──────────────────────────────────────────────
+let bowlAddonOpen = false;
+function toggleAddBowl() {
+  bowlAddonOpen = !bowlAddonOpen;
+  const addon = document.getElementById('bowl-addon');
+  const icon  = document.getElementById('add-bowl-icon');
+  const label = document.getElementById('add-bowl-label');
+  if (addon) addon.classList.toggle('hidden', !bowlAddonOpen);
+  if (icon)  icon.textContent  = bowlAddonOpen ? 'remove_circle' : 'add_circle';
+  if (label) label.textContent = bowlAddonOpen ? '− Remove Bowl Add-on' : '+ Add Paper Bowls to this order';
+  calcPrice();
+}
+
+// ── ADDON PRINT ──────────────────────────────────────────────────
+state.addonBowlPrintColors = 0;
+state.addonBowlPaper = 'chromo_coat';
+state.addonBowlQty   = 200;
+function setAddonPrint(val) {
+  const pl = document.getElementById('addon-plain-lbl');
+  const pr = document.getElementById('addon-print-lbl');
+  const cd = document.getElementById('addon-print-colors');
+  if (pl) { pl.classList.toggle('border-primary', val==='none'); pl.classList.toggle('border-outline-variant', val!=='none'); }
+  if (pr) { pr.classList.toggle('border-primary', val==='print'); pr.classList.toggle('border-outline-variant', val!=='print'); }
+  if (cd) cd.classList.toggle('hidden', val!=='print');
+  state.addonBowlPrintColors = val==='none' ? 0 : (state.addonBowlPrintColors||1);
+  if (val==='print' && state.addonBowlPrintColors===0) state.addonBowlPrintColors=1;
+  calcPrice();
+}
+
+// ── ADDON QTY + COLOUR PICKERS ───────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Addon qty
+  document.querySelectorAll('[data-addon-qty]').forEach(function(lbl) {
+    lbl.addEventListener('click', function() {
+      const val = this.dataset.addonQty;
+      document.querySelectorAll('[data-addon-qty]').forEach(function(l) { l.classList.remove('border-primary'); l.classList.add('border-outline-variant'); });
+      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      const ci = document.getElementById('custom-addon-qty-input');
+      if (ci) ci.classList.toggle('hidden', val!=='custom_addon');
+      if (val !== 'custom_addon') { state.addonBowlQty = parseInt(val)||200; calcPrice(); }
+    });
+  });
+  // Addon colours
+  document.querySelectorAll('[data-addon-colors]').forEach(function(lbl) {
+    lbl.addEventListener('click', function() {
+      state.addonBowlPrintColors = parseInt(this.dataset.addonColors);
+      document.querySelectorAll('[data-addon-colors]').forEach(function(l) { l.classList.remove('border-primary'); l.classList.add('border-outline-variant'); });
+      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      calcPrice();
+    });
+  });
+  // Multi-file upload
+  let orderFiles = [];
+  window.handleOrderFileSelect = function(input) {
+    if (!input.files) return;
+    Array.from(input.files).forEach(function(f) { addOrderFile(f); });
+  };
+  window.handleOrderFileDrop = function(e) {
+    e.preventDefault();
+    document.getElementById('order-drop-zone')?.classList.remove('border-primary','bg-primary/5');
+    Array.from(e.dataTransfer.files).forEach(function(f) { addOrderFile(f); });
+  };
+  function addOrderFile(file) {
+    const MAX = 10*1024*1024;
+    if (file.size > MAX) { alert(file.name + ' is too large (max 10MB)'); return; }
+    orderFiles.push(file);
+    renderOrderFiles();
+  }
+  function renderOrderFiles() {
+    const list = document.getElementById('order-files-list');
+    if (!list) return;
+    if (orderFiles.length === 0) { list.classList.add('hidden'); document.getElementById('order-upload-note')?.classList.add('hidden'); return; }
+    list.classList.remove('hidden');
+    list.innerHTML = orderFiles.map(function(f, i) {
+      return '<div class="flex items-center gap-3 p-3 bg-surface-container border border-outline-variant">' +
+        '<span class="material-symbols-outlined text-primary" style="font-size:18px;">description</span>' +
+        '<div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">' + f.name + '</p>' +
+        '<p class="text-xs text-on-surface-variant">' + (f.size/1024).toFixed(0) + ' KB</p></div>' +
+        '<button onclick="removeOrderFile(' + i + ')" class="text-xs font-bold text-on-surface-variant hover:text-error transition-colors">Remove</button></div>';
+    }).join('');
+    document.getElementById('order-drop-label').textContent = orderFiles.length + ' file' + (orderFiles.length>1?'s':'') + ' selected — tap to add more';
+    document.getElementById('order-upload-note')?.classList.remove('hidden');
+  }
+  window.removeOrderFile = function(index) {
+    orderFiles.splice(index, 1);
+    renderOrderFiles();
+    if (orderFiles.length===0) {
+      document.getElementById('order-drop-label').textContent = 'Tap to select or drag your files here';
+    }
+  };
+  window.clearOrderFile = function() { orderFiles = []; renderOrderFiles(); };
+  // Expose files for checkout
+  window.getOrderFiles = function() { return orderFiles; };
+
+// ── Bowl artwork upload ───────────────────────────────────────────
+let bowlFiles = [];
+window.handleBowlFileSelect = function(input) {
+  if (!input.files) return;
+  Array.from(input.files).forEach(function(f) { addBowlFile(f); });
+};
+window.handleBowlFileDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('bowl-drop-zone')?.classList.remove('border-primary','bg-primary/5');
+  Array.from(e.dataTransfer.files).forEach(function(f) { addBowlFile(f); });
+};
+function addBowlFile(file) {
+  if (file.size > 10*1024*1024) { alert(file.name + ' exceeds 10MB.'); return; }
+  bowlFiles.push(file);
+  renderBowlFiles();
+}
+function renderBowlFiles() {
+  const list  = document.getElementById('bowl-files-list');
+  const label = document.getElementById('bowl-drop-label');
+  if (!list) return;
+  if (!bowlFiles.length) {
+    list.classList.add('hidden');
+    if (label) label.textContent = 'Tap to select or drag your bowl artwork';
+    return;
+  }
+  list.classList.remove('hidden');
+  list.innerHTML = bowlFiles.map(function(f,i) {
+    return '<div class="flex items-center gap-3 p-3 bg-surface-container border border-outline-variant">' +
+      '<span class="material-symbols-outlined text-primary" style="font-size:18px;">description</span>' +
+      '<div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">' + f.name + '</p>' +
+      '<p class="text-xs text-on-surface-variant">' + (f.size/1024).toFixed(0) + ' KB</p></div>' +
+      '<button onclick="removeBowlFile(' + i + ')" class="text-xs font-bold text-on-surface-variant hover:text-error transition-colors">Remove</button></div>';
+  }).join('');
+  if (label) label.textContent = bowlFiles.length + ' file' + (bowlFiles.length > 1 ? 's' : '') + ' selected';
+}
+function removeBowlFile(i) { bowlFiles.splice(i,1); renderBowlFiles(); }
+window.getBowlFiles = function() { return bowlFiles; };
+
+});
+
+</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Configure Your Order | Kraapht Bags Ltd</title>
@@ -175,7 +330,6 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
               <p class="font-body-md font-semibold mb-1">Flat Bottom Bag</p>
               <p class="text-sm text-on-surface-variant uppercase tracking-widest font-label-sm">All sizes · Handle options</p>
             </div>
-            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5">✓</span>
           </label>
           <label class="option-card border-2 border-outline-variant p-5 flex items-start gap-4 relative" id="lbl-food-bowl">
             <input type="radio" name="product_type" value="food_bowl" class="mt-1 accent-primary" onchange="switchProduct('food_bowl')"/>
@@ -324,13 +478,30 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             </div>
 
             <!-- Bowl print colours (shows when print selected) -->
-            <div id="bowl-print-colors" class="hidden mt-4 p-4 bg-surface-container border border-outline-variant">
-              <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Number of Colours</p>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="1"><input type="radio" name="bowl_colors" value="1" class="sr-only"/>1 Colour</label>
-                <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="2"><input type="radio" name="bowl_colors" value="2" class="sr-only"/>2 Colours</label>
-                <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="3"><input type="radio" name="bowl_colors" value="3" class="sr-only"/>3 Colours</label>
-                <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="4"><input type="radio" name="bowl_colors" value="4" class="sr-only"/>Full Colour</label>
+            <div id="bowl-print-colors" class="hidden mt-4 space-y-4">
+              <div class="p-4 bg-surface-container border border-outline-variant">
+                <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Number of Colours</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="1"><input type="radio" name="bowl_colors" value="1" class="sr-only"/>1 Colour</label>
+                  <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="2"><input type="radio" name="bowl_colors" value="2" class="sr-only"/>2 Colours</label>
+                  <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="3"><input type="radio" name="bowl_colors" value="3" class="sr-only"/>3 Colours</label>
+                  <label class="option-card border-2 border-outline-variant p-3 text-center text-sm cursor-pointer" data-bowl-colors="4"><input type="radio" name="bowl_colors" value="4" class="sr-only"/>Full Colour</label>
+                </div>
+              </div>
+              <!-- Bowl artwork upload -->
+              <div>
+                <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Upload Bowl Artwork</label>
+                <div id="bowl-drop-zone" class="border-2 border-dashed border-outline-variant p-5 text-center hover:border-primary transition-colors cursor-pointer"
+                  onclick="document.getElementById('bowl-artwork-input').click()"
+                  ondragover="event.preventDefault();this.classList.add('border-primary','bg-primary/5')"
+                  ondragleave="this.classList.remove('border-primary','bg-primary/5')"
+                  ondrop="handleBowlFileDrop(event)">
+                  <span class="material-symbols-outlined text-2xl text-outline mb-1 block">upload_file</span>
+                  <p class="text-sm font-semibold" id="bowl-drop-label">Tap to select or drag your bowl artwork</p>
+                  <p class="text-xs text-on-surface-variant mt-0.5">PNG, PDF, SVG · Max 10MB</p>
+                  <input id="bowl-artwork-input" type="file" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.svg,.ai" multiple onchange="handleBowlFileSelect(this)"/>
+                </div>
+                <div id="bowl-files-list" class="hidden mt-2 space-y-2"></div>
               </div>
             </div>
           </div>
@@ -590,7 +761,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <!-- ===== END EXPERT ADVICE PANEL ===== -->
 
       <!-- 2. PAPER TYPE — Step 2 -->
-      <div id="step-paper" class="bg-surface border border-outline-variant p-7">
+      <div class="bg-surface border border-outline-variant p-7">
         <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
           <span class="material-symbols-outlined text-primary">layers</span>Step 2 — Select Paper Type
         </h2>
@@ -695,25 +866,22 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <span class="material-symbols-outlined text-primary">straighten</span>Step 3 — Size
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="size-options">
-          <label class="option-card selected border-2 border-primary p-4 text-center" data-size="a5" data-bps="3">
+          <label class="option-card selected border-2 border-primary p-4 text-center" data-size="a5" data-bps="4">
             <input type="radio" name="size" value="a5" class="sr-only" checked/>
             <p class="font-body-md font-semibold">A5 / Small</p>
             <p class="text-xs text-on-surface-variant mt-1">15×8×21 cm</p>
-            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">3 per sheet</p>
           </label>
           <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="a4" data-bps="2">
             <input type="radio" name="size" value="a4" class="sr-only"/>
             <p class="font-body-md font-semibold">A4 / Medium</p>
             <p class="text-xs text-on-surface-variant mt-1">24×12×30 cm</p>
-            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">2 per sheet</p>
           </label>
-          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="a3" data-bps="2">
+          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="a3" data-bps="1">
             <input type="radio" name="size" value="a3" class="sr-only"/>
             <p class="font-body-md font-semibold">A3 / Large</p>
             <p class="text-xs text-on-surface-variant mt-1">32×16×40 cm</p>
-            <p class="text-xs text-primary mt-1 font-label-sm uppercase tracking-widest">2 per sheet</p>
           </label>
-          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="custom" data-bps="2">
+          <label class="option-card border-2 border-outline-variant p-4 text-center" data-size="custom" data-bps="1">
             <input type="radio" name="size" value="custom" class="sr-only"/>
             <p class="font-body-md font-semibold">Custom</p>
             <p class="text-xs text-on-surface-variant mt-1">Your specs</p>
@@ -1037,144 +1205,301 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
 <script>
 let state = {
-  paperPrice:           525,
-  bagsPerSheet:         4,
-  sheetsPerReem:        100,
-  qty:                  200,
-  printColors:          0,
-  isRecurring:          false,
-  hasDesigner:          false,
-  isCustomSize:         false,
-  productType:          'flat_bottom',
-  bowlPaper:            'chromo_coat',
-  bowlPrint:            'none',
-  bowlPrintColors:      0,
-  addonBowlPaper:       'chromo_coat',
-  addonBowlQty:         200,
-  addonBowlPrintColors: 0,
+  paperPrice: 525,
+  bagsPerSheet: 3,
+  qty: 200,
+  printColors: 0,
+  isRecurring: false,
+  hasDesigner: false,
+  productType: 'flat_bottom',   // 'flat_bottom' | 'food_bowl'
+  bowlPaper: 'chromo_coat',
+  bowlPrint: 'none',
+  bowlPrintColors: 0,
 };
 
-// ── Init from config ─────────────────────────────────────────────
+// Initialise state from config.js values
 (function initFromConfig() {
   if (typeof KRAAPHT_CONFIG !== 'undefined') {
-    state.paperPrice = KRAAPHT_CONFIG.paper_prices.chromo_coat;
+    state.paperPrice = KRAAPHT_CONFIG.paper_prices.chromo_coat; // default selected paper
   }
 })();
 
-// ── Paper type selection ─────────────────────────────────────────
+// Paper type cards
 document.querySelectorAll('#paper-options label').forEach(label => {
   label.addEventListener('click', function() {
     document.querySelectorAll('#paper-options label').forEach(l => {
       l.classList.remove('selected');
       const cb = l.querySelector('.check-badge');
-      if (cb) cb.style.display = 'none';
+      if(cb) cb.style.display='none';
     });
     this.classList.add('selected');
     const cb = this.querySelector('.check-badge');
-    if (cb) cb.style.display = 'flex';
+    if(cb) cb.style.display='flex';
     state.paperPrice = parseInt(this.dataset.price);
-    const paper = this.dataset.paper;
-    // Brown Paper 80gsm uses 150 sheets/ream
-    state.sheetsPerReem = (paper === 'brown_paper_80') ? 150 : 100;
     const hasHandle = this.dataset.handle === 'true';
-    document.getElementById('no-handle-msg')?.classList.toggle('hidden', hasHandle);
-    document.getElementById('handle-options')?.classList.toggle('disabled-section', !hasHandle);
+    document.getElementById('no-handle-msg').classList.toggle('hidden', hasHandle);
+    document.getElementById('handle-options').classList.toggle('disabled-section', !hasHandle);
     calcPrice();
   });
 });
 
-// ── Size selection ───────────────────────────────────────────────
+// Size selection
 document.querySelectorAll('#size-options label').forEach(label => {
   label.addEventListener('click', function() {
-    document.querySelectorAll('#size-options label').forEach(l => {
-      l.classList.remove('selected', 'border-primary');
-      l.classList.add('border-outline-variant');
-    });
-    this.classList.add('selected', 'border-primary');
-    this.classList.remove('border-outline-variant');
-    document.getElementById('custom-dims')?.classList.toggle('hidden', this.dataset.size !== 'custom');
-    state.bagsPerSheet = parseInt(this.dataset.bps) || 4;
-    state.isCustomSize = this.dataset.size === 'custom';
+    document.querySelectorAll('#size-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    document.getElementById('custom-dims').classList.toggle('hidden', this.dataset.size !== 'custom');
+    state.bagsPerSheet = parseInt(this.dataset.bps) || 2;
     calcPrice();
   });
 });
 
-// ── Handle selection ─────────────────────────────────────────────
+// Handle selection
 document.querySelectorAll('[name="handle"]').forEach(r => {
   r.addEventListener('change', function() {
-    document.getElementById('pp-colors')?.classList.toggle('hidden', this.value !== 'pp_rope');
+    document.getElementById('pp-colors').classList.toggle('hidden', this.value !== 'pp_rope');
   });
 });
 
-// ── Colour swatches ──────────────────────────────────────────────
+// Colour swatches
 function selectColor(el) {
-  document.querySelectorAll('.color-swatch').forEach(s => {
-    s.style.borderColor = 'transparent';
-    s.classList.remove('selected');
-  });
-  el.style.borderColor = '#1F4D3A';
-  el.classList.add('selected');
+  document.querySelectorAll('.color-swatch').forEach(s => { s.style.borderColor='transparent'; s.classList.remove('selected'); });
+  el.style.borderColor='#1F4D3A'; el.classList.add('selected');
   document.getElementById('selected-color-label').textContent = 'Selected: ' + el.dataset.color;
 }
 
-// ── Quantity selection ───────────────────────────────────────────
-document.querySelectorAll('[data-qty]').forEach(label => {
+// Quantity
+document.querySelectorAll('#qty-options label').forEach(label => {
   label.addEventListener('click', function() {
-    const isCustom = this.dataset.qty === 'custom';
-    document.querySelectorAll('[data-qty]').forEach(l => {
-      l.classList.remove('selected', 'border-primary');
-      l.classList.add('border-outline-variant');
-    });
-    this.classList.add('selected', 'border-primary');
-    this.classList.remove('border-outline-variant');
-    document.getElementById('custom-qty-input')?.classList.toggle('hidden', !isCustom);
-    if (!isCustom) { state.qty = parseInt(this.dataset.qty); calcPrice(); }
+    document.querySelectorAll('#qty-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    const isCustom = this.dataset.qty === 'custom_qty';
+    document.getElementById('custom-qty-input').classList.toggle('hidden', !isCustom);
+    if(!isCustom) { state.qty = parseInt(this.dataset.qty); calcPrice(); }
   });
 });
 
-// ── Returning customer toggle ─────────────────────────────────────
-document.getElementById('is-recurring')?.addEventListener('change', function() {
-  state.isRecurring = this.checked;
-  calcPrice();
+// Print colours
+document.querySelectorAll('[data-colors]').forEach(label => {
+  label.addEventListener('click', function() {
+    const panel = this.closest('#upload-panel,#designer-panel');
+    if(panel) { panel.querySelectorAll('[data-colors]').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); }); }
+    this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
+    state.printColors = parseInt(this.dataset.colors);
+    calcPrice();
+  });
 });
 
-// ── Print option selection ────────────────────────────────────────
+// Printing mode
 function showPrintOptions(val) {
-  const printSection = document.getElementById('print-options-section');
-  const uploadSection = document.getElementById('upload-section');
-  if (printSection) printSection.classList.toggle('hidden', val === 'none' || val === 'designer');
-  if (uploadSection) uploadSection.classList.toggle('hidden', val === 'none');
+  document.getElementById('upload-panel').classList.toggle('hidden', val !== 'upload');
+  document.getElementById('designer-panel').classList.toggle('hidden', val !== 'designer');
   state.hasDesigner = val === 'designer';
-  if (val === 'none') state.printColors = 0;
+  if(val === 'none') state.printColors = 0;
   document.getElementById('designer-cost-row').style.display = val === 'designer' ? 'flex' : 'none';
   calcPrice();
 }
 
-// ── Save design toggle ────────────────────────────────────────────
-document.getElementById('save-design')?.addEventListener('change', function() {
-  document.getElementById('saved-designs')?.classList.toggle('hidden', !this.checked);
+// Save design toggle
+document.getElementById('save-design').addEventListener('change', function() {
+  document.getElementById('saved-designs').classList.toggle('hidden', !this.checked);
 });
 
-// ── Bowl paper card selection ─────────────────────────────────────
-function selectBowlPaper(paperKey, el) {
-  document.querySelectorAll('#bowl-paper-options label').forEach(l => {
-    l.classList.remove('selected');
-    const cb = l.querySelector('.check-badge');
-    if (cb) cb.style.display = 'none';
+// ===== PRICING CALCULATOR — reads from config.js =====
+function calcPrice() {
+  var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+
+  var printCosts   = C ? {0:0,1:C.printing.one_colour,2:C.printing.two_colour,3:C.printing.three_colour,4:C.printing.full_colour} : {0:0,1:50,2:100,3:150,4:200};
+  var plateCosts   = C ? {0:0,1:C.plate_making.one_colour,2:C.plate_making.two_colour,3:C.plate_making.three_colour,4:C.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
+  var dieCutBoard  = C ? C.order.die_cut_board  : 300;
+  var dieCutRun    = C ? C.order.die_cut_run    : 60;
+  var labourPerBag = C ? C.order.labour_per_bag : 1;
+  var delivery     = C ? C.order.delivery_cost  : 30;
+  var designerFee  = C ? C.order.designer_fee   : 100;
+  var minQty       = C ? C.order.minimum_qty    : 200;
+
+  const qtyInput = document.getElementById('qty-custom-val');
+  const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
+    ? parseInt(qtyInput.value)||0 : state.qty;
+  if (qty < minQty) return;
+
+  const isBowl = state.productType === 'food_bowl';
+  const isRecurring = document.getElementById('is-recurring').checked;
+
+  // ── FOOD BOWL pricing ──────────────────────────────────────────────
+  if (isBowl) {
+    const BOWLS_PER_SHEET = 2;
+    const SHEETS_PER_REAM = 100;
+    const LABOUR_PER_BOWL = 0.50;
+
+    // Bowl paper price — from state (set when user picks paper)
+    const bowlPaperPrice = state.bowlPaper === 'brown_card_250' ? (C ? C.paper_prices.brown_card_250 : 550) : (C ? C.paper_prices.chromo_coat : 525);
+    const sheetsNeeded   = Math.ceil(qty / BOWLS_PER_SHEET);
+    const reamsNeeded    = Math.ceil(sheetsNeeded / SHEETS_PER_REAM);
+    const paperCost      = reamsNeeded * bowlPaperPrice;
+    const labour         = qty * LABOUR_PER_BOWL;
+
+    // Print costs (only if custom print selected)
+    const bowlColors = state.bowlPrint === 'print' ? (state.bowlPrintColors || 1) : 0;
+    const printCost  = printCosts[bowlColors] || 0;
+    const plateCost  = plateCosts[bowlColors] || 0;
+
+    const total   = paperCost + printCost + plateCost + labour + delivery;
+    const perUnit = (total / qty).toFixed(2);
+
+    // Update price panel
+    document.getElementById('sb-paper').textContent    = `GHS ${paperCost.toLocaleString()}`;
+    document.getElementById('sb-printing').textContent = printCost > 0 ? `GHS ${printCost}` : 'None';
+    document.getElementById('sb-plate').textContent    = `GHS ${plateCost}`;
+    document.getElementById('sb-labour').textContent   = `GHS ${labour.toLocaleString()}`;
+    document.getElementById('sb-total').textContent    = `GHS ${total.toLocaleString()}`;
+    document.getElementById('sb-per-bag').textContent  = `GHS ${perUnit} / bowl`;
+    document.getElementById('per-unit-label').textContent = 'Per bowl';
+    document.getElementById('labour-label').textContent   = 'Assembly labour';
+
+    // Hide die-cut rows (bowls don't need die-cut board/run)
+    document.getElementById('diecut-row').style.display     = 'none';
+    document.getElementById('diecut-run-row').style.display = 'none';
+    document.getElementById('plate-row').style.display      = bowlColors > 0 ? '' : 'none';
+    document.getElementById('discount-row')?.classList.add('hidden');
+    document.getElementById('recurring-savings')?.classList.add('hidden');
+    return;
+  }
+
+  // ── FLAT BOTTOM BAG pricing (existing logic) ────────────────────────
+  const sheetsNeeded = Math.ceil(qty / state.bagsPerSheet);
+  const reamsNeeded  = Math.ceil(sheetsNeeded / 100);
+  const paperCost    = reamsNeeded * state.paperPrice;
+  const printCost    = printCosts[state.printColors] || 0;
+  const plateCost    = plateCosts[state.printColors] || 0;
+  const labour       = qty * labourPerBag;
+  const extraDesigner = state.hasDesigner ? designerFee : 0;
+  const saving       = state.printColors > 0 ? plateCost + dieCutBoard : 0;
+  const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner;
+  const total        = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+  const perBag       = (total / qty).toFixed(2);
+  const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
+
+  document.getElementById('sb-paper').textContent       = `GHS ${paperCost.toLocaleString()}`;
+  document.getElementById('sb-printing').textContent    = printCost > 0 ? `GHS ${printCost}` : 'None';
+  document.getElementById('sb-plate').textContent       = `GHS ${plateCost}`;
+  document.getElementById('sb-diecutboard').textContent = `GHS ${dieCutBoard}`;
+  document.getElementById('sb-labour').textContent      = `GHS ${labour.toLocaleString()}`;
+  document.getElementById('sb-bag-total').textContent   = `GHS ${total.toLocaleString()}`;
+  document.getElementById('sb-per-bag').textContent     = `GHS ${perBag} / bag`;
+  document.getElementById('sb-qty-display').textContent = qty.toLocaleString() + ' bags';
+  document.getElementById('per-unit-label').textContent = 'Per bag';
+
+  const discRow  = document.getElementById('discount-row');
+  const savLabel = document.getElementById('recurring-savings');
+  if (isRecurring && saving > 0) {
+    discRow?.classList.remove('hidden');
+    document.getElementById('sb-discount').textContent = `- GHS ${saving.toLocaleString()}`;
+    savLabel.textContent = `✓ Saving GHS ${saving.toLocaleString()} (${savingPct}%) — repeat order discount applied`;
+    savLabel?.classList.remove('hidden');
+  } else {
+    discRow?.classList.add('hidden');
+    savLabel?.classList.add('hidden');
+  }
+
+  // ── Bowl add-on pricing ──────────────────────────────────────────
+  const C2 = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+  const pCosts2    = {0:0,1:C2?.printing?.one_colour||50,2:C2?.printing?.two_colour||100,3:C2?.printing?.three_colour||150,4:C2?.printing?.full_colour||200};
+  const plateCosts2= {0:0,1:C2?.plate_making?.one_colour||60,2:C2?.plate_making?.two_colour||120,3:C2?.plate_making?.three_colour||180,4:C2?.plate_making?.full_colour||240};
+  const bowlAddonEl = document.getElementById('bowl-addon');
+  const bowlEstEl   = document.getElementById('estimate-bowl-section');
+  let bowlTotal = 0;
+  if (bowlAddonEl && !bowlAddonEl.classList.contains('hidden')) {
+    const addonQtyEl = document.querySelector('[name="addon_bowl_qty"]:checked');
+    let addonQty = addonQtyEl?.value === 'custom_addon'
+      ? parseInt(document.getElementById('addon-qty-val')?.value)||200
+      : parseInt(addonQtyEl?.value)||200;
+    const addonPaperKey  = document.querySelector('[name="addon_bowl_paper"]:checked')?.value || 'chromo_coat';
+    const addonPaperPrice= addonPaperKey === 'brown_card'
+      ? (C2?.paper_prices?.brown_card_250||550) : (C2?.paper_prices?.chromo_coat||525);
+    const addonSheets    = Math.ceil(addonQty / 2);
+    const addonReams     = Math.ceil(addonSheets / 100);
+    const addonPaperCost = addonReams * addonPaperPrice;
+    const addonLabour    = addonQty * 0.50;
+    const addonColors    = state.addonBowlPrintColors || 0;
+    const addonPrintCost = pCosts2[addonColors]||0;
+    const addonPlateCost = plateCosts2[addonColors]||0;
+    bowlTotal = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
+    const perBowl = (bowlTotal / addonQty).toFixed(2);
+    if (bowlEstEl) {
+      bowlEstEl.classList.remove('hidden');
+      document.getElementById('sb-bowl-paper').textContent      = addonPaperKey === 'brown_card' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
+      document.getElementById('sb-bowl-print').textContent      = addonColors > 0 ? addonColors + ' colour' : 'None';
+      document.getElementById('sb-bowl-qty-display').textContent= addonQty.toLocaleString() + ' bowls';
+      document.getElementById('sb-bowl-total').textContent      = `GHS ${bowlTotal.toLocaleString()}`;
+      document.getElementById('sb-per-bowl').textContent        = `GHS ${perBowl} / bowl`;
+    }
+  } else if (bowlEstEl) {
+    bowlEstEl.classList.add('hidden');
+  }
+
+  // Grand total = bag + bowl + delivery
+  const grandTotal = total + bowlTotal;
+  document.getElementById('sb-total').textContent = `GHS ${grandTotal.toLocaleString()}`;
+}
+
+// ── PRODUCT TYPE SWITCHER ──────────────────────────────────────────
+function switchProduct(type) {
+  state.productType = type;
+  const isBowl = type === 'food_bowl';
+
+  document.getElementById('bowl-options').classList.toggle('hidden', !isBowl);
+
+  document.getElementById('lbl-flat-bottom').classList.toggle('selected', !isBowl);
+  document.getElementById('lbl-flat-bottom').classList.toggle('border-primary', !isBowl);
+  document.getElementById('lbl-flat-bottom').classList.toggle('border-outline-variant', isBowl);
+  document.getElementById('lbl-food-bowl').classList.toggle('selected', isBowl);
+  document.getElementById('lbl-food-bowl').classList.toggle('border-primary', isBowl);
+  document.getElementById('lbl-food-bowl').classList.toggle('border-outline-variant', !isBowl);
+
+  // + Add Bowl button only makes sense when Bag is the primary product
+  const addBowlWrap = document.getElementById('add-bowl-btn-wrap');
+  const bowlAddonEl = document.getElementById('bowl-addon');
+  if (addBowlWrap) addBowlWrap.classList.toggle('hidden', isBowl);
+  if (isBowl && bowlAddonEl) { bowlAddonEl.classList.add('hidden'); bowlAddonOpen = false; }
+
+  // Hide bag-only steps when bowl selected
+  ['step-size','step-handle','step-print','step-design','step-delivery'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden', isBowl);
   });
-  el.classList.add('selected');
-  const cb = el.querySelector('.check-badge');
-  if (cb) cb.style.display = 'flex';
-  el.querySelector('input').checked = true;
-  state.bowlPaper = paperKey;
-  const C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
-  state.paperPrice = paperKey === 'brown_card_250'
-    ? (C?.paper_prices?.brown_card_250 || 550)
-    : (C?.paper_prices?.chromo_coat || 525);
+
+  if (isBowl) {
+    state.bowlPaper = 'chromo_coat';
+    state.paperPrice = 525;
+    state.bowlPrint = 'none';
+    state.bowlPrintColors = 0;
+  }
   calcPrice();
 }
 
-// ── Bowl colour picker ────────────────────────────────────────────
+// ── BOWL PRINT TOGGLE ─────────────────────────────────────────────
+function setBowlPrint(val) {
+  state.bowlPrint = val;
+  document.getElementById('bowl-plain-lbl').classList.toggle('border-primary', val === 'none');
+  document.getElementById('bowl-plain-lbl').classList.toggle('border-outline-variant', val !== 'none');
+  document.getElementById('bowl-print-lbl').classList.toggle('border-primary', val === 'print');
+  document.getElementById('bowl-print-lbl').classList.toggle('border-outline-variant', val !== 'print');
+  document.getElementById('bowl-print-colors').classList.toggle('hidden', val !== 'print');
+  if (val === 'print' && state.bowlPrintColors === 0) {
+    state.bowlPrintColors = 1;
+    const firstColor = document.querySelector('[data-bowl-colors="1"]');
+    if (firstColor) {
+      firstColor.classList.add('border-primary');
+      firstColor.classList.remove('border-outline-variant');
+      firstColor.querySelector('input').checked = true;
+    }
+  }
+  if (val === 'none') state.bowlPrintColors = 0;
+  calcPrice();
+}
+
+// ── BOWL COLOUR PICKER ────────────────────────────────────────────
 document.querySelectorAll('[data-bowl-colors]').forEach(lbl => {
   lbl.addEventListener('click', function() {
     state.bowlPrintColors = parseInt(this.dataset.bowlColors);
@@ -1188,344 +1513,30 @@ document.querySelectorAll('[data-bowl-colors]').forEach(lbl => {
   });
 });
 
-// ── Addon qty picker ─────────────────────────────────────────────
-document.querySelectorAll('[data-addon-qty]').forEach(lbl => {
-  lbl.addEventListener('click', function() {
-    const val = this.dataset.addonQty;
-    document.querySelectorAll('[data-addon-qty]').forEach(l => {
-      l.classList.remove('border-primary', 'selected');
-      l.classList.add('border-outline-variant');
-    });
-    this.classList.add('border-primary', 'selected');
-    this.classList.remove('border-outline-variant');
-    document.getElementById('custom-addon-qty-input')?.classList.toggle('hidden', val !== 'custom_addon');
-    if (val !== 'custom_addon') { state.addonBowlQty = parseInt(val) || 200; calcPrice(); }
-  });
-});
+calcPrice();
 
-// ── Addon colour picker ───────────────────────────────────────────
-document.querySelectorAll('[data-addon-colors]').forEach(lbl => {
-  lbl.addEventListener('click', function() {
-    state.addonBowlPrintColors = parseInt(this.dataset.addonColors);
-    document.querySelectorAll('[data-addon-colors]').forEach(l => {
-      l.classList.remove('border-primary');
-      l.classList.add('border-outline-variant');
-    });
-    this.classList.add('border-primary');
-    this.classList.remove('border-outline-variant');
-    calcPrice();
-  });
-});
-
-// ── Multi-file artwork upload ─────────────────────────────────────
-let orderFiles = [];
-
-function handleOrderFileSelect(input) {
-  if (!input.files) return;
-  Array.from(input.files).forEach(f => addOrderFile(f));
-}
-
-function handleOrderFileDrop(e) {
-  e.preventDefault();
-  document.getElementById('order-drop-zone')?.classList.remove('border-primary', 'bg-primary/5');
-  Array.from(e.dataTransfer.files).forEach(f => addOrderFile(f));
-}
-
-function addOrderFile(file) {
-  const MAX = 10 * 1024 * 1024;
-  if (file.size > MAX) { alert(file.name + ' exceeds 10MB limit.'); return; }
-  const allowed = /\.(jpg|jpeg|png|pdf|svg|ai)$/i;
-  if (!allowed.test(file.name)) { alert(file.name + ' — unsupported file type.'); return; }
-  orderFiles.push(file);
-  renderOrderFiles();
-}
-
-function renderOrderFiles() {
-  const list  = document.getElementById('order-files-list');
-  const note  = document.getElementById('order-upload-note');
-  const label = document.getElementById('order-drop-label');
-  if (!list) return;
-  if (!orderFiles.length) {
-    list.classList.add('hidden');
-    if (note)  note.classList.add('hidden');
-    if (label) label.textContent = 'Tap to select or drag your files here';
-    return;
-  }
-  list.classList.remove('hidden');
-  list.innerHTML = orderFiles.map((f, i) =>
-    `<div class="flex items-center gap-3 p-3 bg-surface-container border border-outline-variant">
-      <span class="material-symbols-outlined text-primary" style="font-size:18px;">description</span>
-      <div class="flex-1 min-w-0">
-        <p class="font-semibold text-sm truncate">${f.name}</p>
-        <p class="text-xs text-on-surface-variant">${(f.size/1024).toFixed(0)} KB</p>
-      </div>
-      <button onclick="removeOrderFile(${i})" class="text-xs font-bold text-on-surface-variant hover:text-error transition-colors">Remove</button>
-    </div>`
-  ).join('');
-  if (label) label.textContent = orderFiles.length + ' file' + (orderFiles.length > 1 ? 's' : '') + ' selected — tap to add more';
-  if (note)  note.classList.remove('hidden');
-}
-
-function removeOrderFile(index) {
-  orderFiles.splice(index, 1);
-  renderOrderFiles();
-}
-
-function clearOrderFile() {
-  orderFiles = [];
-  renderOrderFiles();
-  document.getElementById('order-artwork-input').value = '';
-}
-
-window.getOrderFiles = () => orderFiles;
-
-// ═════════════════════════════════════════════════════════════════
-// PRICING CALCULATOR — incorporates new logic from calculator spec
-// ═════════════════════════════════════════════════════════════════
-function calcPrice() {
-  const C          = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
-  const printCosts = C
-    ? {0:0,1:C.printing.one_colour,2:C.printing.two_colour,3:C.printing.three_colour,4:C.printing.full_colour}
-    : {0:0,1:50,2:100,3:150,4:200};
-  const plateCosts = C
-    ? {0:0,1:C.plate_making.one_colour,2:C.plate_making.two_colour,3:C.plate_making.three_colour,4:C.plate_making.full_colour}
-    : {0:0,1:60,2:120,3:180,4:240};
-
-  const dieCutBoard  = C?.order?.die_cut_board  ?? 300;
-  const dieCutRun    = C?.order?.die_cut_run    ?? 60;
-  const labourPerBag = C?.order?.labour_per_bag ?? 0.50;
-  const delivery     = C?.order?.delivery_cost  ?? 30;
-  const designerFee  = C?.order?.designer_fee   ?? 100;
-  const minQty       = C?.order?.minimum_qty    ?? 200;
-
-  // Resolve qty — custom input or preset button
-  const qtyInput = document.getElementById('qty-custom-val');
-  const isCustomQty = qtyInput && !qtyInput.closest('#custom-qty-input')?.classList.contains('hidden');
-  const qty = isCustomQty ? (parseInt(qtyInput.value) || 0) : state.qty;
-  if (qty < minQty) return;
-
-  const isBowl      = state.productType === 'food_bowl';
-  const isRecurring = state.isRecurring;
-
-  // ── BOWL-ONLY MODE ───────────────────────────────────────────────
-  if (isBowl) {
-    const bowlPaperPrice = state.bowlPaper === 'brown_card_250'
-      ? (C?.paper_prices?.brown_card_250 ?? 550)
-      : (C?.paper_prices?.chromo_coat ?? 525);
-    const sheetsNeeded = Math.ceil(qty / 2);           // 2 bowls per sheet
-    const reamsNeeded  = Math.ceil(sheetsNeeded / 100);
-    const paperCost    = reamsNeeded * bowlPaperPrice;
-    const labour       = qty * 0.50;                   // GHS 0.50 per bowl
-    const bowlColors   = state.bowlPrint === 'print' ? (state.bowlPrintColors || 1) : 0;
-    const printCost    = printCosts[bowlColors] || 0;
-    const plateCost    = plateCosts[bowlColors] || 0;
-    const total        = paperCost + printCost + plateCost + labour + delivery;
-    const perUnit      = (total / qty).toFixed(2);
-
-    // Show only bowl estimate section
-    document.getElementById('estimate-bag-section')?.classList.add('hidden');
-    document.getElementById('estimate-bowl-section')?.classList.remove('hidden');
-    document.getElementById('sb-bowl-paper').textContent      = state.bowlPaper === 'brown_card_250' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
-    document.getElementById('sb-bowl-print').textContent      = bowlColors > 0 ? bowlColors + ' colour' : 'None';
-    document.getElementById('sb-bowl-qty-display').textContent= qty.toLocaleString() + ' bowls';
-    document.getElementById('sb-bowl-total').textContent      = `GHS ${total.toLocaleString()}`;
-    document.getElementById('sb-per-bowl').textContent        = `GHS ${perUnit} / bowl`;
-    document.getElementById('sb-total').textContent           = `GHS ${total.toLocaleString()}`;
-    return;
-  }
-
-  // ── FLAT BOTTOM BAG PRICING ──────────────────────────────────────
-  // Sheets per ream: 150 for Brown Paper 80gsm, 100 for all others
-  const sheetsPerReem = state.sheetsPerReem || 100;
-  const sheetsNeeded  = Math.ceil(qty / state.bagsPerSheet);
-  const reamsNeeded   = Math.ceil(sheetsNeeded / sheetsPerReem);
-  const paperCost     = reamsNeeded * state.paperPrice;
-  const printCost     = printCosts[state.printColors] || 0;
-  const plateCost     = plateCosts[state.printColors] || 0;
-  const labour        = qty * labourPerBag;
-  const extraDesigner = state.hasDesigner ? designerFee : 0;
-
-  // Die cut board applies to all orders (waived on repeat if no print change)
-  const dcBoard = dieCutBoard;
-
-  // Returning customer saving: plate + die cut board waived when same design reused
-  const saving    = isRecurring && state.printColors > 0 ? (plateCost + dcBoard) : 0;
-  const baseTotal = paperCost + printCost + plateCost + dcBoard + dieCutRun + labour + delivery + extraDesigner;
-  const total     = baseTotal - saving;
-  const perBag    = (total / qty).toFixed(2);
-  const savingPct = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
-
-  // Show bag estimate, hide bowl-only section
-  document.getElementById('estimate-bag-section')?.classList.remove('hidden');
-
-  // Update bag estimate panel
-  document.getElementById('sb-paper').textContent       = `GHS ${paperCost.toLocaleString()}`;
-  document.getElementById('sb-printing').textContent    = printCost > 0 ? `GHS ${printCost}` : 'None';
-  document.getElementById('sb-plate').textContent       = `GHS ${plateCost}`;
-  document.getElementById('sb-diecutboard').textContent = `GHS ${dcBoard}`;
-  document.getElementById('sb-labour').textContent      = `GHS ${labour.toLocaleString()}`;
-  document.getElementById('sb-bag-total').textContent   = `GHS ${total.toLocaleString()}`;
-  document.getElementById('sb-per-bag').textContent     = `GHS ${perBag} / bag`;
-  document.getElementById('sb-qty-display').textContent = qty.toLocaleString() + ' bags';
-  document.getElementById('per-unit-label').textContent = 'Per bag';
-
-  const discRow  = document.getElementById('discount-row');
-  const savLabel = document.getElementById('recurring-savings');
-  if (isRecurring && saving > 0) {
-    discRow?.classList.remove('hidden');
-    document.getElementById('sb-discount').textContent = `- GHS ${saving.toLocaleString()}`;
-    if (savLabel) { savLabel.textContent = `✓ Saving GHS ${saving.toLocaleString()} (${savingPct}%) — repeat order discount`; savLabel.classList.remove('hidden'); }
-  } else {
-    discRow?.classList.add('hidden');
-    savLabel?.classList.add('hidden');
-  }
-
-  // ── Bowl add-on pricing ──────────────────────────────────────────
-  const bowlAddonEl = document.getElementById('bowl-addon');
-  const bowlEstEl   = document.getElementById('estimate-bowl-section');
-  let bowlTotal = 0;
-  if (bowlAddonEl && !bowlAddonEl.classList.contains('hidden')) {
-    const addonQtyEl  = document.querySelector('[name="addon_bowl_qty"]:checked');
-    const addonQty    = addonQtyEl?.value === 'custom_addon'
-      ? (parseInt(document.getElementById('addon-qty-val')?.value) || 200)
-      : (parseInt(addonQtyEl?.value) || 200);
-    const addonPaperKey   = state.addonBowlPaper || 'chromo_coat';
-    const addonPaperPrice = addonPaperKey === 'brown_card'
-      ? (C?.paper_prices?.brown_card_250 ?? 550)
-      : (C?.paper_prices?.chromo_coat ?? 525);
-    const addonSheets    = Math.ceil(addonQty / 2);
-    const addonReams     = Math.ceil(addonSheets / 100);
-    const addonPaperCost = addonReams * addonPaperPrice;
-    const addonLabour    = addonQty * 0.50;
-    const addonColors    = state.addonBowlPrintColors || 0;
-    const addonPrintCost = printCosts[addonColors] || 0;
-    const addonPlateCost = plateCosts[addonColors] || 0;
-    bowlTotal = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
-    const perBowl = (bowlTotal / addonQty).toFixed(2);
-    if (bowlEstEl) {
-      bowlEstEl.classList.remove('hidden');
-      document.getElementById('sb-bowl-paper').textContent       = addonPaperKey === 'brown_card' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
-      document.getElementById('sb-bowl-print').textContent       = addonColors > 0 ? addonColors + ' colour' : 'None';
-      document.getElementById('sb-bowl-qty-display').textContent = addonQty.toLocaleString() + ' bowls';
-      document.getElementById('sb-bowl-total').textContent       = `GHS ${bowlTotal.toLocaleString()}`;
-      document.getElementById('sb-per-bowl').textContent         = `GHS ${perBowl} / bowl`;
-    }
-  } else if (bowlEstEl) {
-    bowlEstEl.classList.add('hidden');
-  }
-
-  // Grand total
-  document.getElementById('sb-total').textContent = `GHS ${(total + bowlTotal).toLocaleString()}`;
-}
-
-// ── PRODUCT TYPE SWITCHER ─────────────────────────────────────────
-function switchProduct(type) {
-  state.productType = type;
-  const isBowl = type === 'food_bowl';
-
-  // Toggle bowl options / add-on button
-  document.getElementById('bowl-options')?.classList.toggle('hidden', !isBowl);
-  document.getElementById('add-bowl-btn-wrap')?.classList.toggle('hidden', isBowl);
-  if (isBowl) {
-    document.getElementById('bowl-addon')?.classList.add('hidden');
-    bowlAddonOpen = false;
-  }
-
-  // Toggle product card selection styles
-  document.getElementById('lbl-flat-bottom')?.classList.toggle('selected', !isBowl);
-  document.getElementById('lbl-flat-bottom')?.classList.toggle('border-primary', !isBowl);
-  document.getElementById('lbl-flat-bottom')?.classList.toggle('border-outline-variant', isBowl);
-  document.getElementById('lbl-food-bowl')?.classList.toggle('selected', isBowl);
-  document.getElementById('lbl-food-bowl')?.classList.toggle('border-primary', isBowl);
-  document.getElementById('lbl-food-bowl')?.classList.toggle('border-outline-variant', !isBowl);
-
-  // Collapse/show paper type section for bags
-  document.getElementById('step-paper')?.classList.toggle('hidden', isBowl);
-
-  // Hide bag-only steps when bowl selected
-  ['step-size','step-handle','step-print'].forEach(id => {
-    document.getElementById(id)?.classList.toggle('hidden', isBowl);
-  });
-
-  if (isBowl) {
-    state.bowlPaper = 'chromo_coat';
-    state.paperPrice = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.paper_prices.chromo_coat : 525;
-    state.bowlPrint = 'none';
-    state.bowlPrintColors = 0;
-  }
-  calcPrice();
-}
-
-// ── BOWL TYPE SELECTOR ────────────────────────────────────────────
-function setBowlType(type) {
-  const stdLbl  = document.getElementById('bowl-type-standard-lbl');
-  const trapLbl = document.getElementById('bowl-type-trap-lbl');
-  [stdLbl, trapLbl].forEach(el => { if (el) { el.classList.remove('selected','border-primary'); el.classList.add('border-outline-variant'); } });
-  const active = type === 'standard' ? stdLbl : trapLbl;
-  active?.classList.add('selected','border-primary');
-  active?.classList.remove('border-outline-variant');
-  active?.querySelector('input') && (active.querySelector('input').checked = true);
-  calcPrice();
-}
-
-// ── BOWL PRINT TOGGLE ─────────────────────────────────────────────
-function setBowlPrint(val) {
-  state.bowlPrint = val;
-  document.getElementById('bowl-plain-lbl')?.classList.toggle('border-primary', val === 'none');
-  document.getElementById('bowl-plain-lbl')?.classList.toggle('border-outline-variant', val !== 'none');
-  document.getElementById('bowl-print-lbl')?.classList.toggle('border-primary', val === 'print');
-  document.getElementById('bowl-print-lbl')?.classList.toggle('border-outline-variant', val !== 'print');
-  document.getElementById('bowl-print-colors')?.classList.toggle('hidden', val !== 'print');
-  if (val === 'print' && !state.bowlPrintColors) {
-    state.bowlPrintColors = 1;
-    const fc = document.querySelector('[data-bowl-colors="1"]');
-    if (fc) { fc.classList.add('border-primary'); fc.classList.remove('border-outline-variant'); fc.querySelector('input').checked = true; }
-  }
-  if (val === 'none') state.bowlPrintColors = 0;
-  calcPrice();
-}
-
-// ── ADDON BOWL TYPE ───────────────────────────────────────────────
-function setAddonBowlType(type) {
-  const stdLbl  = document.getElementById('addon-bowl-standard-lbl');
-  const trapLbl = document.getElementById('addon-bowl-trap-lbl');
-  [stdLbl, trapLbl].forEach(el => { if (el) { el.classList.remove('selected','border-primary'); el.classList.add('border-outline-variant'); } });
-  const active = type === 'standard' ? stdLbl : trapLbl;
-  active?.classList.add('selected','border-primary');
-  active?.classList.remove('border-outline-variant');
-  calcPrice();
-}
-
-// ── ADDON PRINT TOGGLE ────────────────────────────────────────────
-function setAddonPrint(val) {
-  document.getElementById('addon-plain-lbl')?.classList.toggle('border-primary', val === 'none');
-  document.getElementById('addon-plain-lbl')?.classList.toggle('border-outline-variant', val !== 'none');
-  document.getElementById('addon-print-lbl')?.classList.toggle('border-primary', val === 'print');
-  document.getElementById('addon-print-lbl')?.classList.toggle('border-outline-variant', val !== 'print');
-  document.getElementById('addon-print-colors')?.classList.toggle('hidden', val !== 'print');
-  if (val === 'none') state.addonBowlPrintColors = 0;
-  if (val === 'print' && !state.addonBowlPrintColors) state.addonBowlPrintColors = 1;
-  calcPrice();
-}
-
-// ── TOGGLE ADD BOWL ───────────────────────────────────────────────
-let bowlAddonOpen = false;
-function toggleAddBowl() {
-  bowlAddonOpen = !bowlAddonOpen;
-  document.getElementById('bowl-addon')?.classList.toggle('hidden', !bowlAddonOpen);
-  document.getElementById('add-bowl-icon').textContent  = bowlAddonOpen ? 'remove_circle' : 'add_circle';
-  document.getElementById('add-bowl-label').textContent = bowlAddonOpen ? '− Remove Bowl Add-on' : '+ Add Paper Bowls to this order';
-  calcPrice();
-}
-
-// ── UPDATE CONFIG VALUES ON LOAD ─────────────────────────────────
+// Update displayed paper prices from config.js on page load
 (function updatePriceDisplays() {
   if (typeof KRAAPHT_CONFIG === 'undefined') return;
   const p = KRAAPHT_CONFIG.paper_prices;
+  const priceMap = {
+    'chromo_coat':    p.chromo_coat,
+    'brown_card_250': p.brown_card_250,
+    'brown_paper_80': p.brown_paper_80,
+    'matt_150':       p.matt_150,
+    'duplex_300':     p.duplex_300,
+  };
+  // Update data-price attributes so click handlers read fresh values
   document.querySelectorAll('#paper-options label[data-paper]').forEach(label => {
     const key = label.dataset.paper;
-    if (p[key] !== undefined) label.dataset.price = p[key];
+    if (priceMap[key] !== undefined) {
+      label.dataset.price = priceMap[key];
+      // Update the visible GHS text in the card
+      const priceEl = label.querySelector('.paper-price-display');
+      // ream price display removed
+    }
   });
+  // Set initial state.paperPrice to config value for default selected paper
   state.paperPrice = p.chromo_coat;
   calcPrice();
 })();
@@ -1533,39 +1544,44 @@ function toggleAddBowl() {
 </script>
 
 <script>
-// ── EXPERT ADVICE PANEL ───────────────────────────────────────────
+// ===== EXPERT ADVICE PANEL TOGGLE =====
 function toggleExpert() {
-  const content = document.getElementById('expert-content');
-  const chevron = document.getElementById('expert-chevron');
+  var content = document.getElementById('expert-content');
+  var chevron = document.getElementById('expert-chevron');
   if (!content || !chevron) return;
-  const isHidden = content.classList.contains('hidden');
+  var isHidden = content.classList.contains('hidden');
   content.classList.toggle('hidden', !isHidden);
   chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-  if (isHidden) document.getElementById('expert-panel-wrapper')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if (isHidden) {
+    document.getElementById('expert-panel-wrapper').scrollIntoView({
+      behavior: 'smooth', block: 'nearest'
+    });
+  }
 }
-
-// ── SAVE ORDER + GO TO PAYMENT ────────────────────────────────────
+// ===== SAVE ORDER + GO TO PAYMENT =====
 function goToPayment() {
-  const orderData = {
-    product:     document.querySelector('[name="product_type"]:checked')?.value || 'flat_bottom',
-    paper:       document.querySelector('[name="paper_type"]:checked')?.value   || 'chromo_coat',
-    size:        document.querySelector('[name="size"]:checked')?.value         || 'a5',
-    handle:      document.querySelector('[name="handle"]:checked')?.value       || 'twisted',
-    qty:         state.qty,
-    printing:    document.querySelector('[name="printing"]:checked')?.value     || 'none',
+  // Collect current order state
+  var orderData = {
+    product:    document.querySelector('[name="product_type"]:checked')?.value || 'flat_bottom',
+    paper:      document.querySelector('[name="paper_type"]:checked')?.value   || 'chromo_coat',
+    size:       document.querySelector('[name="size"]:checked')?.value         || 'a5',
+    handle:     document.querySelector('[name="handle"]:checked')?.value       || 'twisted',
+    qty:        state.qty,
+    printing:   document.querySelector('[name="printing"]:checked')?.value     || 'none',
     hasDesigner: state.hasDesigner,
     printColors: state.printColors,
-    total:       document.getElementById('sb-total')?.textContent  || 'GHS 0',
-    perBag:      document.getElementById('sb-per-bag')?.textContent || '',
-    paperCost:   document.getElementById('sb-paper')?.textContent  || '',
-    labour:      document.getElementById('sb-labour')?.textContent || '',
-    bowlAddon:   bowlAddonOpen,
-    addonQty:    state.addonBowlQty,
-    addonPaper:  state.addonBowlPaper,
+    total:      document.getElementById('sb-total')?.textContent || 'GHS 0',
+    perBag:     document.getElementById('sb-per-bag')?.textContent || '',
+    paperCost:  document.getElementById('sb-paper')?.textContent || '',
+    labour:     document.getElementById('sb-labour')?.textContent || '',
   };
-  try { localStorage.setItem('kraapht_order', JSON.stringify(orderData)); } catch(e) {}
+  try {
+    localStorage.setItem('kraapht_order', JSON.stringify(orderData));
+  } catch(e) {}
   window.location.href = 'payment.html';
 }
+// ── ORDER FORM ARTWORK UPLOAD — multi-file handled in injected JS above ──
+
 </script>
 </body>
 </html>
