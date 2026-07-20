@@ -31,6 +31,7 @@ function toggleAddBowl() {
   if (addon) addon.classList.toggle('hidden', !bowlAddonOpen);
   if (icon)  icon.textContent  = bowlAddonOpen ? 'remove_circle' : 'add_circle';
   if (label) label.textContent = bowlAddonOpen ? '− Remove Bowl Add-on' : '+ Add Paper Bowls to this order';
+  updateBowlAddonUpload();
   calcPrice();
 }
 
@@ -152,6 +153,56 @@ function renderBowlFiles() {
 }
 function removeBowlFile(i) { bowlFiles.splice(i,1); renderBowlFiles(); }
 window.getBowlFiles = function() { return bowlFiles; };
+
+// ── Bowl ADD-ON artwork upload (in print step, for bag+bowl orders) ──
+let bowlAddonFiles = [];
+window.handleBowlAddonFileSelect = function(input) {
+  if (!input.files) return;
+  Array.from(input.files).forEach(function(f) { addBowlAddonFile(f); });
+};
+window.handleBowlAddonFileDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('bowl-addon-drop-zone')?.classList.remove('border-primary','bg-primary/5');
+  Array.from(e.dataTransfer.files).forEach(function(f) { addBowlAddonFile(f); });
+};
+function addBowlAddonFile(file) {
+  if (file.size > 10*1024*1024) { alert(file.name + ' exceeds 10MB.'); return; }
+  bowlAddonFiles.push(file);
+  renderBowlAddonFiles();
+}
+function renderBowlAddonFiles() {
+  var list  = document.getElementById('bowl-addon-files-list');
+  var label = document.getElementById('bowl-addon-drop-label');
+  if (!list) return;
+  if (!bowlAddonFiles.length) {
+    list.classList.add('hidden');
+    if (label) label.textContent = 'Tap to select or drag your bowl artwork';
+    return;
+  }
+  list.classList.remove('hidden');
+  list.innerHTML = bowlAddonFiles.map(function(f,i) {
+    return '<div class="flex items-center gap-3 p-3 bg-surface-container border border-outline-variant">' +
+      '<span class="material-symbols-outlined text-primary" style="font-size:18px;">description</span>' +
+      '<div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">' + f.name + '</p>' +
+      '<p class="text-xs text-on-surface-variant">' + (f.size/1024).toFixed(0) + ' KB</p></div>' +
+      '<button onclick="removeBowlAddonFile(' + i + ')" class="text-xs font-bold text-on-surface-variant hover:text-error transition-colors">Remove</button></div>';
+  }).join('');
+  if (label) label.textContent = bowlAddonFiles.length + ' file' + (bowlAddonFiles.length > 1 ? 's' : '') + ' selected';
+}
+function removeBowlAddonFile(i) { bowlAddonFiles.splice(i,1); renderBowlAddonFiles(); }
+window.getBowlAddonFiles = function() { return bowlAddonFiles; };
+
+// Show/hide bowl addon upload section based on addon state + print choice
+function updateBowlAddonUpload() {
+  var addonOpen   = !document.getElementById('bowl-addon')?.classList.contains('hidden');
+  var addonPrint  = document.querySelector('[name="addon_bowl_print"]:checked')?.value;
+  var uploadSec   = document.getElementById('bowl-addon-upload-section');
+  var bagLabel    = document.getElementById('bag-upload-label');
+  var hasPrint    = addonOpen && addonPrint === 'print';
+  if (uploadSec) uploadSec.classList.toggle('hidden', !hasPrint);
+  if (bagLabel)  bagLabel.classList.toggle('hidden', !hasPrint);
+}
+
 
 });
 
@@ -1008,17 +1059,38 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </div>
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Upload Artwork</label>
-            <div id="order-drop-zone" class="border-2 border-dashed border-outline-variant p-6 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('order-artwork-input').click()" ondragover="event.preventDefault();this.classList.add('border-primary','bg-primary/5')" ondragleave="this.classList.remove('border-primary','bg-primary/5')" ondrop="handleOrderFileDrop(event)">
-              <span class="material-symbols-outlined text-3xl text-outline mb-2 block">upload_file</span>
-              <p class="text-sm font-semibold" id="order-drop-label">Tap to select or drag your files here</p>
-              <p class="text-xs text-on-surface-variant mt-1">PNG, PDF, SVG · High resolution recommended · Max 10MB each</p>
-              <input id="order-artwork-input" type="file" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.svg,.ai,application/postscript" multiple onchange="handleOrderFileSelect(this)"/>
+
+            <!-- BAG artwork upload -->
+            <div class="mb-3">
+              <p id="bag-upload-label" class="text-xs font-bold tracking-widest uppercase text-primary mb-2 hidden">Bag Design</p>
+              <div id="order-drop-zone" class="border-2 border-dashed border-outline-variant p-6 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('order-artwork-input').click()" ondragover="event.preventDefault();this.classList.add('border-primary','bg-primary/5')" ondragleave="this.classList.remove('border-primary','bg-primary/5')" ondrop="handleOrderFileDrop(event)">
+                <span class="material-symbols-outlined text-3xl text-outline mb-2 block">upload_file</span>
+                <p class="text-sm font-semibold" id="order-drop-label">Tap to select or drag your files here</p>
+                <p class="text-xs text-on-surface-variant mt-1">PNG, PDF, SVG · High resolution recommended · Max 10MB each</p>
+                <input id="order-artwork-input" type="file" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.svg,.ai,application/postscript" multiple onchange="handleOrderFileSelect(this)"/>
+              </div>
+              <div id="order-files-list" class="hidden mt-3 space-y-2"></div>
             </div>
-            <!-- Multi-file selected state -->
-            <div id="order-files-list" class="hidden mt-3 space-y-2"></div>
+
+            <!-- BOWL artwork upload — shown when bowl add-on is active and has custom print -->
+            <div id="bowl-addon-upload-section" class="hidden mt-3 pt-3 border-t border-outline-variant">
+              <p class="text-xs font-bold tracking-widest uppercase text-primary mb-2">Bowl Design</p>
+              <div id="bowl-addon-drop-zone" class="border-2 border-dashed border-outline-variant p-5 text-center hover:border-primary transition-colors cursor-pointer"
+                onclick="document.getElementById('bowl-addon-artwork-input').click()"
+                ondragover="event.preventDefault();this.classList.add('border-primary','bg-primary/5')"
+                ondragleave="this.classList.remove('border-primary','bg-primary/5')"
+                ondrop="handleBowlAddonFileDrop(event)">
+                <span class="material-symbols-outlined text-2xl text-outline mb-1 block">upload_file</span>
+                <p class="text-sm font-semibold" id="bowl-addon-drop-label">Tap to select or drag your bowl artwork</p>
+                <p class="text-xs text-on-surface-variant mt-0.5">PNG, PDF, SVG · Max 10MB</p>
+                <input id="bowl-addon-artwork-input" type="file" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.svg,.ai" multiple onchange="handleBowlAddonFileSelect(this)"/>
+              </div>
+              <div id="bowl-addon-files-list" class="hidden mt-2 space-y-2"></div>
+            </div>
+
             <div class="mt-3 p-3 bg-primary/5 border border-primary/20 flex gap-2">
               <span class="material-symbols-outlined text-primary flex-shrink-0" style="font-size:16px;">info</span>
-              <p class="text-xs text-on-surface">You can upload <strong>multiple files</strong> — one for your bag design and one for your bowl design if ordering both. All files will be sent to Kraapht Bags when you complete your order.</p>
+              <p class="text-xs text-on-surface">If ordering both bags and bowls with custom print, upload a separate artwork file for each. All files will be sent to Kraapht Bags when you complete your order.</p>
             </div>
             <p id="order-upload-note" class="hidden text-xs text-primary font-semibold mt-2">✓ Files ready — will be uploaded when you sign in and complete your order.</p>
           </div>
