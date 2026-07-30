@@ -36,9 +36,6 @@ function toggleAddBowl() {
 }
 
 // ── ADDON PRINT ──────────────────────────────────────────────────
-state.addonBowlPrintColors = 0;
-state.addonBowlPaper = 'chromo_coat';
-state.addonBowlQty   = 200;
 function setAddonPrint(val) {
   const pl = document.getElementById('addon-plain-lbl');
   const pr = document.getElementById('addon-print-lbl');
@@ -47,8 +44,7 @@ function setAddonPrint(val) {
   if (pr) { pr.classList.toggle('border-primary', val==='print'); pr.classList.toggle('border-outline-variant', val!=='print'); }
   if (cd) cd.classList.toggle('hidden', val!=='print');
   state.addonBowlPrintColors = val==='none' ? 0 : (state.addonBowlPrintColors||1);
-  if (val==='print' && state.addonBowlPrintColors===0) state.addonBowlPrintColors=1;
-  calcPrice();
+  if (val==='print' && state.addonBowlPrintColors===0)   calcPrice();
 }
 
 // ── ADDON QTY + COLOUR PICKERS ───────────────────────────────────
@@ -812,7 +808,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <!-- ===== END EXPERT ADVICE PANEL ===== -->
 
       <!-- 2. PAPER TYPE — Step 2 -->
-      <div class="bg-surface border border-outline-variant p-7">
+      <div id="step-paper" class="bg-surface border border-outline-variant p-7">
         <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
           <span class="material-symbols-outlined text-primary">layers</span>Step 2 — Select Paper Type
         </h2>
@@ -984,7 +980,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       </div>
 
       <!-- 5. QUANTITY -->
-      <div class="bg-surface border border-outline-variant p-7">
+      <div id="step-qty" class="bg-surface border border-outline-variant p-7">
         <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
           <span class="material-symbols-outlined text-primary">inventory_2</span>Step 5 — Quantity
         </h2>
@@ -1143,6 +1139,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="flex items-center gap-3 mb-3">
           <input type="checkbox" id="is-recurring" class="w-5 h-5 accent-primary" onchange="calcPrice()"/>
           <label for="is-recurring" class="font-body-md font-semibold cursor-pointer">Yes — same design, repeat order</label>
+          <p class="text-xs text-on-surface-variant mt-1 ml-8">Plate making &amp; die-cut setup costs are waived on repeat orders with the same design — saving you up to GHS 360.</p>
         </div>
         <p id="recurring-savings" class="font-label-sm text-label-sm text-primary uppercase tracking-widest hidden"></p>
       </div>
@@ -1253,7 +1250,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <ul class="space-y-3 font-body-md text-sm opacity-70">
         <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
         <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
-        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
+        <li></li>
       </ul>
     </div>
     <div>
@@ -1278,7 +1275,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <script>
 let state = {
   paperPrice: 525,
-  bagsPerSheet: 3,
+  bagsPerSheet: 4,
   qty: 200,
   printColors: 0,
   isRecurring: false,
@@ -1321,7 +1318,7 @@ document.querySelectorAll('#size-options label').forEach(label => {
     document.querySelectorAll('#size-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
     this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
     document.getElementById('custom-dims').classList.toggle('hidden', this.dataset.size !== 'custom');
-    state.bagsPerSheet = parseInt(this.dataset.bps) || 2;
+    state.bagsPerSheet = parseInt(this.dataset.bps) || 1;
     calcPrice();
   });
 });
@@ -1632,6 +1629,19 @@ function toggleExpert() {
 }
 // ===== SAVE ORDER + GO TO PAYMENT =====
 function goToPayment() {
+  // Validate before proceeding
+  const isBowl = state.productType === 'food_bowl';
+  const qtyEl  = document.getElementById('qty-custom-val');
+  const isCustomQty = qtyEl && !qtyEl.closest('#custom-qty-input')?.classList.contains('hidden');
+  const qty    = isCustomQty ? (parseInt(qtyEl.value)||0) : state.qty;
+  const minQty = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.order.minimum_qty : 200;
+  const warn   = document.getElementById('qty-warning');
+  if (!isBowl && qty < minQty) {
+    if (warn) warn.classList.remove('hidden');
+    document.getElementById('step-qty')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if (warn) warn.classList.add('hidden');
   // Collect current order state
   var orderData = {
     product:    document.querySelector('[name="product_type"]:checked')?.value || 'flat_bottom',
