@@ -50,8 +50,17 @@ function setAddonPrint(val) {
   if (pl) { pl.classList.toggle('selected', val==='none'); pl.classList.toggle('border-primary', val==='none'); pl.classList.toggle('border-outline-variant', val!=='none'); }
   if (pr) { pr.classList.toggle('selected', val==='print'); pr.classList.toggle('border-primary', val==='print'); pr.classList.toggle('border-outline-variant', val!=='print'); }
   if (cd) cd.classList.toggle('hidden', val!=='print');
-  state.addonBowlPrintColors = val==='none' ? 0 : (state.addonBowlPrintColors||1);
-  if (val==='print' && state.addonBowlPrintColors===0)   calcPrice();
+  if (val === 'print' && !state.addonBowlPrintColors) {
+    state.addonBowlPrintColors = 1;
+    const firstColor = document.querySelector('[data-addon-colors="1"]');
+    if (firstColor) {
+      firstColor.classList.add('selected','border-primary');
+      firstColor.classList.remove('border-outline-variant');
+      firstColor.querySelector('input').checked = true;
+    }
+  }
+  if (val === 'none') state.addonBowlPrintColors = 0;
+  calcPrice();
 }
 
 // ── ADDON QTY + COLOUR PICKERS ───────────────────────────────────
@@ -1472,8 +1481,10 @@ function calcPrice() {
   const perBag       = (total / qty).toFixed(2);
   const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
 
-  document.getElementById('sb-paper').textContent       = `GHS ${paperCost.toLocaleString()}`;
-  document.getElementById('sb-printing').textContent    = printCost > 0 ? `GHS ${printCost}` : 'None';
+  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Paper 150gsm', duplex_300:'Duplex Board'};
+  const paperKey    = document.querySelector('[name="paper_type"]:checked')?.value || 'chromo_coat';
+  document.getElementById('sb-paper').textContent       = paperNames[paperKey] || 'White / Chromo Coat';
+  document.getElementById('sb-printing').textContent    = state.printColors > 0 ? `${state.printColors} colour` : 'None';
   document.getElementById('sb-plate').textContent       = `GHS ${plateCost}`;
   document.getElementById('sb-diecutboard').textContent = `GHS ${dieCutBoard}`;
   document.getElementById('sb-labour').textContent      = `GHS ${labour.toLocaleString()}`;
