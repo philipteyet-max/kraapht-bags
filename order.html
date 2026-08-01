@@ -16,8 +16,8 @@ function setBowlType(type) {
 function setAddonBowlType(type) {
   const stdLbl  = document.getElementById('addon-bowl-standard-lbl');
   const trapLbl = document.getElementById('addon-bowl-trap-lbl');
-  if (stdLbl)  { stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
-  if (trapLbl) { trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
+  if (stdLbl)  { stdLbl.classList.toggle('selected', type==='standard'); stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
+  if (trapLbl) { trapLbl.classList.toggle('selected', type==='trap'); trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
   calcPrice();
 }
 
@@ -31,6 +31,13 @@ function toggleAddBowl() {
   if (addon) addon.classList.toggle('hidden', !bowlAddonOpen);
   if (icon)  icon.textContent  = bowlAddonOpen ? 'remove_circle' : 'add_circle';
   if (label) label.textContent = bowlAddonOpen ? '− Remove Bowl Add-on' : '+ Add Paper Bowls to this order';
+  // Mark both product cards as part of the order while the bowl add-on is active
+  const bowlCard = document.getElementById('lbl-food-bowl');
+  if (bowlCard) {
+    bowlCard.classList.toggle('selected', bowlAddonOpen);
+    bowlCard.classList.toggle('border-primary', bowlAddonOpen);
+    bowlCard.classList.toggle('border-outline-variant', !bowlAddonOpen);
+  }
   updateBowlAddonUpload();
   calcPrice();
 }
@@ -40,8 +47,8 @@ function setAddonPrint(val) {
   const pl = document.getElementById('addon-plain-lbl');
   const pr = document.getElementById('addon-print-lbl');
   const cd = document.getElementById('addon-print-colors');
-  if (pl) { pl.classList.toggle('border-primary', val==='none'); pl.classList.toggle('border-outline-variant', val!=='none'); }
-  if (pr) { pr.classList.toggle('border-primary', val==='print'); pr.classList.toggle('border-outline-variant', val!=='print'); }
+  if (pl) { pl.classList.toggle('selected', val==='none'); pl.classList.toggle('border-primary', val==='none'); pl.classList.toggle('border-outline-variant', val!=='none'); }
+  if (pr) { pr.classList.toggle('selected', val==='print'); pr.classList.toggle('border-primary', val==='print'); pr.classList.toggle('border-outline-variant', val!=='print'); }
   if (cd) cd.classList.toggle('hidden', val!=='print');
   state.addonBowlPrintColors = val==='none' ? 0 : (state.addonBowlPrintColors||1);
   if (val==='print' && state.addonBowlPrintColors===0)   calcPrice();
@@ -53,8 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('[data-addon-qty]').forEach(function(lbl) {
     lbl.addEventListener('click', function() {
       const val = this.dataset.addonQty;
-      document.querySelectorAll('[data-addon-qty]').forEach(function(l) { l.classList.remove('border-primary'); l.classList.add('border-outline-variant'); });
-      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      document.querySelectorAll('[data-addon-qty]').forEach(function(l) { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+      this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
       const ci = document.getElementById('custom-addon-qty-input');
       if (ci) ci.classList.toggle('hidden', val!=='custom_addon');
       if (val !== 'custom_addon') { state.addonBowlQty = parseInt(val)||200; calcPrice(); }
@@ -64,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('[data-addon-colors]').forEach(function(lbl) {
     lbl.addEventListener('click', function() {
       state.addonBowlPrintColors = parseInt(this.dataset.addonColors);
-      document.querySelectorAll('[data-addon-colors]').forEach(function(l) { l.classList.remove('border-primary'); l.classList.add('border-outline-variant'); });
-      this.classList.add('border-primary'); this.classList.remove('border-outline-variant');
+      document.querySelectorAll('[data-addon-colors]').forEach(function(l) { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
+      this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
       calcPrice();
     });
   });
@@ -421,10 +428,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Bowl Paper</label>
             <div class="grid grid-cols-2 gap-3">
-              <label class="option-card selected border-2 border-primary p-3 text-sm cursor-pointer" id="addon-paper-chromo-lbl" onclick="this.classList.add('border-primary');this.classList.remove('border-outline-variant');document.getElementById('addon-paper-brown-lbl').classList.remove('border-primary');document.getElementById('addon-paper-brown-lbl').classList.add('border-outline-variant');state.addonBowlPaper='chromo_coat';calcPrice()">
+              <label class="option-card selected border-2 border-primary p-3 text-sm cursor-pointer" id="addon-paper-chromo-lbl" onclick="this.classList.add('selected','border-primary');this.classList.remove('border-outline-variant');document.getElementById('addon-paper-brown-lbl').classList.remove('selected','border-primary');document.getElementById('addon-paper-brown-lbl').classList.add('border-outline-variant');state.addonBowlPaper='chromo_coat';calcPrice()">
                 <input type="radio" name="addon_bowl_paper" value="chromo_coat" class="sr-only" checked/>White / Chromo Coat
               </label>
-              <label class="option-card border-2 border-outline-variant p-3 text-sm cursor-pointer" id="addon-paper-brown-lbl" onclick="this.classList.add('border-primary');this.classList.remove('border-outline-variant');document.getElementById('addon-paper-chromo-lbl').classList.remove('border-primary');document.getElementById('addon-paper-chromo-lbl').classList.add('border-outline-variant');state.addonBowlPaper='brown_card';calcPrice()">
+              <label class="option-card border-2 border-outline-variant p-3 text-sm cursor-pointer" id="addon-paper-brown-lbl" onclick="this.classList.add('selected','border-primary');this.classList.remove('border-outline-variant');document.getElementById('addon-paper-chromo-lbl').classList.remove('selected','border-primary');document.getElementById('addon-paper-chromo-lbl').classList.add('border-outline-variant');state.addonBowlPaper='brown_card';calcPrice()">
                 <input type="radio" name="addon_bowl_paper" value="brown_card" class="sr-only"/>Brown Card 250gsm
               </label>
             </div>
@@ -1577,7 +1584,7 @@ function setBowlPrint(val) {
     state.bowlPrintColors = 1;
     const firstColor = document.querySelector('[data-bowl-colors="1"]');
     if (firstColor) {
-      firstColor.classList.add('border-primary');
+      firstColor.classList.add('selected','border-primary');
       firstColor.classList.remove('border-outline-variant');
       firstColor.querySelector('input').checked = true;
     }
@@ -1591,10 +1598,10 @@ document.querySelectorAll('[data-bowl-colors]').forEach(lbl => {
   lbl.addEventListener('click', function() {
     state.bowlPrintColors = parseInt(this.dataset.bowlColors);
     document.querySelectorAll('[data-bowl-colors]').forEach(l => {
-      l.classList.remove('border-primary');
+      l.classList.remove('selected','border-primary');
       l.classList.add('border-outline-variant');
     });
-    this.classList.add('border-primary');
+    this.classList.add('selected','border-primary');
     this.classList.remove('border-outline-variant');
     calcPrice();
   });
