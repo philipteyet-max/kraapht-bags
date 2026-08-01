@@ -7,8 +7,8 @@
 function setBowlType(type) {
   const stdLbl  = document.getElementById('bowl-type-standard-lbl');
   const trapLbl = document.getElementById('bowl-type-trap-lbl');
-  if (stdLbl)  { stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
-  if (trapLbl) { trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
+  if (stdLbl)  { stdLbl.classList.toggle('selected', type==='standard'); stdLbl.classList.toggle('border-primary', type==='standard');  stdLbl.classList.toggle('border-outline-variant', type!=='standard'); }
+  if (trapLbl) { trapLbl.classList.toggle('selected', type==='trap'); trapLbl.classList.toggle('border-primary', type==='trap');  trapLbl.classList.toggle('border-outline-variant', type!=='trap'); }
   calcPrice();
 }
 
@@ -1312,6 +1312,20 @@ document.querySelectorAll('#paper-options label').forEach(label => {
   });
 });
 
+// Bowl paper cards (standalone Paper Food Bowl flow)
+document.querySelectorAll('#bowl-paper-options label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('#bowl-paper-options label').forEach(l => {
+      l.classList.remove('selected');
+      const cb = l.querySelector('.check-badge');
+      if(cb) cb.style.display='none';
+    });
+    this.classList.add('selected');
+    const cb = this.querySelector('.check-badge');
+    if(cb) cb.style.display='flex';
+  });
+});
+
 // Size selection
 document.querySelectorAll('#size-options label').forEach(label => {
   label.addEventListener('click', function() {
@@ -1416,15 +1430,17 @@ function calcPrice() {
     const total   = paperCost + printCost + plateCost + labour + delivery;
     const perUnit = (total / qty).toFixed(2);
 
-    // Update price panel
-    document.getElementById('sb-paper').textContent    = `GHS ${paperCost.toLocaleString()}`;
-    document.getElementById('sb-printing').textContent = printCost > 0 ? `GHS ${printCost}` : 'None';
+    // Update price panel — hide the flat-bottom bag section, show the Paper Bowls section
+    document.getElementById('estimate-bag-section').classList.add('hidden');
+    document.getElementById('estimate-bowl-section').classList.remove('hidden');
+    document.getElementById('sb-bowl-paper').textContent       = state.bowlPaper === 'brown_card_250' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
+    document.getElementById('sb-bowl-print').textContent       = bowlColors > 0 ? bowlColors + ' colour' : 'None';
+    document.getElementById('sb-bowl-qty-display').textContent = qty.toLocaleString() + ' bowls';
+    document.getElementById('sb-bowl-total').textContent       = `GHS ${total.toLocaleString()}`;
+    document.getElementById('sb-per-bowl').textContent         = `GHS ${perUnit} / bowl`;
     document.getElementById('sb-plate').textContent    = `GHS ${plateCost}`;
     document.getElementById('sb-labour').textContent   = `GHS ${labour.toLocaleString()}`;
     document.getElementById('sb-total').textContent    = `GHS ${total.toLocaleString()}`;
-    document.getElementById('sb-per-bag').textContent  = `GHS ${perUnit} / bowl`;
-    document.getElementById('per-unit-label').textContent = 'Per bowl';
-    document.getElementById('labour-label').textContent   = 'Assembly labour';
 
     // Hide die-cut rows (bowls don't need die-cut board/run)
     document.getElementById('diecut-row').style.display     = 'none';
@@ -1436,9 +1452,9 @@ function calcPrice() {
   }
 
   // ── FLAT BOTTOM BAG pricing (existing logic) ────────────────────────
+  document.getElementById('estimate-bag-section').classList.remove('hidden');
   const sheetsNeeded = Math.ceil(qty / state.bagsPerSheet);
-  const reamsNeeded  = Math.ceil(sheetsNeeded / 100);
-  const paperCost    = reamsNeeded * state.paperPrice;
+  const paperCost    = (sheetsNeeded / 100) * state.paperPrice;
   const printCost    = printCosts[state.printColors] || 0;
   const plateCost    = plateCosts[state.printColors] || 0;
   const labour       = qty * labourPerBag;
@@ -1533,7 +1549,7 @@ function switchProduct(type) {
   if (isBowl && bowlAddonEl) { bowlAddonEl.classList.add('hidden'); bowlAddonOpen = false; }
 
   // Hide bag-only steps when bowl selected
-  ['step-size','step-handle','step-print','step-design','step-delivery'].forEach(id => {
+  ['step-paper','step-size','step-handle','step-print','step-design','step-delivery'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.toggle('hidden', isBowl);
   });
@@ -1550,8 +1566,10 @@ function switchProduct(type) {
 // ── BOWL PRINT TOGGLE ─────────────────────────────────────────────
 function setBowlPrint(val) {
   state.bowlPrint = val;
+  document.getElementById('bowl-plain-lbl').classList.toggle('selected', val === 'none');
   document.getElementById('bowl-plain-lbl').classList.toggle('border-primary', val === 'none');
   document.getElementById('bowl-plain-lbl').classList.toggle('border-outline-variant', val !== 'none');
+  document.getElementById('bowl-print-lbl').classList.toggle('selected', val === 'print');
   document.getElementById('bowl-print-lbl').classList.toggle('border-primary', val === 'print');
   document.getElementById('bowl-print-lbl').classList.toggle('border-outline-variant', val !== 'print');
   document.getElementById('bowl-print-colors').classList.toggle('hidden', val !== 'print');
