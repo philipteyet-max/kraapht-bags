@@ -806,7 +806,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
               <span class="material-symbols-outlined text-accent flex-shrink-0 mt-0.5 text-xl">tune</span>
               <div>
                 <p class="font-body-md font-semibold text-sm mb-1">None of these fit your product?</p>
-                <p class="text-xs text-on-surface-variant leading-relaxed">If your item is unusually large, bulky, or has specific dimensions — choose <strong class="text-on-surface">Custom size</strong> in the selector below and enter your exact measurements. We cut a new die-board to your specification. Custom sizes carry a one-time die-cut board cost of GHS 300, waived on all repeat orders of the same size.</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed">If your item is unusually large, bulky, or has specific dimensions — choose <strong class="text-on-surface">Custom size</strong> in the selector below and enter your exact measurements. We cut a new die-board to your specification. Custom sizes carry a one-time die-cut board cost of GHS 100, waived on all repeat orders of the same size.</p>
               </div>
             </div>
 
@@ -951,9 +951,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
         </div>
         <div id="custom-dims" class="hidden grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-outline-variant">
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 20"/></div>
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 10"/></div>
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label><input type="number" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 25"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label><input type="number" id="custom-width-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 20"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label><input type="number" id="custom-depth-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 10"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label><input type="number" id="custom-height-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 25"/></div>
         </div>
       </div>
 
@@ -1032,6 +1032,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div id="custom-qty-input" class="hidden mt-4">
           <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Enter Quantity (min 200)</label>
           <input type="number" id="qty-custom-val" min="200" class="w-48 border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 750" oninput="calcPrice()"/>
+        </div>
+        <div id="qty-warning" class="hidden mt-4 p-4 bg-red-50 border border-red-200 flex items-start gap-3">
+          <span class="material-symbols-outlined text-error flex-shrink-0">error</span>
+          <p class="font-body-md text-error text-sm">Please enter a quantity of at least <span class="min-order-qty">200</span> to continue.</p>
         </div>
       </div>
 
@@ -1155,7 +1159,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="flex items-center gap-3 mb-3">
           <input type="checkbox" id="is-recurring" class="w-5 h-5 accent-primary" onchange="calcPrice()"/>
           <label for="is-recurring" class="font-body-md font-semibold cursor-pointer">Yes — same design, repeat order</label>
-          <p class="text-xs text-on-surface-variant mt-1 ml-8">Plate making &amp; die-cut setup costs are waived on repeat orders with the same design — saving you up to GHS 360.</p>
+          <p class="text-xs text-on-surface-variant mt-1 ml-8">Plate making &amp; die-cut setup costs are waived on repeat orders with the same design — saving you up to GHS 340.</p>
         </div>
         <p id="recurring-savings" class="font-label-sm text-label-sm text-primary uppercase tracking-widest hidden"></p>
       </div>
@@ -1189,6 +1193,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div id="discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-3">
               <span>Repeat order saving</span><span id="sb-discount">—</span>
             </div>
+            <div id="bag-bulk-discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-3">
+              <span>Bulk order saving (5%)</span><span id="sb-bag-bulk-discount">—</span>
+            </div>
             <div class="flex justify-between font-bold text-base border-t border-white/20 pt-3 mb-1">
               <span>Bag Total</span><span class="text-accent" id="sb-bag-total">GHS —</span>
             </div>
@@ -1209,6 +1216,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
               <div class="flex justify-between"><span class="opacity-60">Paper</span><span id="sb-bowl-paper">—</span></div>
               <div class="flex justify-between"><span class="opacity-60">Print</span><span id="sb-bowl-print">None</span></div>
               <div class="flex justify-between"><span class="opacity-60">Quantity</span><span id="sb-bowl-qty-display">—</span></div>
+            </div>
+            <div id="bowl-bulk-discount-row" class="hidden flex justify-between text-sm text-green-400 font-semibold mb-3">
+              <span>Bulk order saving (5%)</span><span id="sb-bowl-bulk-discount">—</span>
             </div>
             <div class="flex justify-between font-bold text-base border-t border-white/20 pt-3 mb-1">
               <span>Bowl Total</span><span class="text-accent" id="sb-bowl-total">GHS —</span>
@@ -1416,6 +1426,8 @@ function calcPrice() {
   var delivery     = C ? C.order.delivery_cost  : 30;
   var designerFee  = C ? C.order.designer_fee   : 100;
   var minQty       = C ? C.order.minimum_qty    : 200;
+  var bulkQty      = C ? C.order.bulk_discount_qty  : 1000;
+  var bulkRate     = C ? C.order.bulk_discount_rate : 0.05;
 
   const qtyInput = document.getElementById('qty-custom-val');
   const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
@@ -1443,7 +1455,9 @@ function calcPrice() {
     const printCost  = printCosts[bowlColors] || 0;
     const plateCost  = plateCosts[bowlColors] || 0;
 
-    const total   = paperCost + printCost + plateCost + labour + delivery;
+    const baseTotal   = paperCost + printCost + plateCost + labour + delivery;
+    const bulkSaving  = qty >= bulkQty ? (baseTotal - delivery) * bulkRate : 0;
+    const total       = baseTotal - bulkSaving;
     const perUnit = (total / qty).toFixed(2);
 
     // Update price panel — hide the flat-bottom bag section, show the Paper Bowls section
@@ -1454,6 +1468,13 @@ function calcPrice() {
     document.getElementById('sb-bowl-qty-display').textContent = qty.toLocaleString() + ' bowls';
     document.getElementById('sb-bowl-total').textContent       = `GHS ${total.toLocaleString()}`;
     document.getElementById('sb-per-bowl').textContent         = `GHS ${perUnit} / bowl`;
+    const bowlBulkRow = document.getElementById('bowl-bulk-discount-row');
+    if (bulkSaving > 0) {
+      bowlBulkRow?.classList.remove('hidden');
+      document.getElementById('sb-bowl-bulk-discount').textContent = `- GHS ${bulkSaving.toLocaleString()}`;
+    } else {
+      bowlBulkRow?.classList.add('hidden');
+    }
     document.getElementById('sb-plate').textContent    = `GHS ${plateCost}`;
     document.getElementById('sb-labour').textContent   = `GHS ${labour.toLocaleString()}`;
     document.getElementById('sb-total').textContent    = `GHS ${total.toLocaleString()}`;
@@ -1477,7 +1498,9 @@ function calcPrice() {
   const extraDesigner = state.hasDesigner ? designerFee : 0;
   const saving       = state.printColors > 0 ? plateCost + dieCutBoard : 0;
   const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner;
-  const total        = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+  const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+  const bulkSaving   = qty >= bulkQty ? (afterRecurring - delivery) * bulkRate : 0;
+  const total        = afterRecurring - bulkSaving;
   const perBag       = (total / qty).toFixed(2);
   const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
 
@@ -1505,6 +1528,14 @@ function calcPrice() {
     savLabel?.classList.add('hidden');
   }
 
+  const bagBulkRow = document.getElementById('bag-bulk-discount-row');
+  if (bulkSaving > 0) {
+    bagBulkRow?.classList.remove('hidden');
+    document.getElementById('sb-bag-bulk-discount').textContent = `- GHS ${bulkSaving.toLocaleString()}`;
+  } else {
+    bagBulkRow?.classList.add('hidden');
+  }
+
   // ── Bowl add-on pricing ──────────────────────────────────────────
   const C2 = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
   const pCosts2    = {0:0,1:C2?.printing?.one_colour||50,2:C2?.printing?.two_colour||100,3:C2?.printing?.three_colour||150,4:C2?.printing?.full_colour||200};
@@ -1527,7 +1558,9 @@ function calcPrice() {
     const addonColors    = state.addonBowlPrintColors || 0;
     const addonPrintCost = pCosts2[addonColors]||0;
     const addonPlateCost = plateCosts2[addonColors]||0;
-    bowlTotal = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
+    const addonBaseTotal  = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
+    const addonBulkSaving = addonQty >= bulkQty ? addonBaseTotal * bulkRate : 0;
+    bowlTotal = addonBaseTotal - addonBulkSaving;
     const perBowl = (bowlTotal / addonQty).toFixed(2);
     if (bowlEstEl) {
       bowlEstEl.classList.remove('hidden');
@@ -1536,6 +1569,13 @@ function calcPrice() {
       document.getElementById('sb-bowl-qty-display').textContent= addonQty.toLocaleString() + ' bowls';
       document.getElementById('sb-bowl-total').textContent      = `GHS ${bowlTotal.toLocaleString()}`;
       document.getElementById('sb-per-bowl').textContent        = `GHS ${perBowl} / bowl`;
+      const addonBulkRow = document.getElementById('bowl-bulk-discount-row');
+      if (addonBulkSaving > 0) {
+        addonBulkRow?.classList.remove('hidden');
+        document.getElementById('sb-bowl-bulk-discount').textContent = `- GHS ${addonBulkSaving.toLocaleString()}`;
+      } else {
+        addonBulkRow?.classList.add('hidden');
+      }
     }
   } else if (bowlEstEl) {
     bowlEstEl.classList.add('hidden');
@@ -1672,27 +1712,65 @@ function goToPayment() {
   const qty    = isCustomQty ? (parseInt(qtyEl.value)||0) : state.qty;
   const minQty = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.order.minimum_qty : 200;
   const warn   = document.getElementById('qty-warning');
-  if (!isBowl && qty < minQty) {
+  if (qty < minQty) {
     if (warn) warn.classList.remove('hidden');
     document.getElementById('step-qty')?.scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
   if (warn) warn.classList.add('hidden');
-  // Collect current order state
+
+  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Paper 150gsm', duplex_300:'Duplex Board'};
+  const sizeNames  = {a5:'A5 / Small', a4:'A4 / Medium', a3:'A3 / Large', custom:'Custom Size'};
+
+  const bowlAddonEl = document.getElementById('bowl-addon');
+  const hasBowlAddon = !isBowl && bowlAddonEl && !bowlAddonEl.classList.contains('hidden');
+
   var orderData = {
-    product:    document.querySelector('[name="product_type"]:checked')?.value || 'flat_bottom',
-    paper:      document.querySelector('[name="paper_type"]:checked')?.value   || 'chromo_coat',
-    size:       document.querySelector('[name="size"]:checked')?.value         || 'a5',
-    handle:     document.querySelector('[name="handle"]:checked')?.value       || 'twisted',
-    qty:        state.qty,
-    printing:   document.querySelector('[name="printing"]:checked')?.value     || 'none',
-    hasDesigner: state.hasDesigner,
-    printColors: state.printColors,
-    total:      document.getElementById('sb-total')?.textContent || 'GHS 0',
-    perBag:     document.getElementById('sb-per-bag')?.textContent || '',
-    paperCost:  document.getElementById('sb-paper')?.textContent || '',
-    labour:     document.getElementById('sb-labour')?.textContent || '',
+    hasBag:  !isBowl,
+    hasBowl: isBowl || hasBowlAddon,
+    total:   document.getElementById('sb-total')?.textContent || 'GHS 0',
+    qty:     qty, // primary quantity, used for Paystack metadata
   };
+
+  if (!isBowl) {
+    const paperKey = document.querySelector('[name="paper_type"]:checked')?.value || 'chromo_coat';
+    const sizeKey  = document.querySelector('[name="size"]:checked')?.value || 'a5';
+    orderData.bagPaper  = paperNames[paperKey] || paperKey;
+    orderData.bagSize   = sizeNames[sizeKey] || sizeKey;
+    if (sizeKey === 'custom') {
+      const w = document.getElementById('custom-width-val')?.value;
+      const d = document.getElementById('custom-depth-val')?.value;
+      const h = document.getElementById('custom-height-val')?.value;
+      if (w || d || h) orderData.bagSize = `Custom (${w||'?'}×${d||'?'}×${h||'?'} cm)`;
+    }
+    orderData.bagHandle      = document.querySelector('[name="handle"]:checked')?.value === 'pp_rope' ? 'PP Rope Handle' : 'Twisted Paper Rope';
+    orderData.bagQty         = qty;
+    orderData.bagPrinting    = document.querySelector('[name="printing"]:checked')?.value || 'none';
+    orderData.bagPrintColors = state.printColors;
+    orderData.hasDesigner    = state.hasDesigner;
+    orderData.bagTotal       = document.getElementById('sb-bag-total')?.textContent || '';
+  }
+
+  if (isBowl) {
+    const bowlTypeKey  = document.querySelector('[name="bowl_type"]:checked')?.value || 'standard';
+    orderData.bowlType        = bowlTypeKey === 'trapezoidal' ? 'Trapezoidal' : 'Standard Tray';
+    orderData.bowlPaper       = state.bowlPaper === 'brown_card_250' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
+    orderData.bowlQty         = qty;
+    orderData.bowlPrintColors = state.bowlPrint === 'print' ? (state.bowlPrintColors || 1) : 0;
+    orderData.bowlTotal       = document.getElementById('sb-bowl-total')?.textContent || '';
+  } else if (hasBowlAddon) {
+    const addonTypeKey = document.querySelector('[name="addon_bowl_type"]:checked')?.value || 'standard';
+    const addonQtyEl   = document.querySelector('[name="addon_bowl_qty"]:checked');
+    const addonQty     = addonQtyEl?.value === 'custom_addon'
+      ? parseInt(document.getElementById('addon-qty-val')?.value)||200
+      : parseInt(addonQtyEl?.value)||200;
+    orderData.bowlType        = addonTypeKey === 'trapezoidal' ? 'Trapezoidal' : 'Standard Tray';
+    orderData.bowlPaper       = document.querySelector('[name="addon_bowl_paper"]:checked')?.value === 'brown_card' ? 'Brown Card 250gsm' : 'White / Chromo Coat';
+    orderData.bowlQty         = addonQty;
+    orderData.bowlPrintColors = document.querySelector('[name="addon_bowl_print"]:checked')?.value === 'print' ? (state.addonBowlPrintColors || 1) : 0;
+    orderData.bowlTotal       = document.getElementById('sb-bowl-total')?.textContent || '';
+  }
+
   try {
     localStorage.setItem('kraapht_order', JSON.stringify(orderData));
   } catch(e) {}

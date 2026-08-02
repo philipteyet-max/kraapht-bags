@@ -213,17 +213,16 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <div class="sticky top-24 space-y-4">
         <div class="bg-charcoal text-white p-7">
           <h3 class="text-xl font-bold mb-6">Order Summary</h3>
-          <div class="space-y-3 text-sm mb-6 pb-6 border-b border-white/20">
-            <div class="flex justify-between"><span class="opacity-60">Product</span><span>Flat Bottom Bag</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Paper</span><span>Chromo Coat</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Size</span><span>A5 / Small</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Quantity</span><span>200 units</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Subtotal</span><span>GHS 870</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Delivery</span><span>GHS 30</span></div>
-            <div class="flex justify-between"><span class="opacity-60">Paystack fee</span><span>GHS 17.95</span></div>
+          <div class="space-y-3 text-sm mb-6 pb-6 border-b border-white/20" id="summary-lines">
+            <div class="flex justify-between"><span class="opacity-60">Product</span><span id="sum-product">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Paper</span><span id="sum-paper">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Size / Bowl Type</span><span id="sum-size">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Quantity</span><span id="sum-qty">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Subtotal</span><span id="sum-subtotal">—</span></div>
+            <div class="flex justify-between"><span class="opacity-60">Delivery</span><span id="sum-delivery">—</span></div>
           </div>
           <div class="flex justify-between text-xl font-bold mb-8">
-            <span>Total</span><span class="text-accent">GHS 917.95</span>
+            <span>Total</span><span class="text-accent" id="summary-total">GHS —</span>
           </div>
           <button onclick="handlePayment()" id="pay-btn" class="w-full bg-accent text-white py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
             <span class="material-symbols-outlined">lock</span>Pay <span id="pay-btn-amount">Now</span>
@@ -310,6 +309,8 @@ var ORDER = {};
 try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
 
 window.addEventListener('DOMContentLoaded', function() {
+  var deliveryCost = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.order.delivery_cost : 30;
+
   // Populate order summary from saved order
   if (ORDER.total) {
     // Update sidebar totals
@@ -320,15 +321,42 @@ window.addEventListener('DOMContentLoaded', function() {
     var btnAmt = document.getElementById('pay-btn-amount');
     if (btnAmt) btnAmt.textContent = ORDER.total + ' Now';
 
-    // Update line items if available
-    if (ORDER.paperCost) {
-      var pcEl = document.getElementById('sum-subtotal');
-      if (pcEl) pcEl.textContent = ORDER.paperCost;
-    }
-    if (ORDER.qty) {
-      var qEl = document.getElementById('sum-qty');
-      if (qEl) qEl.textContent = ORDER.qty + ' units';
-    }
+    // Product
+    var productParts = [];
+    if (ORDER.hasBag)  productParts.push('Flat Bottom Bag');
+    if (ORDER.hasBowl) productParts.push('Paper Food Bowl');
+    var prodEl = document.getElementById('sum-product');
+    if (prodEl) prodEl.textContent = productParts.join(' + ') || '—';
+
+    // Paper
+    var paperParts = [];
+    if (ORDER.hasBag && ORDER.bagPaper)   paperParts.push(ORDER.hasBowl ? 'Bag: ' + ORDER.bagPaper : ORDER.bagPaper);
+    if (ORDER.hasBowl && ORDER.bowlPaper) paperParts.push(ORDER.hasBag ? 'Bowl: ' + ORDER.bowlPaper : ORDER.bowlPaper);
+    var paperEl = document.getElementById('sum-paper');
+    if (paperEl) paperEl.textContent = paperParts.join(' · ') || '—';
+
+    // Size / Bowl Type
+    var sizeParts = [];
+    if (ORDER.hasBag && ORDER.bagSize)   sizeParts.push(ORDER.hasBowl ? 'Bag: ' + ORDER.bagSize : ORDER.bagSize);
+    if (ORDER.hasBowl && ORDER.bowlType) sizeParts.push(ORDER.hasBag ? 'Bowl: ' + ORDER.bowlType : ORDER.bowlType);
+    var sizeEl = document.getElementById('sum-size');
+    if (sizeEl) sizeEl.textContent = sizeParts.join(' · ') || '—';
+
+    // Quantity
+    var qtyParts = [];
+    if (ORDER.hasBag && ORDER.bagQty)   qtyParts.push(ORDER.bagQty.toLocaleString() + (ORDER.hasBowl ? ' bags' : ' units'));
+    if (ORDER.hasBowl && ORDER.bowlQty) qtyParts.push(ORDER.bowlQty.toLocaleString() + ' bowls');
+    var qEl = document.getElementById('sum-qty');
+    if (qEl) qEl.textContent = qtyParts.join(' + ') || '—';
+
+    // Subtotal = total minus delivery (delivery is charged once, on top of production cost)
+    var totalNum    = parseFloat(String(ORDER.total).replace(/[^0-9.]/g,'')) || 0;
+    var subtotalNum = Math.max(totalNum - deliveryCost, 0);
+    var subEl = document.getElementById('sum-subtotal');
+    if (subEl) subEl.textContent = 'GHS ' + subtotalNum.toLocaleString();
+
+    var delEl = document.getElementById('sum-delivery');
+    if (delEl) delEl.textContent = 'GHS ' + deliveryCost;
   }
 
   // Load config key

@@ -21,22 +21,6 @@
 const KRAAPHT_CONFIG = {
 
   // ----------------------------------------------------------
-  // PRODUCTION COSTS (hidden from customer — included in total)
-  // These apply to every order but are not shown on the estimate.
-  // Returning customers have plate_making and die_cut_board waived.
-  // ----------------------------------------------------------
-  production_costs: {
-    plate_making_1colour:   60,
-    plate_making_2colour:   120,
-    plate_making_3colour:   180,
-    plate_making_fullcolour:240,
-    die_cut_board:          300,
-    die_cut_run:            60,
-    labour_per_bag:         1,
-    labour_per_bowl:        0.50,
-  },
-
-  // ----------------------------------------------------------
   // PAYSTACK
   // Switch from test to live by updating public_key below.
   // Also update PAYSTACK_SECRET_KEY in Vercel environment variables.
@@ -57,19 +41,17 @@ const KRAAPHT_CONFIG = {
   },
 
   // ----------------------------------------------------------
-  // ORDER RULES & HIDDEN PRODUCTION COSTS
-  // These costs are NEVER shown to the customer on the live
-  // price estimate — they are baked into the total silently.
-  // Edit here to update plate making, die-cut, and labour costs
-  // across the entire site automatically.
+  // ORDER RULES
   // ----------------------------------------------------------
   order: {
-    minimum_qty:    200,
-    delivery_cost:  30,    // shown to customer
-    designer_fee:   100,   // shown to customer (only if designer requested)
-    die_cut_run:    60,    // HIDDEN — die cutting cost per run
-    die_cut_board:  100,   // HIDDEN — die cut board cost
-    labour_per_bag: 0.50,  // HIDDEN — folding/assembly labour per bag
+    minimum_qty:        200,
+    delivery_cost:      30,
+    designer_fee:       100,
+    die_cut_run:        60,
+    die_cut_board:      100,
+    labour_per_bag:     0.50,
+    bulk_discount_qty:  1000,   // orders at/above this quantity get the bulk discount
+    bulk_discount_rate: 0.05,   // 5% off production cost (paper, print, labour — not delivery)
   },
 
   // ----------------------------------------------------------
@@ -96,7 +78,6 @@ const KRAAPHT_CONFIG = {
 
   // ----------------------------------------------------------
   // PLATE MAKING COSTS (GHS — one-time per design)
-  // HIDDEN from customer — included in total silently.
   // Waived for returning customers with the same design
   // ----------------------------------------------------------
   plate_making: {
@@ -229,12 +210,6 @@ const KRAAPHT_CONFIG = {
     client_bag_13: "client_bag_13_v2.png",  // left
     client_bag_14: "client_bag_14_v2.png",  // centre
     client_bag_15: "client_bag_15_v2.png",  // right
-
-    // ── ORDER PAGE — BOWL TYPE IMAGES ────────────────────────────────
-    //  Upload bowl images to GitHub with these exact filenames
-    //  Use 400×400px PNG on dark background (same as paper type images)
-    bowl_standard:     "bowl_standard.png",      // Standard Tray Bowl — 150×100×50mm
-    bowl_trapezoidal:  "bowl_trapezoidal.png",   // Trapezoidal Bowl — 160×90×55mm
 
     // ── ORDER PAGE — PAPER TYPE SELECTORS ────────────────────────────
     //  Shown inside the paper selection cards on the order form
