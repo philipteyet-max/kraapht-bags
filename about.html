@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About Us | Kraapht Bags Ltd</title>
+<script src="config.js?v=4"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+  .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
+</style>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#1F4D3A",
+  "primary-light":"#2D6B52",
+  "on-primary":"#FFFFFF",
+  "primary-container":"#C5E8D8",
+  "on-primary-container":"#002114",
+  "secondary":"#D8C3A5",
+  "on-secondary":"#2B2B2B",
+  "tertiary":"#2B2B2B",
+  "accent":"#C8A96B",
+  "on-accent":"#FFFFFF",
+  "background":"#F7F4EF",
+  "on-background":"#2B2B2B",
+  "surface":"#FFFFFF",
+  "on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2",
+  "surface-container-low":"#F7F4EF",
+  "surface-container-high":"#E5E1DA",
+  "on-surface-variant":"#4A4035",
+  "inverse-surface":"#2B2B2B",
+  "inverse-on-surface":"#F7F4EF",
+  "inverse-primary":"#C8A96B",
+  "outline":"#8B7355",
+  "outline-variant":"#D8C3A5",
+  "error":"#BA1A1A",
+  "kraft":"#D8C3A5",
+  "forest":"#1F4D3A",
+  "gold":"#C8A96B",
+  "charcoal":"#2B2B2B"
+},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Hanken Grotesk"],"display-xl":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-sm":["Hanken Grotesk"]},
+"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0.02em","fontWeight":"600"}],"display-xl":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.1em","fontWeight":"600"}]},
+"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
+</script>
+</head>
+<body class="bg-background text-on-surface font-sans antialiased">
+<nav class="fixed top-0 w-full z-50 bg-surface/90 glass-nav border-b border-outline-variant shadow-sm">
+<div class="max-w-[1280px] mx-auto px-10 flex justify-between items-center h-20">
+  <a href="index.html" class="flex items-center gap-3">
+    <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png" data-img="logo"/>
+  </a>
+  <div class="hidden md:flex items-center gap-8">
+    <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a>
+    <a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="about.html">About</a>
+    <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a>
+    <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a>
+  </div>
+  <div class="flex items-center gap-3">
+    <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+  </div>
+</div>
+</nav>
+
+<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
+
+  <!-- ===== HERO ===== -->
+  <section class="mb-16 max-w-3xl">
+    <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-4 block">About Kraapht Bags</span>
+    <h1 id="about-hero-title" class="text-4xl md:text-5xl font-bold mb-5">Our Story</h1>
+    <p id="about-hero-subtitle" class="font-body-lg text-on-surface-variant"></p>
+  </section>
+
+  <!-- ===== FOUNDING STORY ===== -->
+  <section class="mb-20 bg-surface border border-outline-variant p-8 md:p-10">
+    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">history_edu</span>How We Started
+    </h2>
+    <p id="about-founding-story" class="font-body-md text-on-surface-variant leading-relaxed"></p>
+  </section>
+
+  <!-- ===== FOUNDERS ===== -->
+  <section class="mb-20">
+    <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">groups</span>Meet the Founders
+    </h2>
+    <div id="founders-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="bg-surface border border-outline-variant p-6" id="founder-1-card">
+        <div class="relative w-full aspect-square mb-5 bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
+          <img data-img="about_founder_1" src="about_founder_1.png" alt="Founder photo" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
+            <span class="material-symbols-outlined text-4xl opacity-40">person</span>
+            <p class="text-xs opacity-60">Upload a founder photo and set <code class="bg-surface-container-high px-1">images.about_founder_1</code> in config.js</p>
+          </div>
+        </div>
+        <p id="founder-1-name" class="font-body-lg font-bold"></p>
+        <p id="founder-1-title" class="text-sm text-accent font-semibold uppercase tracking-widest mb-3"></p>
+        <p id="founder-1-bio" class="text-sm text-on-surface-variant leading-relaxed"></p>
+      </div>
+
+      <div class="bg-surface border border-outline-variant p-6" id="founder-2-card">
+        <div class="relative w-full aspect-square mb-5 bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
+          <img data-img="about_founder_2" src="about_founder_2.png" alt="Founder photo" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
+            <span class="material-symbols-outlined text-4xl opacity-40">person</span>
+            <p class="text-xs opacity-60">Upload a founder photo and set <code class="bg-surface-container-high px-1">images.about_founder_2</code> in config.js</p>
+          </div>
+        </div>
+        <p id="founder-2-name" class="font-body-lg font-bold"></p>
+        <p id="founder-2-title" class="text-sm text-accent font-semibold uppercase tracking-widest mb-3"></p>
+        <p id="founder-2-bio" class="text-sm text-on-surface-variant leading-relaxed"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FACTORY ===== -->
+  <section class="mb-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div class="relative w-full aspect-[4/3] bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden order-2 md:order-1">
+      <img data-img="about_factory" src="about_factory.png" alt="Kraapht Bags factory" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
+        <span class="material-symbols-outlined text-4xl opacity-40">factory</span>
+        <p class="text-xs opacity-60">Upload a factory/production photo and set <code class="bg-surface-container-high px-1">images.about_factory</code> in config.js</p>
+      </div>
+    </div>
+    <div class="order-1 md:order-2">
+      <h2 id="about-factory-title" class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">factory</span>Our Factory
+      </h2>
+      <p id="about-factory-description" class="font-body-md text-on-surface-variant leading-relaxed"></p>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICATIONS & REGISTRATION ===== -->
+  <section class="mb-20 bg-surface border border-outline-variant p-8 md:p-10">
+    <h2 id="about-certifications-title" class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">workspace_premium</span>Certifications &amp; Registration
+    </h2>
+    <p id="about-certifications-note" class="font-body-md text-on-surface-variant leading-relaxed mb-8"></p>
+
+    <div>
+      <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Company Registration Certificate</p>
+      <div class="relative w-full max-w-md aspect-[3/4] bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
+        <img data-img="about_certificate" src="company_certificate.png" alt="Kraapht Bags Ltd company registration certificate" class="w-full h-full object-contain p-4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
+          <span class="material-symbols-outlined text-4xl opacity-40">description</span>
+          <p class="text-sm font-semibold">Company Registration Certificate</p>
+          <p class="text-xs opacity-60">Upload a scan/photo of your registered business certificate and set <code class="bg-surface-container-high px-1">images.about_certificate</code> in config.js</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="bg-primary p-10 md:p-14 text-white text-center">
+    <h2 class="text-2xl md:text-3xl font-bold mb-3">Ready to work with us?</h2>
+    <p class="text-white/70 mb-8 max-w-xl mx-auto font-body-md">Configure your bags, see your live price, and pay securely — or reach us on WhatsApp or by phone first if you'd like to talk it through.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="order.html" class="bg-accent text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white hover:text-primary transition-colors">Start Ordering →</a>
+      <a href="https://wa.me/233558619224" class="border border-white/40 text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-colors">Chat on WhatsApp</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bg-charcoal text-inverse-on-surface w-full">
+<div class="max-w-[1280px] mx-auto px-10 py-16">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <div class="md:col-span-1">
+      <img alt="Kraapht Bags Ltd" class="h-9 w-auto brightness-0 invert mb-5" src="logo.png" data-img="logo"/>
+      <p class="font-body-md opacity-60 text-sm">Eco-friendly premium paper bags. Precision-crafted in Ghana for businesses that care about their brand.</p>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Products</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="order.html">Flat Bottom Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Paper Food Bowls</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Custom Print Bags</a></li>
+        <li><a class="hover:text-accent transition-colors" href="order.html">Bulk Orders</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="about.html">About Us</a></li>
+        <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
+        <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
+        <li><a class="hover:text-accent transition-colors" href="admin.html">Admin Login</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
+      <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors whatsapp-number">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">call</span><a href="tel:+233558619224" class="hover:text-accent transition-colors phone-number">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
+      </ul>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
+    <p class="font-label-sm text-label-sm opacity-40 uppercase tracking-widest">© 2026 Kraapht Bags Ltd. Made in Ghana.</p>
+    <div class="flex gap-6 opacity-40">
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Privacy</a>
+      <a class="font-label-sm text-label-sm hover:opacity-80 uppercase tracking-widest" href="#">Terms</a>
+    </div>
+  </div>
+</div>
+</footer>
+
+<script>
+(function() {
+  var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.about : null;
+  if (!C) return;
+
+  document.getElementById('about-hero-title').textContent        = C.hero_title || 'Our Story';
+  document.getElementById('about-hero-subtitle').textContent     = C.hero_subtitle || '';
+  document.getElementById('about-founding-story').textContent    = C.founding_story || '';
+
+  document.getElementById('founder-1-name').textContent  = C.founder_1_name || '';
+  document.getElementById('founder-1-title').textContent = C.founder_1_title || '';
+  document.getElementById('founder-1-bio').textContent   = C.founder_1_bio || '';
+
+  if (C.founder_2_name) {
+    document.getElementById('founder-2-name').textContent  = C.founder_2_name;
+    document.getElementById('founder-2-title').textContent = C.founder_2_title || '';
+    document.getElementById('founder-2-bio').textContent   = C.founder_2_bio || '';
+  } else {
+    // No second founder configured — hide the card and let the first one take the full row
+    var card2 = document.getElementById('founder-2-card');
+    if (card2) card2.style.display = 'none';
+    var grid = document.getElementById('founders-grid');
+    if (grid) grid.classList.remove('md:grid-cols-2');
+  }
+
+  document.getElementById('about-factory-title').textContent       = C.factory_title || 'Our Factory';
+  document.getElementById('about-factory-description').textContent = C.factory_description || '';
+
+  document.getElementById('about-certifications-title').textContent = C.certifications_title || 'Certifications & Registration';
+  document.getElementById('about-certifications-note').textContent  = C.certifications_note || '';
+})();
+</script>
+
+</body>
+</html>

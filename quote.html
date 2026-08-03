@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quotation / Proforma Invoice | Kraapht Bags Ltd</title>
+<script src="config.js?v=4"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+  .fill-line{border:none;border-bottom:1px solid #8B7355;background:transparent;outline:none;padding:4px 2px;font-family:inherit;}
+  .fill-line:focus{border-bottom-color:#1F4D3A;}
+  @media print {
+    .no-print{display:none !important;}
+    body{background:#fff;}
+    .print-sheet{box-shadow:none !important;border:none !important;margin:0 !important;}
+  }
+</style>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#1F4D3A",
+  "primary-light":"#2D6B52",
+  "on-primary":"#FFFFFF",
+  "secondary":"#D8C3A5",
+  "accent":"#C8A96B",
+  "on-accent":"#FFFFFF",
+  "background":"#F7F4EF",
+  "on-background":"#2B2B2B",
+  "surface":"#FFFFFF",
+  "on-surface":"#2B2B2B",
+  "surface-container":"#EDE9E2",
+  "on-surface-variant":"#4A4035",
+  "outline":"#8B7355",
+  "outline-variant":"#D8C3A5",
+  "error":"#BA1A1A",
+  "charcoal":"#2B2B2B"
+},
+"fontFamily":{"sans":["Hanken Grotesk","sans-serif"]},
+"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"}}}}
+</script>
+</head>
+<body class="bg-background text-on-surface font-sans antialiased">
+
+<div class="no-print sticky top-0 z-50 bg-charcoal text-white">
+  <div class="max-w-[900px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
+    <a href="order.html" class="text-sm opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span>Back to Order
+    </a>
+    <button onclick="window.print()" class="bg-accent text-white px-6 py-2.5 text-sm font-bold uppercase tracking-widest hover:bg-primary transition-colors flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">print</span>Print / Save as PDF
+    </button>
+  </div>
+</div>
+
+<main class="max-w-[900px] mx-auto px-6 py-10">
+  <div id="quote-doc" class="print-sheet bg-surface border border-outline-variant p-8 md:p-12">
+
+    <!-- ===== HEADER ===== -->
+    <div class="flex flex-col md:flex-row justify-between gap-6 mb-10 pb-8 border-b-2 border-primary">
+      <div>
+        <img alt="Kraapht Bags Ltd" class="h-12 w-auto mb-3" src="logo.png" data-img="logo"/>
+        <p class="text-sm text-on-surface-variant" id="q-company-address">Kraapht Bags Ltd &middot; Accra, Ghana</p>
+        <p class="text-sm text-on-surface-variant whatsapp-number" id="q-company-phone">+233 558 619 224</p>
+        <p class="text-sm text-on-surface-variant" id="q-company-email">kraaphtbags@gmail.com</p>
+      </div>
+      <div class="text-left md:text-right">
+        <h1 class="text-2xl font-bold text-primary mb-1">Quotation / Proforma Invoice</h1>
+        <p class="text-sm text-on-surface-variant">Quote Ref: <span id="q-ref" class="font-semibold text-on-surface">—</span></p>
+        <p class="text-sm text-on-surface-variant">Date Issued: <span id="q-issued" class="font-semibold text-on-surface">—</span></p>
+        <p class="text-sm text-on-surface-variant">Valid Until: <span id="q-valid" class="font-semibold text-on-surface">—</span></p>
+      </div>
+    </div>
+
+    <!-- ===== BUYER DETAILS (fill before printing) ===== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Business / Organisation Name</label>
+        <input type="text" class="fill-line w-full" placeholder="e.g. Accra Bakery Ltd"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Contact Person</label>
+        <input type="text" class="fill-line w-full" placeholder="Full name"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Email</label>
+        <input type="email" class="fill-line w-full" placeholder="email@yourbusiness.com"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">PO / Internal Reference Number</label>
+        <input type="text" class="fill-line w-full" placeholder="Optional — for your internal records"/>
+      </div>
+    </div>
+
+    <!-- ===== ITEMIZED BREAKDOWN ===== -->
+    <table class="w-full mb-8 text-sm">
+      <thead>
+        <tr class="border-b-2 border-outline text-left">
+          <th class="py-2 font-bold uppercase tracking-widest text-xs">Item</th>
+          <th class="py-2 font-bold uppercase tracking-widest text-xs">Specification</th>
+          <th class="py-2 font-bold uppercase tracking-widest text-xs text-right">Quantity</th>
+          <th class="py-2 font-bold uppercase tracking-widest text-xs text-right">Amount</th>
+        </tr>
+      </thead>
+      <tbody id="quote-line-items">
+        <!-- populated by script -->
+      </tbody>
+      <tfoot>
+        <tr class="border-t border-outline-variant">
+          <td colspan="3" class="py-2 text-right text-on-surface-variant">Delivery (Accra)</td>
+          <td class="py-2 text-right" id="q-delivery">GHS 30</td>
+        </tr>
+        <tr class="border-t-2 border-primary">
+          <td colspan="3" class="py-3 text-right font-bold text-lg">Total</td>
+          <td class="py-3 text-right font-bold text-lg text-primary" id="q-total">GHS —</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- ===== TERMS ===== -->
+    <div class="bg-surface-container p-5 mb-10 text-sm text-on-surface-variant leading-relaxed">
+      <p class="mb-2">This is a price quotation for internal approval purposes and does not confirm an order. Prices shown are valid for <span id="q-validity-days">14</span> days from the date of issue.</p>
+      <p class="mb-2">To proceed with production: complete the order at <a href="order.html" class="text-primary underline">kraaphtbags.com/order.html</a> and submit 100% pre-payment via Paystack (card or MoMo). Production begins once payment is confirmed.</p>
+      <p>Questions before you order? Reach us on WhatsApp or by phone — details above.</p>
+    </div>
+
+    <!-- ===== APPROVAL / SIGN-OFF ===== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 pt-8 border-t border-outline-variant">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-6">Approved By</p>
+        <div class="border-b border-outline pb-1 mb-1">&nbsp;</div>
+        <p class="text-xs text-on-surface-variant">Name &amp; Signature</p>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-6">Date</p>
+        <div class="border-b border-outline pb-1 mb-1">&nbsp;</div>
+        <p class="text-xs text-on-surface-variant">DD / MM / YYYY</p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="no-print text-center text-xs text-on-surface-variant uppercase tracking-widest mt-6">Kraapht Bags Ltd &middot; Prepared automatically from your order.html configuration</p>
+</main>
+
+<script>
+(function() {
+  var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
+  var Q = {};
+  try { Q = JSON.parse(localStorage.getItem('kraapht_quote') || '{}'); } catch(e) {}
+
+  if (C) {
+    document.getElementById('q-company-address').textContent = 'Kraapht Bags Ltd · ' + (C.contact.location || 'Accra, Ghana');
+    document.getElementById('q-company-phone').textContent    = C.contact.phone_display || C.contact.whatsapp_display;
+    document.getElementById('q-company-email').textContent    = C.contact.email;
+    document.getElementById('q-delivery').textContent = 'GHS ' + (C.order.delivery_cost || 30);
+    document.getElementById('q-validity-days').textContent = C.order.quote_validity_days || 14;
+  }
+
+  document.getElementById('q-ref').textContent = Q.quoteRef || '—';
+
+  var issued = Q.issuedDate ? new Date(Q.issuedDate) : new Date();
+  var validityDays = (C && C.order.quote_validity_days) || 14;
+  var validUntil = new Date(issued.getTime() + validityDays * 24 * 60 * 60 * 1000);
+  var fmt = function(d) { return d.toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}); };
+  document.getElementById('q-issued').textContent = fmt(issued);
+  document.getElementById('q-valid').textContent  = fmt(validUntil);
+
+  var rows = [];
+  if (Q.hasBag) {
+    var bagSpec = [Q.bagPaper, Q.bagSize, Q.bagHandle].filter(Boolean).join(' · ');
+    if (Q.bagPrintColors > 0) bagSpec += ' · ' + Q.bagPrintColors + ' colour print';
+    rows.push({item: 'Flat Bottom Bags', spec: bagSpec, qty: (Q.bagQty || 0).toLocaleString() + ' bags', amount: Q.bagTotal || '—'});
+  }
+  if (Q.hasBowl) {
+    var bowlSpec = [Q.bowlType, Q.bowlPaper].filter(Boolean).join(' · ');
+    if (Q.bowlPrintColors > 0) bowlSpec += ' · ' + Q.bowlPrintColors + ' colour print';
+    rows.push({item: 'Paper Food Bowls', spec: bowlSpec, qty: (Q.bowlQty || 0).toLocaleString() + ' bowls', amount: Q.bowlTotal || '—'});
+  }
+
+  var tbody = document.getElementById('quote-line-items');
+  if (rows.length) {
+    tbody.innerHTML = rows.map(function(r) {
+      return '<tr class="border-b border-outline-variant">' +
+        '<td class="py-3 font-semibold">' + r.item + '</td>' +
+        '<td class="py-3 text-on-surface-variant">' + r.spec + '</td>' +
+        '<td class="py-3 text-right">' + r.qty + '</td>' +
+        '<td class="py-3 text-right">' + r.amount + '</td>' +
+        '</tr>';
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-on-surface-variant">No order configuration found. <a href="order.html" class="text-primary underline">Configure an order</a> first, then download the quote.</td></tr>';
+  }
+
+  document.getElementById('q-total').textContent = Q.total || 'GHS —';
+})();
+</script>
+
+</body>
+</html>

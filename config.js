@@ -35,6 +35,11 @@ const KRAAPHT_CONFIG = {
   contact: {
     whatsapp_number:  "233558619224",
     whatsapp_display: "+233 558 619 224",
+    // Direct call-in number shown next to WhatsApp for buyers who prefer to call.
+    // Defaults to the same mobile line as WhatsApp — change this if you want a
+    // separate landline/office number to ring instead.
+    phone_number:     "233558619224",
+    phone_display:    "+233 558 619 224",
     email:            "kraaphtbags@gmail.com",
     website:          "https://kraaphtbags.com",
     location:         "Accra, Ghana",
@@ -52,6 +57,7 @@ const KRAAPHT_CONFIG = {
     labour_per_bag:     0.50,
     bulk_discount_qty:  1000,   // orders at/above this quantity get the bulk discount
     bulk_discount_rate: 0.05,   // 5% off production cost (paper, print, labour — not delivery)
+    quote_validity_days: 14,    // how many days a downloaded quote/proforma invoice stays valid
   },
 
   // ----------------------------------------------------------
@@ -154,6 +160,31 @@ const KRAAPHT_CONFIG = {
     stat_delivery:    "7–10",
     stat_eco:         "100%",
   },
+
+  // =================================================================
+  //  ABOUT / OUR STORY PAGE (about.html)
+  //  Fill these in with your real company details — they're placeholders
+  //  until you edit them. Leave founder_2 fields blank to hide that card.
+  // =================================================================
+  about: {
+    hero_title:            "Our Story",
+    hero_subtitle:         "[Add a one-line summary of who Kraapht Bags is and what you stand for.]",
+    founding_story:        "[Add your company's founding story here — who started Kraapht Bags, when, and why. What problem were you solving for businesses in Accra?]",
+
+    founder_1_name:        "[Founder Name]",
+    founder_1_title:       "[Founder & CEO]",
+    founder_1_bio:         "[Short bio — background, experience, and why they started the company.]",
+
+    founder_2_name:        "",   // leave blank to hide this card
+    founder_2_title:       "",
+    founder_2_bio:         "",
+
+    factory_title:         "Our Factory",
+    factory_description:   "[Describe your production facility — location, size, equipment, and team. This is a trust signal for buyers evaluating you as a new vendor.]",
+
+    certifications_title:  "Certifications & Registration",
+    certifications_note:   "[List any certifications, standards-body approvals, or registrations you currently hold — e.g. Ghana Standards Authority (GSA), FDA Ghana. If none yet, say so plainly and note any you're pursuing — buyers trust honesty here more than a blank claim.]",
+  },
   // =================================================================
   //  IMAGES
   //  Change the filename value to swap any image on the website.
@@ -219,6 +250,14 @@ const KRAAPHT_CONFIG = {
     duplex_board_paper:   "paper_duplex_v2.png",      // Duplex Board
     matt_card_paper:      "matt_card_paper_v2.png",     // Matt Paper 150gsm
 
+    // ── ABOUT PAGE (about.html) ───────────────────────────────────────
+    //  Upload each file to GitHub with the exact filename below. Until you
+    //  do, the page shows a neat placeholder box instead of a broken image.
+    about_founder_1:     "about_founder_1.png",     // Founder 1 photo
+    about_founder_2:     "about_founder_2.png",     // Founder 2 photo (if used)
+    about_factory:       "about_factory.png",       // Factory / production floor photo
+    about_certificate:   "company_certificate.png", // Company registration certificate scan/photo
+
   },
 
 };
@@ -244,6 +283,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   document.querySelectorAll(".whatsapp-number").forEach(function(el) {
     el.textContent = C.contact.whatsapp_display;
+  });
+  document.querySelectorAll('a[href^="tel:"]').forEach(function(el) {
+    el.href = "tel:+" + C.contact.phone_number;
+  });
+  document.querySelectorAll(".phone-number").forEach(function(el) {
+    el.textContent = C.contact.phone_display;
   });
   document.querySelectorAll('a[href^="mailto:"]').forEach(function(el) {
     el.href = "mailto:" + C.contact.email;

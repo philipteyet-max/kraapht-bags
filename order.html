@@ -290,7 +290,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   <a href="index.html" class="flex items-center gap-3">
     <img alt="Kraapht Bags Ltd" class="h-10 w-auto" src="logo.png" data-img="logo"/>
   </a>
-  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a> <a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
+  <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="about.html">About</a> <a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
   <div class="flex items-center gap-3">
     <a href="customer.html" class="border border-primary text-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
     <a href="order.html" class="bg-primary text-on-primary px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
@@ -298,7 +298,20 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </div>
 </nav>
 
-<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
+<!-- ===== MOBILE STICKY PRICE BAR ===== -->
+<div id="mobile-sticky-total" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-charcoal text-white border-t border-white/10 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
+  <button type="button" onclick="document.getElementById('price-summary-panel').scrollIntoView({behavior:'smooth',block:'start'})" class="w-full flex items-center justify-between px-5 py-4">
+    <span class="text-left">
+      <span class="block font-label-sm text-label-sm uppercase tracking-widest opacity-60 text-xs">Grand Total</span>
+      <span class="block text-xl font-bold text-accent" id="mobile-sticky-total-amount">GHS —</span>
+    </span>
+    <span class="flex items-center gap-1 text-xs font-label-sm uppercase tracking-widest text-white/70">
+      View estimate<span class="material-symbols-outlined text-base">expand_less</span>
+    </span>
+  </button>
+</div>
+
+<main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-32 lg:pb-24">
 
   <!-- ===== PORTFOLIO GALLERY ===== -->
   <section class="mb-16">
@@ -1167,7 +1180,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     </div>
 
     <!-- ===== RIGHT: LIVE PRICE SUMMARY ===== -->
-    <div class="lg:col-span-1">
+    <div class="lg:col-span-1" id="price-summary-panel">
       <div class="sticky top-24 space-y-4">
         <div class="bg-charcoal text-white p-7">
           <h3 class="text-xl font-bold mb-5">Live Price Estimate</h3>
@@ -1249,6 +1262,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <button onclick="goToPayment()" class="w-full bg-accent text-white py-5 px-8 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined">shopping_cart_checkout</span>Place Order
         </button>
+        <button onclick="downloadQuote()" class="w-full bg-surface border-2 border-outline-variant text-on-surface py-4 px-8 font-label-sm text-label-sm uppercase tracking-widest hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">description</span>Download Quote / Proforma
+        </button>
         <p class="text-center font-label-sm text-label-sm text-on-surface-variant text-xs uppercase tracking-widest">Secured by Paystack</p>
       </div>
     </div>
@@ -1274,15 +1290,16 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <div>
       <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Company</h5>
       <ul class="space-y-3 font-body-md text-sm opacity-70">
+        <li><a class="hover:text-accent transition-colors" href="about.html">About Us</a></li>
         <li><a class="hover:text-accent transition-colors" href="index.html#contact">Contact Us</a></li>
         <li><a class="hover:text-accent transition-colors" href="customer.html">Track Your Order</a></li>
-        <li></li>
       </ul>
     </div>
     <div>
       <h5 class="font-label-sm text-label-sm uppercase tracking-widest mb-6 text-accent">Contact</h5>
       <ul class="space-y-3 font-body-md text-sm opacity-70">
-        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">chat</span><a href="https://wa.me/233558619224" class="hover:text-accent transition-colors whatsapp-number">+233 558 619 224</a></li>
+        <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">call</span><a href="tel:+233558619224" class="hover:text-accent transition-colors phone-number">+233 558 619 224</a></li>
         <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">mail</span><a href="mailto:kraaphtbags@gmail.com" class="hover:text-accent transition-colors">kraaphtbags@gmail.com</a></li>
         <li class="flex items-center gap-2"><span class="material-symbols-outlined text-accent text-base">location_on</span>Accra, Ghana</li>
       </ul>
@@ -1478,6 +1495,7 @@ function calcPrice() {
     document.getElementById('sb-plate').textContent    = `GHS ${plateCost}`;
     document.getElementById('sb-labour').textContent   = `GHS ${labour.toLocaleString()}`;
     document.getElementById('sb-total').textContent    = `GHS ${total.toLocaleString()}`;
+    document.getElementById('mobile-sticky-total-amount').textContent = `GHS ${total.toLocaleString()}`;
 
     // Hide die-cut rows (bowls don't need die-cut board/run)
     document.getElementById('diecut-row').style.display     = 'none';
@@ -1584,6 +1602,7 @@ function calcPrice() {
   // Grand total = bag + bowl + delivery
   const grandTotal = total + bowlTotal;
   document.getElementById('sb-total').textContent = `GHS ${grandTotal.toLocaleString()}`;
+  document.getElementById('mobile-sticky-total-amount').textContent = `GHS ${grandTotal.toLocaleString()}`;
 }
 
 // ── PRODUCT TYPE SWITCHER ──────────────────────────────────────────
@@ -1703,9 +1722,9 @@ function toggleExpert() {
     });
   }
 }
-// ===== SAVE ORDER + GO TO PAYMENT =====
-function goToPayment() {
-  // Validate before proceeding
+// ===== COLLECT CURRENT ORDER STATE (shared by checkout and quote) =====
+// Returns null (after showing the qty warning) if the order isn't valid yet.
+function collectOrderData() {
   const isBowl = state.productType === 'food_bowl';
   const qtyEl  = document.getElementById('qty-custom-val');
   const isCustomQty = qtyEl && !qtyEl.closest('#custom-qty-input')?.classList.contains('hidden');
@@ -1715,7 +1734,7 @@ function goToPayment() {
   if (qty < minQty) {
     if (warn) warn.classList.remove('hidden');
     document.getElementById('step-qty')?.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
+    return null;
   }
   if (warn) warn.classList.add('hidden');
 
@@ -1771,10 +1790,31 @@ function goToPayment() {
     orderData.bowlTotal       = document.getElementById('sb-bowl-total')?.textContent || '';
   }
 
+  return orderData;
+}
+
+// ===== SAVE ORDER + GO TO PAYMENT =====
+function goToPayment() {
+  const orderData = collectOrderData();
+  if (!orderData) return;
   try {
     localStorage.setItem('kraapht_order', JSON.stringify(orderData));
   } catch(e) {}
   window.location.href = 'payment.html';
+}
+
+// ===== DOWNLOAD QUOTE / PROFORMA INVOICE =====
+// Opens a printable quote in a new tab without leaving the configurator —
+// for institutional/first-time buyers who need a document for internal sign-off before paying.
+function downloadQuote() {
+  const orderData = collectOrderData();
+  if (!orderData) return;
+  orderData.quoteRef    = 'QT-' + Date.now();
+  orderData.issuedDate  = new Date().toISOString();
+  try {
+    localStorage.setItem('kraapht_quote', JSON.stringify(orderData));
+  } catch(e) {}
+  window.open('quote.html', '_blank');
 }
 // ── ORDER FORM ARTWORK UPLOAD — multi-file handled in injected JS above ──
 
