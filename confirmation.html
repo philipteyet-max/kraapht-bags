@@ -73,6 +73,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
 <main class="max-w-[1280px] mx-auto px-6 lg:px-10 pt-28 pb-24">
 
+  <!-- ===== NO ORDER FOUND (direct/bookmarked/stale visit) ===== -->
+  <div id="no-order-panel" class="hidden max-w-lg mx-auto text-center bg-surface border border-outline-variant p-10">
+    <span class="material-symbols-outlined text-5xl mb-4 block text-on-surface-variant opacity-50">receipt_long</span>
+    <h1 class="text-2xl font-bold mb-3">No Order to Confirm</h1>
+    <p class="font-body-md text-on-surface-variant mb-8">We couldn't find a completed order for this page — it may have expired, or you reached this page without finishing checkout.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="order.html" class="bg-primary text-on-primary px-6 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Configure an Order</a>
+      <a href="customer.html" class="border border-outline-variant text-on-surface-variant px-6 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:border-primary hover:text-primary transition-colors">View My Account</a>
+    </div>
+  </div>
+
+  <div id="confirmation-content" class="hidden">
+
   <!-- Success Banner -->
   <div class="bg-primary text-white p-10 mb-12 text-center">
     <span class="material-symbols-outlined text-6xl mb-4 block text-accent" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">check_circle</span>
@@ -97,8 +110,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Product</p><p class="font-body-md font-semibold" id="detail-product">Flat Bottom Bag</p></div>
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Paper Type</p><p class="font-body-md font-semibold" id="detail-paper">White / Chromo Coat</p></div>
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Quantity</p><p class="font-body-md font-semibold order-qty" id="detail-qty">200 units</p></div>
-          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Size</p><p class="font-body-md font-semibold">A5 / Small (15×8×21 cm)</p></div>
-          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Handle</p><p class="font-body-md font-semibold">Twisted Paper Rope</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Size</p><p class="font-body-md font-semibold" id="detail-size">—</p></div>
+          <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Handle</p><p class="font-body-md font-semibold" id="detail-handle">—</p></div>
           <div class="p-4 bg-primary text-white"><p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mb-1 opacity-70">Amount Paid</p><p class="font-body-md font-semibold text-accent total-paid" id="detail-amount">GHS 917.95</p></div>
         </div>
       </div>
@@ -185,14 +198,12 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <div class="bg-charcoal text-white p-7">
         <h3 class="text-xl font-bold mb-6">Invoice</h3>
         <div class="space-y-3 text-sm mb-6 pb-6 border-b border-white/20">
-          <div class="flex justify-between"><span class="opacity-60">Order Ref</span><span class="text-accent" id="invoice-ref">KBL-2026-00148</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Order Ref</span><span class="text-accent" id="invoice-ref">—</span></div>
           <div class="flex justify-between"><span class="opacity-60">Date</span><span id="order-date"></span></div>
-          <div class="flex justify-between"><span class="opacity-60">Paper + Labour</span><span>GHS 870.00</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Delivery</span><span>GHS 30.00</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Paystack fee</span><span>GHS 17.95</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Delivery</span><span class="delivery-cost">GHS 30</span></div>
         </div>
         <div class="flex justify-between text-xl font-bold mb-6">
-          <span>Total Paid</span><span class="text-accent">GHS 917.95</span>
+          <span>Total Paid</span><span class="text-accent total-paid" id="invoice-total">GHS —</span>
         </div>
         <button onclick="window.print()" class="w-full border border-white/30 text-white py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-lg">download</span>Download Invoice
@@ -207,6 +218,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       </a>
     </div>
   </div>
+
+  </div> <!-- /#confirmation-content -->
 </main>
 
 <footer class="bg-charcoal text-inverse-on-surface w-full">
@@ -272,75 +285,91 @@ async function sbGet(table, params) {
 var ORDER = {};
 try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
 
+// Build a display-ready summary from the rich order object order.html saves
+// (see collectOrderData() in order.html) — used whenever we don't have a
+// matching Supabase row to read from instead.
+function summariseLocalOrder(o) {
+  const product = [o.hasBag ? 'Flat Bottom Bag' : null, o.hasBowl ? 'Paper Food Bowl' : null].filter(Boolean).join(' + ') || '—';
+  const paperParts = [];
+  if (o.hasBag && o.bagPaper)   paperParts.push(o.hasBowl ? 'Bag: ' + o.bagPaper : o.bagPaper);
+  if (o.hasBowl && o.bowlPaper) paperParts.push(o.hasBag ? 'Bowl: ' + o.bowlPaper : o.bowlPaper);
+  const sizeParts = [];
+  if (o.hasBag && o.bagSize)   sizeParts.push(o.hasBowl ? 'Bag: ' + o.bagSize : o.bagSize);
+  if (o.hasBowl && o.bowlType) sizeParts.push(o.hasBag ? 'Bowl: ' + o.bowlType : o.bowlType);
+  const qtyParts = [];
+  if (o.hasBag && o.bagQty)   qtyParts.push(o.bagQty.toLocaleString() + (o.hasBowl ? ' bags' : ' units'));
+  if (o.hasBowl && o.bowlQty) qtyParts.push(o.bowlQty.toLocaleString() + ' bowls');
+  return {
+    product, paper: paperParts.join(' · ') || '—', size: sizeParts.join(' · ') || '—',
+    qty: qtyParts.join(' + ') || '—', amount: o.total || '—', handle: o.bagHandle || '—',
+  };
+}
+
 window.addEventListener('DOMContentLoaded', async function() {
-  // Date
   var dateEl = document.getElementById('order-date');
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 
-  // ── Get Paystack reference from URL params (Paystack appends ?reference=xxx) ──
   const urlParams  = new URLSearchParams(window.location.search);
-  const paystackRef = urlParams.get('reference') || urlParams.get('trxref') || ORDER.txn_ref || ORDER.ref || '';
+  const paystackRef = urlParams.get('reference') || urlParams.get('trxref') || ORDER.txn_ref || '';
 
-  // ── Look up real KBL ref from Supabase using Paystack reference ──
-  let displayRef = paystackRef; // fallback
+  // ── Look up the real order from Supabase using the Paystack reference ──
+  let supaOrder = null;
   if (paystackRef) {
     try {
       const rows = await sbGet('orders', {
-        select: 'ref,product_type,paper_type,quantity,amount_ghs,stage',
+        select: 'ref,product_type,paper_type,size,quantity,amount_ghs,stage',
         paystack_ref: `eq.${paystackRef}`,
         limit: 1,
       });
-      if (rows && rows.length > 0) {
-        const order = rows[0];
-        displayRef = order.ref;
-
-        // Update order detail cards with real data
-        const fields = {
-          'detail-product': order.product_type,
-          'detail-paper':   order.paper_type,
-          'detail-qty':     order.quantity ? order.quantity.toLocaleString() + ' units' : '—',
-          'detail-amount':  order.amount_ghs ? 'GHS ' + Number(order.amount_ghs).toLocaleString() : '—',
-        };
-        Object.entries(fields).forEach(([id, val]) => {
-          const el = document.getElementById(id);
-          if (el) el.textContent = val;
-        });
-
-        // Update invoice total
-        if (order.amount_ghs) {
-          document.querySelectorAll('.total-paid').forEach(el => {
-            el.textContent = 'GHS ' + Number(order.amount_ghs).toLocaleString();
-          });
-        }
-      }
+      if (rows && rows.length > 0) supaOrder = rows[0];
     } catch(e) {
       console.warn('Could not fetch order from Supabase:', e);
     }
   }
 
-  // ── If no Paystack ref at all, show a clean placeholder ──
-  if (!displayRef) {
-    displayRef = ORDER.ref || '—';
+  // ── Do we have real evidence of a completed order? ──
+  // Either a confirmed Supabase row, or the order this browser just paid for
+  // (saved by order.html right before redirecting to Paystack).
+  const hasLocalOrder = !!(ORDER && (ORDER.total || ORDER.bagTotal || ORDER.bowlTotal));
+  if (!supaOrder && !hasLocalOrder) {
+    document.getElementById('no-order-panel').classList.remove('hidden');
+    return; // don't fabricate a confirmed order for a visitor with nothing to confirm
   }
 
-  // Apply ref everywhere
+  let displayRef, product, paper, size, qty, amount, handle;
+  if (supaOrder) {
+    displayRef = supaOrder.ref || paystackRef;
+    product    = supaOrder.product_type || '—';
+    paper      = supaOrder.paper_type || '—';
+    size       = supaOrder.size || '—';
+    qty        = supaOrder.quantity ? supaOrder.quantity.toLocaleString() + ' units' : '—';
+    amount     = supaOrder.amount_ghs ? 'GHS ' + Number(supaOrder.amount_ghs).toLocaleString() : '—';
+    handle     = ORDER.bagHandle || '—'; // not stored in Supabase — use this browser's own checkout data if present
+  } else {
+    const s = summariseLocalOrder(ORDER);
+    displayRef = ORDER.ref || paystackRef || '—';
+    product = s.product; paper = s.paper; size = s.size; qty = s.qty; amount = s.amount; handle = s.handle;
+  }
+
+  document.getElementById('detail-product').textContent = product;
+  document.getElementById('detail-paper').textContent   = paper;
+  document.getElementById('detail-size').textContent    = size;
+  document.getElementById('detail-handle').textContent  = handle;
+  document.getElementById('detail-qty').textContent     = qty;
+  document.getElementById('detail-amount').textContent  = amount;
+  document.getElementById('invoice-total').textContent  = amount;
+
   document.querySelectorAll('#order-ref, #ref-inline, #invoice-ref').forEach(function(el) {
     el.textContent = displayRef;
   });
 
-  // Update WhatsApp link with real ref
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(a) {
     if (a.href.includes('order+ref') || a.href.includes('order_ref') || a.href.includes('KBL')) {
       a.href = 'https://wa.me/233558619224?text=Hi+Kraapht+Bags%2C+my+order+ref+is+' + encodeURIComponent(displayRef);
     }
   });
 
-  // Quantity from localStorage fallback
-  if (ORDER.qty) {
-    document.querySelectorAll('.order-qty').forEach(function(el) {
-      el.textContent = ORDER.qty + ' units';
-    });
-  }
+  document.getElementById('confirmation-content').classList.remove('hidden');
 
   // Clear localStorage after 10 mins
   setTimeout(function() {

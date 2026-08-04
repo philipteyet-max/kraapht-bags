@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Admin Dashboard | Kraapht Bags Ltd</title>
 <script src="config.js?v=4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
@@ -107,13 +108,47 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <span class="material-symbols-outlined text-outline" style="font-size:16px;">search</span>
         <input id="global-search" class="bg-transparent border-none focus:ring-0 text-sm w-36 outline-none placeholder:text-on-surface-variant/50" placeholder="Search orders, clients…" type="text" oninput="handleSearch(this.value)"/>
       </div>
-      <div class="flex items-center gap-2 px-4 py-2 bg-primary text-white">
-        <span class="material-symbols-outlined" style="font-size:16px;">person</span>
-        <span class="text-xs font-bold tracking-[0.15em] uppercase hidden md:block">Founder</span>
+      <div id="admin-user-badge" class="hidden items-center gap-2">
+        <div class="flex items-center gap-2 px-4 py-2 bg-primary text-white">
+          <span class="material-symbols-outlined" style="font-size:16px;">person</span>
+          <span class="text-xs font-bold tracking-[0.15em] uppercase hidden md:block" id="admin-email-label">Admin</span>
+        </div>
+        <button onclick="handleAdminLogout()" title="Sign out" class="flex items-center gap-2 px-3 py-2 border border-outline-variant text-on-surface-variant hover:border-error hover:text-error transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">logout</span>
+        </button>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- ═══════════════════════════ LOGIN GATE ═══════════════════════════ -->
+<div id="admin-login-panel" class="max-w-md mx-auto pt-32 px-6">
+  <div class="bg-surface border border-outline-variant p-8">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-primary">lock</span>
+      <h1 class="text-xl font-bold">Admin Sign In</h1>
+    </div>
+    <p class="text-sm text-on-surface-variant mb-6">Restricted to Kraapht Bags staff. Sign in with an admin account to continue.</p>
+    <div id="admin-login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"></div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Email</label>
+        <input id="admin-login-email" type="email" placeholder="you@kraaphtbags.com" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Password</label>
+        <input id="admin-login-password" type="password" placeholder="••••••••" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors" onkeydown="if(event.key==='Enter')handleAdminLogin()"/>
+      </div>
+      <button onclick="handleAdminLogin()" id="admin-login-btn" class="w-full bg-primary text-white py-3 font-bold text-sm uppercase tracking-widest hover:bg-primary-light transition-colors">Sign In</button>
+    </div>
+  </div>
+  <p class="text-center text-xs text-on-surface-variant mt-6">
+    <a href="index.html" class="hover:text-primary transition-colors">← Back to public site</a>
+  </p>
+</div>
+
+<!-- ═══════════════════ DASHBOARD (hidden until signed in as admin) ═══════════════════ -->
+<div id="admin-content" class="hidden">
 
 <div id="loading-banner" class="hidden fixed top-16 left-0 right-0 z-40 bg-accent text-white text-center text-xs font-bold tracking-widest uppercase py-2">
   Loading orders from database…
@@ -660,7 +695,87 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   <span id="toast-msg">Done</span>
 </div>
 
+</div> <!-- /#admin-content -->
+
 <script>
+// ═══════════════════════════════════════════════════════
+// AUTH GATE — Supabase Auth + admins allowlist
+// See admin_security_fix.sql for the required database setup.
+// ═══════════════════════════════════════════════════════
+const SUPABASE_URL_AUTH  = 'https://irehhfetxofmhcepluuz.supabase.co';
+const SUPABASE_ANON_AUTH = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWhoZmV0eG9mbWhjZXBsdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODM4MjIsImV4cCI6MjA5Njk1OTgyMn0.0qryf15jWiUpZ4fsupKstHR4cUjlvrCzlVtyuu0n9Y8';
+const sbAuth = supabase.createClient(SUPABASE_URL_AUTH, SUPABASE_ANON_AUTH);
+
+function showLoginError(msg) {
+  const el = document.getElementById('admin-login-error');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+function clearLoginError() {
+  document.getElementById('admin-login-error').classList.add('hidden');
+}
+
+async function handleAdminLogin() {
+  clearLoginError();
+  const email    = document.getElementById('admin-login-email').value.trim();
+  const password = document.getElementById('admin-login-password').value;
+  if (!email || !password) return showLoginError('Enter your email and password.');
+
+  const btn = document.getElementById('admin-login-btn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  const { data, error } = await sbAuth.auth.signInWithPassword({ email, password });
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    return showLoginError(error.message);
+  }
+
+  const admitted = await verifyAdminAndEnter(data.user);
+  if (!admitted) {
+    await sbAuth.auth.signOut();
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    showLoginError('This account does not have admin access.');
+  }
+}
+
+async function handleAdminLogout() {
+  await sbAuth.auth.signOut();
+  document.getElementById('admin-content').classList.add('hidden');
+  document.getElementById('admin-user-badge').classList.add('hidden');
+  document.getElementById('admin-user-badge').classList.remove('flex');
+  document.getElementById('admin-login-panel').classList.remove('hidden');
+}
+
+// Checks the is_admin() RPC (defined in admin_security_fix.sql) and, if
+// true, reveals the dashboard and kicks off the live data load.
+async function verifyAdminAndEnter(user) {
+  const { data: isAdmin, error } = await sbAuth.rpc('is_admin');
+  if (error || !isAdmin) return false;
+
+  document.getElementById('admin-login-panel').classList.add('hidden');
+  document.getElementById('admin-content').classList.remove('hidden');
+  const badge = document.getElementById('admin-user-badge');
+  badge.classList.remove('hidden');
+  badge.classList.add('flex');
+  document.getElementById('admin-email-label').textContent = user.email;
+
+  initDashboard();
+  return true;
+}
+
+// On load: if there's already a valid admin session, skip straight to the
+// dashboard. Otherwise show the login form.
+(async () => {
+  const { data: { session } } = await sbAuth.auth.getSession();
+  if (session?.user) {
+    const ok = await verifyAdminAndEnter(session.user);
+    if (!ok) await sbAuth.auth.signOut();
+  }
+})();
+
 // ═══════════════════════════════════════════════════════
 // CONFIG — Supabase connection
 // ═══════════════════════════════════════════════════════
@@ -1235,12 +1350,12 @@ function renderFinance(){
 
   // cost breakdown bars
   const items=[
-    {label:'Materials',amount:data.matCost,color:'bg-error/70'},
-    {label:'Labour',amount:data.labCost,color:'bg-amber-500/70'},
+    {label:'Materials',amount:matCost,color:'bg-error/70'},
+    {label:'Labour',amount:labCost,color:'bg-amber-500/70'},
     {label:'Net Profit',amount:profit,color:'bg-primary'},
   ];
   document.getElementById('fin-cost-breakdown').innerHTML=items.map(item=>{
-    const w=Math.round(item.amount/data.actual*100);
+    const w=revenue>0?Math.round(item.amount/revenue*100):0;
     return `<div>
       <div class="flex justify-between text-sm mb-1">
         <span class="font-semibold">${item.label}</span>
@@ -1466,9 +1581,13 @@ function exportMonthlyReport(){
 }
 
 // ═══════════════════════════════════════════════════════
-// INIT — load live data then render
+// INIT — load live data then render (called after admin login succeeds)
 // ═══════════════════════════════════════════════════════
-(async () => {
+let dashboardInitialized = false;
+async function initDashboard() {
+  if (dashboardInitialized) return; // don't double-start the refresh interval
+  dashboardInitialized = true;
+
   await loadOrders();
   renderDashboard();
   // Auto-refresh every 60 seconds
@@ -1485,7 +1604,7 @@ function exportMonthlyReport(){
       if (tabId === 'finance')     renderFinance();
     }
   }, 60000);
-})();
+}
 </script>
 </body>
 </html>
