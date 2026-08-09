@@ -82,7 +82,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
       <span class="material-symbols-outlined text-primary">history_edu</span>How We Started
     </h2>
-    <p id="about-founding-story" class="font-body-md text-on-surface-variant leading-relaxed"></p>
+    <div id="about-founding-story" class="font-body-md text-on-surface-variant leading-relaxed space-y-4"></div>
   </section>
 
   <!-- ===== FOUNDERS ===== -->
@@ -102,7 +102,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         </div>
         <p id="founder-1-name" class="font-body-lg font-bold"></p>
         <p id="founder-1-title" class="text-sm text-accent font-semibold uppercase tracking-widest mb-3"></p>
-        <p id="founder-1-bio" class="text-sm text-on-surface-variant leading-relaxed"></p>
+        <div id="founder-1-bio" class="text-sm text-on-surface-variant leading-relaxed space-y-3"></div>
       </div>
 
       <div class="bg-surface border border-outline-variant p-6" id="founder-2-card">
@@ -115,7 +115,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         </div>
         <p id="founder-2-name" class="font-body-lg font-bold"></p>
         <p id="founder-2-title" class="text-sm text-accent font-semibold uppercase tracking-widest mb-3"></p>
-        <p id="founder-2-bio" class="text-sm text-on-surface-variant leading-relaxed"></p>
+        <div id="founder-2-bio" class="text-sm text-on-surface-variant leading-relaxed space-y-3"></div>
       </div>
 
     </div>
@@ -134,7 +134,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <h2 id="about-factory-title" class="text-2xl font-bold mb-4 flex items-center gap-2">
         <span class="material-symbols-outlined text-primary">factory</span>Our Factory
       </h2>
-      <p id="about-factory-description" class="font-body-md text-on-surface-variant leading-relaxed"></p>
+      <div id="about-factory-description" class="font-body-md text-on-surface-variant leading-relaxed space-y-4"></div>
     </div>
   </section>
 
@@ -220,18 +220,31 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.about : null;
   if (!C) return;
 
+  // Config text may contain multiple paragraphs separated by a blank line —
+  // render each as its own <p> instead of one run-on block.
+  function renderParagraphs(id, text) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    (text || '').split(/\n\s*\n/).map(function(p){return p.trim();}).filter(Boolean).forEach(function(para) {
+      var p = document.createElement('p');
+      p.textContent = para;
+      el.appendChild(p);
+    });
+  }
+
   document.getElementById('about-hero-title').textContent        = C.hero_title || 'Our Story';
   document.getElementById('about-hero-subtitle').textContent     = C.hero_subtitle || '';
-  document.getElementById('about-founding-story').textContent    = C.founding_story || '';
+  renderParagraphs('about-founding-story', C.founding_story);
 
   document.getElementById('founder-1-name').textContent  = C.founder_1_name || '';
   document.getElementById('founder-1-title').textContent = C.founder_1_title || '';
-  document.getElementById('founder-1-bio').textContent   = C.founder_1_bio || '';
+  renderParagraphs('founder-1-bio', C.founder_1_bio);
 
   if (C.founder_2_name) {
     document.getElementById('founder-2-name').textContent  = C.founder_2_name;
     document.getElementById('founder-2-title').textContent = C.founder_2_title || '';
-    document.getElementById('founder-2-bio').textContent   = C.founder_2_bio || '';
+    renderParagraphs('founder-2-bio', C.founder_2_bio);
   } else {
     // No second founder configured — hide the card and let the first one take the full row
     var card2 = document.getElementById('founder-2-card');
@@ -240,8 +253,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     if (grid) grid.classList.remove('md:grid-cols-2');
   }
 
-  document.getElementById('about-factory-title').textContent       = C.factory_title || 'Our Factory';
-  document.getElementById('about-factory-description').textContent = C.factory_description || '';
+  document.getElementById('about-factory-title').textContent = C.factory_title || 'Our Factory';
+  renderParagraphs('about-factory-description', C.factory_description);
 
   document.getElementById('about-certifications-title').textContent = C.certifications_title || 'Certifications & Registration';
   document.getElementById('about-certifications-note').textContent  = C.certifications_note || '';

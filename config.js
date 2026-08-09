@@ -26,7 +26,7 @@ const KRAAPHT_CONFIG = {
   // Also update PAYSTACK_SECRET_KEY in Vercel environment variables.
   // ----------------------------------------------------------
   paystack: {
-    public_key: "pk_test_335b7466d67dd7d8b8360c338983a6f1fb7193c8",
+    public_key: "sk_test_d689d91e71b61e83eb894c8d1a1ffcdc3083f4b3",
   },
 
   // ----------------------------------------------------------
@@ -168,19 +168,19 @@ const KRAAPHT_CONFIG = {
   // =================================================================
   about: {
     hero_title:            "Our Story",
-    hero_subtitle:         "[Add a one-line summary of who Kraapht Bags is and what you stand for.]",
-    founding_story:        "[Add your company's founding story here — who started Kraapht Bags, when, and why. What problem were you solving for businesses in Accra?]",
+    hero_subtitle:         "Custom-printed, eco-friendly flat bottom bags and food bowls.",
+    founding_story:        "Kraapht Bags Ltd was founded with a simple vision: to help businesses elevate their brands through high-quality, sustainable paper packaging.\n\nWhat began as an observation of the growing demand for eco-friendly packaging quickly became a mission to provide businesses in Accra and across Ghana with premium custom paper bags that combine functionality, durability, and exceptional design. At a time when many businesses relied on plastic packaging or struggled to find reliable suppliers for branded paper bags, Kraapht Bags set out to bridge that gap.\n\nOur goal has always been more than manufacturing paper bags. We help businesses create memorable customer experiences by providing packaging that reflects the quality of their products and strengthens their brand identity. Whether it's a boutique, restaurant, supermarket, pharmacy, corporate organization, or event planner, we believe every business deserves packaging that leaves a lasting impression.\n\nSince our establishment, we have remained committed to quality craftsmanship, sustainable production practices, timely delivery, and outstanding customer service. Every order is produced with careful attention to detail, ensuring our clients receive packaging that not only protects their products but also enhances their brand image.\n\nToday, Kraapht Bags Ltd continues to serve businesses of all sizes with innovative packaging solutions, making it easier than ever to customize, order, and receive premium paper bags. As we grow, our commitment remains unchanged: delivering packaging solutions that help businesses stand out while contributing to a more sustainable future.",
 
-    founder_1_name:        "[Founder Name]",
-    founder_1_title:       "[Founder & CEO]",
-    founder_1_bio:         "[Short bio — background, experience, and why they started the company.]",
+    founder_1_name:        "Philip Teye",
+    founder_1_title:       "Founder & CEO",
+    founder_1_bio:         "My name is Philip Teye, a Graphic, 3D, and Product Design Specialist based in Accra, Ghana. My professional journey has been driven by creativity, problem-solving, and a desire to turn ideas into practical solutions. Through my work in design, product development, and creative leadership, I have learned to look beyond aesthetics and understand how products can respond to real needs in communities.\n\nThis mindset led me to establish Kraapht Bags Ltd., a small-scale paper bag manufacturing business. I started the company after recognizing the growing dependence on single-use plastic packaging and the need for accessible, durable, and environmentally friendly alternatives for everyday businesses. Rather than simply identifying the problem, I wanted to build a practical local solution that could serve businesses while contributing to the reduction of plastic waste.\n\nAs a founder, my goal is to grow Kraapht Bags Ltd. into a sustainable manufacturing business that provides quality packaging solutions, creates employment opportunities, and encourages businesses to adopt more environmentally responsible practices. I see the company not only as a business opportunity, but as a way to combine my creativity, entrepreneurial drive, and commitment to building solutions that can create meaningful economic and environmental impact in Ghana.",
 
     founder_2_name:        "",   // leave blank to hide this card
     founder_2_title:       "",
     founder_2_bio:         "",
 
-    factory_title:         "Our Factory",
-    factory_description:   "[Describe your production facility — location, size, equipment, and team. This is a trust signal for buyers evaluating you as a new vendor.]",
+    factory_title:         "Our Production Network",
+    factory_description:   "Kraapht Bags Ltd operates through a trusted network of specialized production partners across Accra, allowing us to access the equipment, technical expertise, and skilled production teams required for different paper bag specifications and order volumes.\n\nRather than limiting our capabilities to a single production facility, we work with carefully selected manufacturing partners for printing, paper conversion, bag production, finishing, and other specialized processes. This flexible production model allows us to handle both standard and customized orders while maintaining consistency in quality and delivery.\n\nEvery project is managed by the Kraapht Bags team from specification and artwork preparation through production, quality checks, packaging, and delivery. We coordinate the production process to ensure that the finished bags meet the agreed specifications before they reach the customer.\n\nOur partner-based model also allows us to scale production according to demand, giving our customers access to a wider range of materials, finishes, sizes, and production capabilities without compromising the quality of their order.\n\nOur focus is simple: you place the order with Kraapht Bags, and we take responsibility for getting it produced to specification and delivered to you.",
 
     certifications_title:  "Certifications & Registration",
     certifications_note:   "[List any certifications, standards-body approvals, or registrations you currently hold — e.g. Ghana Standards Authority (GSA), FDA Ghana. If none yet, say so plainly and note any you're pursuing — buyers trust honesty here more than a blank claim.]",
