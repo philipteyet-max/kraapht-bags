@@ -991,16 +991,37 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <p class="text-sm text-on-surface-variant mb-4">Polypropylene rope. Durable and available in 7 colours.</p>
                 <div id="pp-colors" class="hidden">
                   <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Rope Colour:</p>
-                  <div class="flex gap-2 flex-wrap">
-                    <button type="button" class="color-swatch selected" data-color="White" style="background:#FFFFFF;border:2px solid #1F4D3A;" title="White" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Black" style="background:#1a1a1a;" title="Black" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Brown" style="background:#8B6347;" title="Brown" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Gold" style="background:#C8A96B;" title="Gold" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Red" style="background:#C0392B;" title="Red" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Navy" style="background:#1B3A6B;" title="Navy" onclick="selectColor(this)"></button>
-                    <button type="button" class="color-swatch" data-color="Green" style="background:#1F4D3A;" title="Green" onclick="selectColor(this)"></button>
+                  <div class="flex gap-3 flex-wrap">
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch selected" data-color="White" style="background:#FFFFFF;border:2px solid #1F4D3A;" title="White" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">White</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Black" style="background:#1a1a1a;" title="Black" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Black</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Brown" style="background:#8B6347;" title="Brown" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Brown</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Gold" style="background:#C8A96B;" title="Gold" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Gold</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Red" style="background:#C0392B;" title="Red" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Red</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Navy" style="background:#1B3A6B;" title="Navy" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Navy</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1.5">
+                      <button type="button" class="color-swatch" data-color="Green" style="background:#1F4D3A;" title="Green" onclick="selectColor(this)"></button>
+                      <span class="text-xs text-on-surface-variant">Green</span>
+                    </div>
                   </div>
-                  <p class="font-label-sm text-label-sm text-primary mt-2" id="selected-color-label">Selected: White</p>
+                  <p class="font-label-sm text-label-sm text-primary mt-3" id="selected-color-label">Selected: White</p>
                 </div>
               </div>
             </label>
@@ -1150,6 +1171,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Describe Your Brand &amp; Design Brief *</label>
             <textarea rows="3" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md resize-none" placeholder="e.g. Our bakery uses brown and gold. Logo is text-only — 'Accra Bakery'. Centre it on the front with our tagline below..."></textarea>
+            <div class="mt-3 p-3 bg-surface border border-outline-variant flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary flex-shrink-0" style="font-size:18px;">info</span>
+              <p class="text-xs text-on-surface-variant">Typing a full brief on your phone is a pain — you don't have to. <a href="https://wa.me/233558619224?text=Hi%20Kraapht%20Bags%2C%20I%27d%20like%20to%20send%20a%20voice%20note%20for%20my%20design%20brief" target="_blank" class="text-primary font-semibold underline">Send a WhatsApp voice note instead</a>, or <a href="https://wa.me/233558619224?text=Hi%20Kraapht%20Bags%2C%20please%20call%20me%20back%20about%20my%20design%20brief" target="_blank" class="text-primary font-semibold underline">request a callback</a> — just mention your order and skip the typing.</p>
+            </div>
           </div>
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Number of Colours *</label>

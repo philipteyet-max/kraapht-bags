@@ -153,8 +153,10 @@ const KRAAPHT_CONFIG = {
 
   },
   homepage: {
-    hero_headline:    "Premium Paper Bags Built for Your Brand",
-    hero_subtext:     "Custom-printed, eco-friendly flat bottom bags and food bowls. Pre-payment production. Delivered to your business in Accra.",
+    // Hero headline is styled as two lines (line 2 in gold) — edit each separately.
+    hero_headline_line1: "Packaging With Ghanaian Craft.",
+    hero_headline_line2: "Built for Your Brand.",
+    hero_subtext:     "Custom-printed, eco-friendly paper bags and food bowls — crafted in Accra, delivered to your door, and built to make your brand impossible to ignore.",
     stat_min_order:   "200+",
     stat_paper_types: "5",
     stat_delivery:    "7–10",
@@ -301,6 +303,14 @@ document.addEventListener("DOMContentLoaded", function () {
     el.textContent = "GHS " + C.order.delivery_cost;
   });
 
+  // ── Homepage hero copy ────────────────────────────────────────────
+  var heroLine1 = document.getElementById("hero-headline-1");
+  var heroLine2 = document.getElementById("hero-headline-2");
+  var heroSub   = document.getElementById("hero-subtext");
+  if (heroLine1 && C.homepage.hero_headline_line1) heroLine1.textContent = C.homepage.hero_headline_line1;
+  if (heroLine2 && C.homepage.hero_headline_line2) heroLine2.textContent = C.homepage.hero_headline_line2;
+  if (heroSub   && C.homepage.hero_subtext)        heroSub.textContent   = C.homepage.hero_subtext;
+
   // ── Homepage stats ──────────────────────────────────────────────
   var stats = {
     "stat-min-order":   C.homepage.stat_min_order,
@@ -332,15 +342,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 2. Hero video special handling
+  // 2. Hero video special handling — only set the poster/source here.
+  //    Whether to actually fetch and play the video (vs. staying on the poster
+  //    on a slow connection) is decided by index.html's own hero-video script,
+  //    which runs after this and needs the source already pointed correctly.
   var heroVid = document.getElementById("hero-vid");
   if (heroVid) {
     if (imgs.hero_poster) heroVid.poster = imgs.hero_poster;
     var heroSrc = heroVid.querySelector("source");
     if (heroSrc && imgs.hero_video) {
       heroSrc.src = imgs.hero_video;
-      heroVid.load();
-      heroVid.play().catch(function(){});
     }
   }
 
