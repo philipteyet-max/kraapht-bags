@@ -108,23 +108,23 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Business Name *</label>
-            <input type="text" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="e.g. Accra Bakery Ltd"/>
+            <input type="text" id="pay-biz-name" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="e.g. Accra Bakery Ltd"/>
           </div>
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Contact Person *</label>
-            <input type="text" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="Full name"/>
+            <input type="text" id="pay-contact-person" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="Full name"/>
           </div>
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Phone / WhatsApp *</label>
-            <input type="tel" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="+233 XX XXX XXXX"/>
+            <input type="tel" id="pay-phone" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="+233 XX XXX XXXX"/>
           </div>
           <div>
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Email Address *</label>
-            <input type="email" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="email@yourbusiness.com"/>
+            <input type="email" id="pay-email" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="email@yourbusiness.com"/>
           </div>
           <div class="md:col-span-2">
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Delivery Address *</label>
-            <input type="text" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="Street, area, Accra landmark"/>
+            <input type="text" id="pay-delivery-address" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="Street, area, Accra landmark"/>
           </div>
         </div>
       </div>
@@ -203,7 +203,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <div class="bg-surface border border-outline-variant p-6">
         <label class="flex items-start gap-4 cursor-pointer">
           <input type="checkbox" id="terms" class="mt-1 w-5 h-5 accent-primary flex-shrink-0"/>
-          <p class="font-body-md text-on-surface-variant text-sm">I agree that this order requires <strong class="text-on-surface">100% pre-payment</strong> and that no refund will be issued once production materials have been purchased. I have reviewed my order summary.</p>
+          <p class="font-body-md text-on-surface-variant text-sm">I agree to pay a <strong class="text-on-surface" id="terms-deposit-pct">50%</strong> deposit today to start production, with the remaining balance due before dispatch, and that no refund will be issued once production materials have been purchased. I have reviewed my order summary.</p>
         </label>
       </div>
     </div>
@@ -221,11 +221,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div class="flex justify-between"><span class="opacity-60">Subtotal</span><span id="sum-subtotal">—</span></div>
             <div class="flex justify-between"><span class="opacity-60">Delivery</span><span id="sum-delivery">—</span></div>
           </div>
-          <div class="flex justify-between text-xl font-bold mb-8">
-            <span>Total</span><span class="text-accent" id="summary-total">GHS —</span>
+          <div class="flex justify-between text-base font-semibold mb-2">
+            <span class="opacity-80">Order Total</span><span id="summary-total">GHS —</span>
+          </div>
+          <div class="space-y-1 mb-8">
+            <div class="flex justify-between text-xl font-bold">
+              <span>Deposit Due Today</span><span class="text-accent" id="summary-deposit">GHS —</span>
+            </div>
+            <div class="flex justify-between text-xs opacity-60">
+              <span>Balance before dispatch</span><span id="summary-balance">GHS —</span>
+            </div>
           </div>
           <button onclick="handlePayment()" id="pay-btn" class="w-full bg-accent text-white py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined">lock</span>Pay <span id="pay-btn-amount">Now</span>
+            <span class="material-symbols-outlined">lock</span>Pay Deposit <span id="pay-btn-amount">Now</span>
           </button>
           <div class="flex items-center justify-center gap-2 mt-4 opacity-40">
             <span class="material-symbols-outlined text-sm">lock</span>
@@ -310,18 +318,39 @@ document.querySelectorAll('[name="pay_method"]').forEach(function(r) {
 var ORDER = {};
 try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
 
+// Deposit percentage — single source of truth, used for both display and the actual charge
+function getDepositPercentage() {
+  return (typeof KRAAPHT_CONFIG !== 'undefined' && KRAAPHT_CONFIG.order.deposit_percentage != null)
+    ? KRAAPHT_CONFIG.order.deposit_percentage : 0.5;
+}
+function getOrderTotalGHS() {
+  return parseFloat(String(ORDER.total || '0').replace(/[^0-9.]/g, '')) || 0;
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   var deliveryCost = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.order.delivery_cost : 30;
 
   // Populate order summary from saved order
   if (ORDER.total) {
+    var depositPct   = getDepositPercentage();
+    var totalGHS      = getOrderTotalGHS();
+    var depositGHS     = Math.round(totalGHS * depositPct * 100) / 100;
+    var balanceGHS   = Math.round((totalGHS - depositGHS) * 100) / 100;
+    var depositText  = 'GHS ' + depositGHS.toLocaleString();
+
     // Update sidebar totals
     var totalEl = document.getElementById('summary-total');
     if (totalEl) totalEl.textContent = ORDER.total;
+    var depositEl = document.getElementById('summary-deposit');
+    if (depositEl) depositEl.textContent = depositText;
+    var balanceEl = document.getElementById('summary-balance');
+    if (balanceEl) balanceEl.textContent = 'GHS ' + balanceGHS.toLocaleString();
+    var pctEl = document.getElementById('terms-deposit-pct');
+    if (pctEl) pctEl.textContent = Math.round(depositPct * 100) + '%';
 
-    // Update pay button amount
+    // Update pay button amount — shows what's actually charged today (the deposit)
     var btnAmt = document.getElementById('pay-btn-amount');
-    if (btnAmt) btnAmt.textContent = ORDER.total + ' Now';
+    if (btnAmt) btnAmt.textContent = depositText + ' Now';
 
     // Product
     var productParts = [];
@@ -369,6 +398,28 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Flattens the rich bag/bowl ORDER shape (from order.html's collectOrderData) into the
+// simpler fields api/webhook.js's orderRow expects. Only fields checkout actually knows
+// about are set — lamination/notes aren't captured anywhere in the configurator today,
+// so they're left for webhook.js's own defaults rather than guessed at here.
+function buildOrderMetadata() {
+  var productParts = [];
+  if (ORDER.hasBag)  productParts.push('Flat Bottom Bag');
+  if (ORDER.hasBowl) productParts.push('Paper Food Bowl');
+
+  var paperType = ORDER.hasBag ? (ORDER.bagPaper || '') : (ORDER.bowlPaper || '');
+  var size      = ORDER.hasBag ? (ORDER.bagSize  || '') : (ORDER.bowlType  || '');
+  var customPrint = !!(ORDER.hasBag && (ORDER.bagPrintColors > 0 || ORDER.bagPrinting === 'upload' || ORDER.bagPrinting === 'designer'));
+
+  return {
+    product_type:  productParts.join(' + ') || '',
+    paper_type:    paperType,
+    size:          size,
+    quantity:      ORDER.qty || 0,
+    custom_print:  customPrint,
+  };
+}
+
 // ── Main payment handler ───────────────────────────────────────────
 function handlePayment() {
   if (!document.getElementById('terms').checked) {
@@ -376,28 +427,38 @@ function handlePayment() {
     return;
   }
 
-  var email = document.querySelector('[type="email"]')?.value?.trim();
+  var email = document.getElementById('pay-email')?.value?.trim();
   if (!email || !email.includes('@')) {
     alert('Please enter a valid email address to receive your order confirmation.');
-    document.querySelector('[type="email"]')?.focus();
+    document.getElementById('pay-email')?.focus();
     return;
   }
 
-  var bizName = document.querySelector('[type="text"]')?.value?.trim() || 'Customer';
+  var bizName  = document.getElementById('pay-biz-name')?.value?.trim() || 'Customer';
+  var contact  = document.getElementById('pay-contact-person')?.value?.trim() || '';
+  var phone    = document.getElementById('pay-phone')?.value?.trim() || '';
+  var address  = document.getElementById('pay-delivery-address')?.value?.trim() || '';
 
-  // Parse amount from ORDER or fall back to displayed total
-  var totalText = ORDER.total || 'GHS 917.95';
-  var amountGHS = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 917.95;
-  var amountPesewas = Math.round(amountGHS * 100); // Paystack uses smallest unit
+  // Charge only the deposit today — the rest is the "outstanding balance" paid
+  // before dispatch, via the customer account's Outstanding Balance panel.
+  var depositPct    = getDepositPercentage();
+  var totalGHS      = getOrderTotalGHS();
+  var depositGHS    = Math.round(totalGHS * depositPct * 100) / 100;
+  var amountPesewas = Math.round(depositGHS * 100); // Paystack uses smallest unit
 
   // Generate unique reference
   var ref = ORDER.ref || ('KBL-' + Date.now());
 
-  // Save reference for confirmation page
-  ORDER.ref   = ref;
-  ORDER.email = email;
-  ORDER.biz   = bizName;
+  // Save reference + payment details for confirmation page
+  ORDER.ref         = ref;
+  ORDER.email       = email;
+  ORDER.biz         = bizName;
+  ORDER.paymentType = 'deposit';
+  ORDER.depositPaid = depositGHS;
+  ORDER.balanceDue  = Math.round((totalGHS - depositGHS) * 100) / 100;
   try { localStorage.setItem('kraapht_order', JSON.stringify(ORDER)); } catch(e) {}
+
+  var orderMeta = buildOrderMetadata();
 
   // ── Launch Paystack popup ────────────────────────────────────────
   var handler = PaystackPop.setup({
@@ -406,12 +467,22 @@ function handlePayment() {
     amount:   amountPesewas,
     currency: 'GHS',
     ref:      ref,
-    label:    'Kraapht Bags Ltd — ' + bizName,
+    label:    'Kraapht Bags Ltd — ' + bizName + ' (deposit)',
     metadata: {
       custom_fields: [
-        { display_name: 'Business Name', variable_name: 'biz_name',   value: bizName },
-        { display_name: 'Order Ref',     variable_name: 'order_ref',  value: ref },
-        { display_name: 'Quantity',      variable_name: 'quantity',   value: ORDER.qty || '' },
+        { display_name: 'Payment Type',   variable_name: 'payment_type',  value: 'deposit' },
+        { display_name: 'Order Total',    variable_name: 'order_total',   value: totalGHS },
+        { display_name: 'Business Name',  variable_name: 'business_name', value: bizName },
+        { display_name: 'Contact Person', variable_name: 'full_name',     value: contact },
+        { display_name: 'Phone',          variable_name: 'phone',         value: phone },
+        { display_name: 'WhatsApp',       variable_name: 'whatsapp',      value: phone },
+        { display_name: 'Delivery Address', variable_name: 'location',    value: address },
+        { display_name: 'Order Ref',      variable_name: 'order_ref',     value: ref },
+        { display_name: 'Product Type',   variable_name: 'product_type',  value: orderMeta.product_type },
+        { display_name: 'Paper Type',     variable_name: 'paper_type',    value: orderMeta.paper_type },
+        { display_name: 'Size',           variable_name: 'size',          value: orderMeta.size },
+        { display_name: 'Quantity',       variable_name: 'quantity',      value: orderMeta.quantity },
+        { display_name: 'Custom Print',   variable_name: 'custom_print',  value: orderMeta.customPrint },
       ]
     },
     channels: ['mobile_money', 'bank'],
@@ -428,8 +499,9 @@ function handlePayment() {
         btn.textContent = 'Payment cancelled — try again';
         btn.classList.add('bg-red-700');
         setTimeout(function() {
-          btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Pay ' +
-            (ORDER.total || '') + ' Now';
+          var depositText = 'GHS ' + depositGHS.toLocaleString();
+          btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Pay Deposit ' +
+            depositText + ' Now';
           btn.classList.remove('bg-red-700');
         }, 3000);
       }

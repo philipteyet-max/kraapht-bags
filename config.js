@@ -58,6 +58,7 @@ const KRAAPHT_CONFIG = {
     bulk_discount_qty:  1000,   // orders at/above this quantity get the bulk discount
     bulk_discount_rate: 0.05,   // 5% off production cost (paper, print, labour — not delivery)
     quote_validity_days: 14,    // how many days a downloaded quote/proforma invoice stays valid
+    deposit_percentage: 0.5,    // fraction of the order total charged at checkout; the rest is the "outstanding balance" paid before dispatch
   },
 
   // ----------------------------------------------------------

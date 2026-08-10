@@ -7,6 +7,7 @@
 <script src="config.js?v=4"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
@@ -579,7 +580,9 @@ async function handleForgotPassword() {
 async function loadAccountData() {
   const [profileRes, ordersRes, artworkRes] = await Promise.all([
     sb.from('profiles').select('*').eq('id', currentUser.id).single(),
-    sb.from('orders').select('*').eq('user_id', currentUser.id).order('order_date', { ascending: false }),
+    // Matched by email, not user_id — checkout has no login step, so orders
+    // never get a user_id set. Email is what actually links an order to an account.
+    sb.from('orders').select('*').eq('email', currentUser.email).order('order_date', { ascending: false }),
     sb.from('artwork').select('*').eq('user_id', currentUser.id).order('uploaded_at', { ascending: false }),
   ]);
 
@@ -600,7 +603,7 @@ function renderAccountHeader(p, orders) {
   document.getElementById('nav-user-name').textContent = name;
   document.getElementById('stat-order-count').textContent = orders.length;
   const bags  = orders.reduce((s, o) => s + (o.quantity || 0), 0);
-  const spent = orders.reduce((s, o) => s + Number(o.amount_ghs || 0), 0);
+  const spent = orders.reduce((s, o) => s + Number(o.amount_paid != null ? o.amount_paid : o.amount_ghs || 0), 0);
   document.getElementById('stat-bags').textContent  = bags.toLocaleString();
   document.getElementById('stat-spent').textContent = 'GHS ' + spent.toLocaleString();
   // Loyalty
@@ -617,7 +620,7 @@ function renderAccountHeader(p, orders) {
 // ═══════════════════════════════════════════════════════
 // ORDERS RENDER
 // ═══════════════════════════════════════════════════════
-const STAGES = ['Paid','Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
+const STAGES = ['New Order','Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
 
 function renderOrders(orders) {
   const el = document.getElementById('orders-list');
@@ -641,6 +644,22 @@ function renderOrders(orders) {
     }).join('');
     const isActive = !['Delivered','Cancelled'].includes(o.stage);
     const due = o.due_date ? new Date(o.due_date).toLocaleDateString('en-GB', {day:'numeric',month:'short'}) : '—';
+
+    // Outstanding balance — fixed from the order's own stored total, never recalculated live
+    const amountPaid = Number(o.amount_paid || 0);
+    const totalGHS   = Number(o.amount_ghs || 0);
+    const balanceGHS = Math.max(Math.round((totalGHS - amountPaid) * 100) / 100, 0);
+    const balanceBanner = (o.payment_status !== 'paid' && balanceGHS > 0) ? `
+      <div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-error">Outstanding Balance</p>
+          <p class="text-sm text-on-surface-variant">GHS ${balanceGHS.toLocaleString()} due before dispatch</p>
+        </div>
+        <button onclick="payBalance('${o.ref}', ${balanceGHS})" class="bg-accent text-white px-5 py-2.5 text-xs font-bold tracking-widest uppercase hover:bg-primary transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">lock</span>Pay Now
+        </button>
+      </div>` : '';
+
     return `<div class="bg-surface border-l-4 ${isActive?'border-accent':'border-outline-variant'} border border-outline-variant p-5 mb-4">
       <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
         <div>
@@ -651,11 +670,49 @@ function renderOrders(orders) {
           <p class="text-sm text-on-surface-variant">${o.quantity?.toLocaleString()} × ${o.product_type} · ${o.paper_type}</p>
           <p class="text-xs text-on-surface-variant mt-0.5">Due: ${due}</p>
         </div>
-        <p class="font-semibold text-primary">GHS ${Number(o.amount_ghs).toLocaleString()}</p>
+        <p class="font-semibold text-primary">GHS ${totalGHS.toLocaleString()}</p>
       </div>
       <div class="flex items-center gap-0 overflow-x-auto">${stageTrack}</div>
+      ${balanceBanner}
     </div>`;
   }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// OUTSTANDING BALANCE PAYMENT
+// ═══════════════════════════════════════════════════════
+function payBalance(ref, balanceGHS) {
+  if (!balanceGHS || balanceGHS <= 0) return;
+  if (typeof PaystackPop === 'undefined') {
+    alert('Payment could not load. Please refresh the page and try again.');
+    return;
+  }
+  var key = (typeof KRAAPHT_CONFIG !== 'undefined' && KRAAPHT_CONFIG.paystack)
+    ? KRAAPHT_CONFIG.paystack.public_key
+    : 'pk_test_335b7466d67dd7d8b8360c338983a6f1fb7193c8';
+
+  var handler = PaystackPop.setup({
+    key:      key,
+    email:    currentUser.email,
+    amount:   Math.round(balanceGHS * 100), // pesewas
+    currency: 'GHS',
+    ref:      'BAL-' + ref + '-' + Date.now(), // must differ from the original deposit's reference
+    label:    'Kraapht Bags Ltd — Balance for ' + ref,
+    metadata: {
+      custom_fields: [
+        { display_name: 'Payment Type', variable_name: 'payment_type', value: 'balance' },
+        { display_name: 'Order Ref',    variable_name: 'order_ref',    value: ref },
+      ]
+    },
+    channels: ['mobile_money', 'bank'],
+    callback: function() {
+      alert('Balance paid — thank you! Your order status will update shortly.');
+      loadAccountData(); // refresh so the balance banner clears once the webhook lands
+    },
+    onClose: function() {}
+  });
+
+  handler.openIframe();
 }
 
 // ═══════════════════════════════════════════════════════

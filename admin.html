@@ -839,6 +839,7 @@ function normalise(row) {
     customPrint:  row.custom_print,
     qty:          row.quantity,
     amount:       Number(row.amount_ghs),
+    amountPaid:   Number(row.amount_paid || 0),
     materialCost: Number(row.material_cost),
     labourCost:   Number(row.labour_cost),
     stage:        row.stage,
@@ -876,7 +877,7 @@ function showLoadingState(on) {
 // ═══════════════════════════════════════════════════════
 // STATIC CONFIG — targets & projections (update in config.js later)
 // ═══════════════════════════════════════════════════════
-const STAGES = ['Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
+const STAGES = ['New Order','Printing','Die Cutting','Lamination','Folding','QC Check','Dispatched','Delivered'];
 const PROD_STAGES = ['Printing','Die Cutting','Lamination','Folding','QC Check'];
 
 const monthlyTargets = {
@@ -1223,6 +1224,13 @@ function renderProductionCard(o){
 async function advanceStage(orderId, newStage){
   const o=orders.find(x=>x.id===orderId);
   if(!o) return;
+  // Balance must be fully paid before an order can be dispatched — the
+  // customer's own "Outstanding Balance" panel is how they clear this.
+  if(newStage==='Dispatched'&&o.paymentStatus!=='paid'){
+    const outstanding=(o.amount-o.amountPaid).toLocaleString();
+    showToast(`Blocked: GHS ${outstanding} still owing on ${orderId} — customer must pay balance before dispatch`);
+    return;
+  }
   // skip lamination if not required
   if(newStage==='Lamination'&&!o.lamination){
     const si=stageIndex('Lamination');
@@ -1327,7 +1335,7 @@ function renderFinance(){
   const prefix=isNaN(d)?'2026-06':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
   const monthOrders=orders.filter(o=>o.orderDate&&o.orderDate.startsWith(prefix));
-  const revenue=monthOrders.reduce((s,o)=>s+o.amount,0);
+  const revenue=monthOrders.reduce((s,o)=>s+o.amountPaid,0); // cash actually collected, not full order value
   const matCost=monthOrders.reduce((s,o)=>s+o.materialCost,0);
   const labCost=monthOrders.reduce((s,o)=>s+o.labourCost,0);
   const inProd=orders.filter(o=>PROD_STAGES.includes(o.stage)).reduce((s,o)=>s+o.amount,0);
@@ -1433,12 +1441,18 @@ function openOrderModal(orderId){
   // info grid
   const orderDate=o.orderDate?new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
   const dueDate=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const balanceOwing = Math.max(o.amount - o.amountPaid, 0);
+  const paymentLabel = o.paymentStatus === 'paid'
+    ? 'Paid in full'
+    : `${ghs(o.amountPaid)} paid · GHS ${balanceOwing.toLocaleString()} owing`;
+
   document.getElementById('modal-info-grid').innerHTML=[
     ['Product',o.product||o.product_type||'—'],
     ['Paper',o.paper||o.paper_type||'—'],
     ['Size',o.size||'—'],
     ['Qty',o.qty.toLocaleString()+' units'],
     ['Lamination',o.lamination?'Yes — required':'No'],
+    ['Payment',paymentLabel],
     ['Order Date',orderDate],
     ['Due Date',dueDate],
     ['Status',o.stage],

@@ -112,8 +112,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Quantity</p><p class="font-body-md font-semibold order-qty" id="detail-qty">200 units</p></div>
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Size</p><p class="font-body-md font-semibold" id="detail-size">—</p></div>
           <div class="p-4 bg-surface-container"><p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-xs mb-1">Handle</p><p class="font-body-md font-semibold" id="detail-handle">—</p></div>
-          <div class="p-4 bg-primary text-white"><p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mb-1 opacity-70">Amount Paid</p><p class="font-body-md font-semibold text-accent total-paid" id="detail-amount">GHS 917.95</p></div>
+          <div class="p-4 bg-primary text-white"><p class="font-label-sm text-label-sm uppercase tracking-widest text-xs mb-1 opacity-70" id="detail-amount-label">Amount Paid</p><p class="font-body-md font-semibold text-accent total-paid" id="detail-amount">GHS 917.95</p></div>
         </div>
+        <p id="detail-balance-note" class="hidden mt-4 text-sm text-on-surface-variant"></p>
       </div>
 
       <!-- Production Timeline -->
@@ -203,7 +204,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div class="flex justify-between"><span class="opacity-60">Delivery</span><span class="delivery-cost">GHS 30</span></div>
         </div>
         <div class="flex justify-between text-xl font-bold mb-6">
-          <span>Total Paid</span><span class="text-accent total-paid" id="invoice-total">GHS —</span>
+          <span id="invoice-total-label">Total Paid</span><span class="text-accent total-paid" id="invoice-total">GHS —</span>
         </div>
         <button onclick="window.print()" class="w-full border border-white/30 text-white py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-lg">download</span>Download Invoice
@@ -299,9 +300,17 @@ function summariseLocalOrder(o) {
   const qtyParts = [];
   if (o.hasBag && o.bagQty)   qtyParts.push(o.bagQty.toLocaleString() + (o.hasBowl ? ' bags' : ' units'));
   if (o.hasBowl && o.bowlQty) qtyParts.push(o.bowlQty.toLocaleString() + ' bowls');
+  // If this was a deposit payment, show what was actually charged today —
+  // not the full order total, which hasn't all been collected yet.
+  const isDeposit = o.paymentType === 'deposit' && o.depositPaid != null;
+  const amount = isDeposit ? `GHS ${Number(o.depositPaid).toLocaleString()}` : (o.total || '—');
+  const balanceNote = isDeposit && o.balanceDue > 0
+    ? `GHS ${Number(o.balanceDue).toLocaleString()} balance due before dispatch`
+    : '';
+
   return {
     product, paper: paperParts.join(' · ') || '—', size: sizeParts.join(' · ') || '—',
-    qty: qtyParts.join(' + ') || '—', amount: o.total || '—', handle: o.bagHandle || '—',
+    qty: qtyParts.join(' + ') || '—', amount, handle: o.bagHandle || '—', balanceNote,
   };
 }
 
@@ -317,7 +326,7 @@ window.addEventListener('DOMContentLoaded', async function() {
   if (paystackRef) {
     try {
       const rows = await sbGet('orders', {
-        select: 'ref,product_type,paper_type,size,quantity,amount_ghs,stage',
+        select: 'ref,product_type,paper_type,size,quantity,amount_ghs,amount_paid,payment_status,stage',
         paystack_ref: `eq.${paystackRef}`,
         limit: 1,
       });
@@ -336,19 +345,29 @@ window.addEventListener('DOMContentLoaded', async function() {
     return; // don't fabricate a confirmed order for a visitor with nothing to confirm
   }
 
-  let displayRef, product, paper, size, qty, amount, handle;
+  let displayRef, product, paper, size, qty, amount, handle, balanceNote, amountLabel;
+  amountLabel = 'Amount Paid';
   if (supaOrder) {
     displayRef = supaOrder.ref || paystackRef;
     product    = supaOrder.product_type || '—';
     paper      = supaOrder.paper_type || '—';
     size       = supaOrder.size || '—';
     qty        = supaOrder.quantity ? supaOrder.quantity.toLocaleString() + ' units' : '—';
-    amount     = supaOrder.amount_ghs ? 'GHS ' + Number(supaOrder.amount_ghs).toLocaleString() : '—';
     handle     = ORDER.bagHandle || '—'; // not stored in Supabase — use this browser's own checkout data if present
+
+    const paidSoFar = supaOrder.amount_paid != null ? Number(supaOrder.amount_paid) : Number(supaOrder.amount_ghs || 0);
+    amount = 'GHS ' + paidSoFar.toLocaleString();
+    if (supaOrder.payment_status && supaOrder.payment_status !== 'paid') {
+      amountLabel = 'Deposit Paid';
+      const owing = Math.max(Number(supaOrder.amount_ghs || 0) - paidSoFar, 0);
+      balanceNote = owing > 0 ? `GHS ${owing.toLocaleString()} balance due before dispatch` : '';
+    }
   } else {
     const s = summariseLocalOrder(ORDER);
     displayRef = ORDER.ref || paystackRef || '—';
     product = s.product; paper = s.paper; size = s.size; qty = s.qty; amount = s.amount; handle = s.handle;
+    balanceNote = s.balanceNote;
+    if (ORDER.paymentType === 'deposit') amountLabel = 'Deposit Paid';
   }
 
   document.getElementById('detail-product').textContent = product;
@@ -358,6 +377,13 @@ window.addEventListener('DOMContentLoaded', async function() {
   document.getElementById('detail-qty').textContent     = qty;
   document.getElementById('detail-amount').textContent  = amount;
   document.getElementById('invoice-total').textContent  = amount;
+  document.getElementById('detail-amount-label').textContent = amountLabel;
+  document.getElementById('invoice-total-label').textContent = amountLabel;
+  var balanceEl = document.getElementById('detail-balance-note');
+  if (balanceEl) {
+    balanceEl.textContent = balanceNote || '';
+    balanceEl.classList.toggle('hidden', !balanceNote);
+  }
 
   document.querySelectorAll('#order-ref, #ref-inline, #invoice-ref').forEach(function(el) {
     el.textContent = displayRef;
