@@ -128,6 +128,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Delivery Address *</label>
             <input type="text" id="pay-delivery-address" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="Street, area, Accra landmark"/>
           </div>
+          <div class="md:col-span-2">
+            <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Purchase Order / Reference Number <span class="normal-case text-on-surface-variant opacity-60">— optional, for institutional buyers</span></label>
+            <input type="text" id="pay-po-number" class="w-full border-b-2 border-outline bg-transparent px-0 py-3 focus:border-primary outline-none font-body-md" placeholder="e.g. PO-2026-0143 (leave blank if not applicable)"/>
+          </div>
         </div>
       </div>
 
@@ -492,6 +496,7 @@ function handlePayment() {
   var contact  = document.getElementById('pay-contact-person')?.value?.trim() || '';
   var phone    = document.getElementById('pay-phone')?.value?.trim() || '';
   var address  = document.getElementById('pay-delivery-address')?.value?.trim() || '';
+  var poNumber = document.getElementById('pay-po-number')?.value?.trim() || '';
 
   // Charge only the deposit today — the rest is the "outstanding balance" paid
   // before dispatch, via the customer account's Outstanding Balance panel.
@@ -531,6 +536,7 @@ function handlePayment() {
         { display_name: 'Phone',          variable_name: 'phone',         value: phone },
         { display_name: 'WhatsApp',       variable_name: 'whatsapp',      value: phone },
         { display_name: 'Delivery Address', variable_name: 'location',    value: address },
+        { display_name: 'PO / Reference Number', variable_name: 'po_number', value: poNumber || 'N/A' },
         { display_name: 'Order Ref',      variable_name: 'order_ref',     value: ref },
         { display_name: 'Product Type',   variable_name: 'product_type',  value: orderMeta.product_type },
         { display_name: 'Paper Type',     variable_name: 'paper_type',    value: orderMeta.paper_type },
