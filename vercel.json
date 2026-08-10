@@ -1,10 +1,10 @@
 {
   "functions": {
-    "api/webhook.js": { "maxDuration": 10 },
-    "api/orders.js":  { "maxDuration": 10 },
-    "api/finance.js": { "maxDuration": 10 },
-    "api/artwork-upload.js": { "maxDuration": 30 },
-    "api/profile.js": { "maxDuration": 10 }
+    "api/webhook.js":                  { "maxDuration": 10 },
+    "api/orders.js":                   { "maxDuration": 10 },
+    "api/finance.js":                  { "maxDuration": 10 },
+    "api/notify-email.js":             { "maxDuration": 10 },
+    "api/check-returning-customer.js": { "maxDuration": 10 }
   },
   "headers": [
     {

@@ -1279,7 +1279,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 
           <div class="bg-white/10 p-4 mb-4 text-sm">
             <p class="opacity-60 font-label-sm uppercase tracking-widest text-xs mb-1">Payment Policy</p>
-            <p class="opacity-80">100% pre-payment. Production starts after payment is confirmed.</p>
+            <p class="opacity-80"><span id="order-policy-deposit-pct">50</span>% today starts production immediately — the balance is only due once your order's ready to dispatch, not before.</p>
           </div>
           <p class="text-xs text-white/30 text-center mb-5 uppercase tracking-widest leading-5">First orders include plate &amp; die-cut setup costs. Returning customers save these on repeat orders.</p>
         </div>
@@ -1728,6 +1728,12 @@ calcPrice();
   // Set initial state.paperPrice to config value for default selected paper
   state.paperPrice = p.chromo_coat;
   calcPrice();
+
+  // Payment policy deposit % — dynamic, matches payment.html
+  const depositPctEl = document.getElementById('order-policy-deposit-pct');
+  if (depositPctEl && KRAAPHT_CONFIG.order.deposit_percentage != null) {
+    depositPctEl.textContent = Math.round(KRAAPHT_CONFIG.order.deposit_percentage * 100);
+  }
 })();
 
 </script>

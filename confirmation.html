@@ -300,11 +300,11 @@ function summariseLocalOrder(o) {
   const qtyParts = [];
   if (o.hasBag && o.bagQty)   qtyParts.push(o.bagQty.toLocaleString() + (o.hasBowl ? ' bags' : ' units'));
   if (o.hasBowl && o.bowlQty) qtyParts.push(o.bowlQty.toLocaleString() + ' bowls');
-  // If this was a deposit payment, show what was actually charged today —
-  // not the full order total, which hasn't all been collected yet.
-  const isDeposit = o.paymentType === 'deposit' && o.depositPaid != null;
-  const amount = isDeposit ? `GHS ${Number(o.depositPaid).toLocaleString()}` : (o.total || '—');
-  const balanceNote = isDeposit && o.balanceDue > 0
+  // Show what was actually charged today (deposit or full), not the order
+  // total, which for a deposit hasn't all been collected yet.
+  const chargedToday = (o.paymentType === 'deposit' || o.paymentType === 'full') && o.depositPaid != null;
+  const amount = chargedToday ? `GHS ${Number(o.depositPaid).toLocaleString()}` : (o.total || '—');
+  const balanceNote = o.balanceDue > 0
     ? `GHS ${Number(o.balanceDue).toLocaleString()} balance due before dispatch`
     : '';
 

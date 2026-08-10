@@ -91,12 +91,14 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <!-- Payment Form -->
     <div class="lg:col-span-2 space-y-6">
 
-      <!-- Pre-payment notice -->
+      <!-- Payment / production timeline notice -->
       <div class="bg-amber-50 border border-amber-200 p-5 flex gap-4">
-        <span class="material-symbols-outlined text-amber-600 flex-shrink-0 mt-0.5">info</span>
+        <span class="material-symbols-outlined text-amber-600 flex-shrink-0 mt-0.5">schedule</span>
         <div>
-          <p class="font-body-md font-semibold text-amber-800">100% Pre-Payment Required</p>
-          <p class="font-body-md text-amber-700 text-sm mt-1">Production begins only after full payment is confirmed. No refunds once materials are purchased. All prices in Ghana Cedis (GHS).</p>
+          <p class="font-body-md font-semibold text-amber-800">We Start the Moment You Commit</p>
+          <p class="font-body-md text-amber-700 text-sm mt-1">
+            Pay <span id="policy-deposit-pct">50</span>% today and we begin sourcing materials immediately — <strong>Day 0</strong>. Production starts <strong>Day 1</strong>, quality-checked by <strong>Day 5–7</strong>, dispatched by <strong>Day 7–10</strong>. The remaining balance is only due once your order is ready to ship — not before. No refunds once materials are purchased. All prices in Ghana Cedis (GHS).
+          </p>
         </div>
       </div>
 
@@ -224,16 +226,22 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <div class="flex justify-between text-base font-semibold mb-2">
             <span class="opacity-80">Order Total</span><span id="summary-total">GHS —</span>
           </div>
+
+          <div id="pay-in-full-wrap" class="hidden mb-4 p-3 bg-white/10 flex items-start gap-3">
+            <input type="checkbox" id="pay-in-full-checkbox" class="mt-1 w-4 h-4 accent-accent flex-shrink-0"/>
+            <label for="pay-in-full-checkbox" class="text-xs opacity-80 cursor-pointer">Welcome back — since you've ordered with us before, you can pay in full today instead and skip a second payment before dispatch.</label>
+          </div>
+
           <div class="space-y-1 mb-8">
             <div class="flex justify-between text-xl font-bold">
-              <span>Deposit Due Today</span><span class="text-accent" id="summary-deposit">GHS —</span>
+              <span id="summary-deposit-label">Deposit Due Today</span><span class="text-accent" id="summary-deposit">GHS —</span>
             </div>
-            <div class="flex justify-between text-xs opacity-60">
+            <div class="flex justify-between text-xs opacity-60" id="summary-balance-row">
               <span>Balance before dispatch</span><span id="summary-balance">GHS —</span>
             </div>
           </div>
           <button onclick="handlePayment()" id="pay-btn" class="w-full bg-accent text-white py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-colors flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined">lock</span>Pay Deposit <span id="pay-btn-amount">Now</span>
+            <span class="material-symbols-outlined">lock</span><span id="pay-btn-label">Pay Deposit</span> <span id="pay-btn-amount">Now</span>
           </button>
           <div class="flex items-center justify-center gap-2 mt-4 opacity-40">
             <span class="material-symbols-outlined text-sm">lock</span>
@@ -318,8 +326,12 @@ document.querySelectorAll('[name="pay_method"]').forEach(function(r) {
 var ORDER = {};
 try { ORDER = JSON.parse(localStorage.getItem('kraapht_order') || '{}'); } catch(e) {}
 
-// Deposit percentage — single source of truth, used for both display and the actual charge
+// Deposit percentage — single source of truth, used for both display and the actual charge.
+// payInFullOverride is set true only for confirmed returning customers who tick
+// the "pay in full" box — see checkReturningCustomer() / the checkbox handler below.
+var payInFullOverride = false;
 function getDepositPercentage() {
+  if (payInFullOverride) return 1;
   return (typeof KRAAPHT_CONFIG !== 'undefined' && KRAAPHT_CONFIG.order.deposit_percentage != null)
     ? KRAAPHT_CONFIG.order.deposit_percentage : 0.5;
 }
@@ -327,30 +339,72 @@ function getOrderTotalGHS() {
   return parseFloat(String(ORDER.total || '0').replace(/[^0-9.]/g, '')) || 0;
 }
 
+// Re-run whenever the deposit % might have changed (initial load, or the
+// pay-in-full checkbox toggling) — updates every amount and label that depends on it.
+function updatePaymentAmounts() {
+  if (!ORDER.total) return;
+  var depositPct  = getDepositPercentage();
+  var payingFull  = depositPct >= 1;
+  var totalGHS    = getOrderTotalGHS();
+  var depositGHS  = Math.round(totalGHS * depositPct * 100) / 100;
+  var balanceGHS  = Math.round((totalGHS - depositGHS) * 100) / 100;
+  var depositText = 'GHS ' + depositGHS.toLocaleString();
+
+  var totalEl = document.getElementById('summary-total');
+  if (totalEl) totalEl.textContent = ORDER.total;
+  var depositLabelEl = document.getElementById('summary-deposit-label');
+  if (depositLabelEl) depositLabelEl.textContent = payingFull ? 'Total Due Today' : 'Deposit Due Today';
+  var depositEl = document.getElementById('summary-deposit');
+  if (depositEl) depositEl.textContent = depositText;
+  var balanceRow = document.getElementById('summary-balance-row');
+  if (balanceRow) balanceRow.classList.toggle('hidden', payingFull);
+  var balanceEl = document.getElementById('summary-balance');
+  if (balanceEl) balanceEl.textContent = 'GHS ' + balanceGHS.toLocaleString();
+  var pctEl = document.getElementById('terms-deposit-pct');
+  if (pctEl) pctEl.textContent = payingFull ? '100%' : Math.round(depositPct * 100) + '%';
+  var policyPctEl = document.getElementById('policy-deposit-pct');
+  if (policyPctEl) policyPctEl.textContent = payingFull ? 100 : Math.round(depositPct * 100);
+
+  // Pay button — shows what's actually charged today
+  var btnAmt = document.getElementById('pay-btn-amount');
+  if (btnAmt) btnAmt.textContent = depositText + ' Now';
+  var btnLabel = document.getElementById('pay-btn-label');
+  if (btnLabel) btnLabel.textContent = payingFull ? 'Pay' : 'Pay Deposit';
+}
+
+// Checks whether this email has ordered before; if so, reveals the "pay in
+// full" option. Never blocks checkout if the lookup fails — just stays hidden.
+async function checkReturningCustomer(email) {
+  var wrap = document.getElementById('pay-in-full-wrap');
+  if (!wrap) return;
+  if (!email || !email.includes('@')) { wrap.classList.add('hidden'); return; }
+  try {
+    var res = await fetch('/api/check-returning-customer?email=' + encodeURIComponent(email));
+    var data = await res.json();
+    wrap.classList.toggle('hidden', !data.isReturning);
+  } catch (e) {
+    wrap.classList.add('hidden');
+  }
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   var deliveryCost = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG.order.delivery_cost : 30;
 
+  var payInFullCheckbox = document.getElementById('pay-in-full-checkbox');
+  if (payInFullCheckbox) {
+    payInFullCheckbox.addEventListener('change', function() {
+      payInFullOverride = this.checked;
+      updatePaymentAmounts();
+    });
+  }
+  var emailInput = document.getElementById('pay-email');
+  if (emailInput) {
+    emailInput.addEventListener('blur', function() { checkReturningCustomer(this.value.trim()); });
+  }
+
   // Populate order summary from saved order
   if (ORDER.total) {
-    var depositPct   = getDepositPercentage();
-    var totalGHS      = getOrderTotalGHS();
-    var depositGHS     = Math.round(totalGHS * depositPct * 100) / 100;
-    var balanceGHS   = Math.round((totalGHS - depositGHS) * 100) / 100;
-    var depositText  = 'GHS ' + depositGHS.toLocaleString();
-
-    // Update sidebar totals
-    var totalEl = document.getElementById('summary-total');
-    if (totalEl) totalEl.textContent = ORDER.total;
-    var depositEl = document.getElementById('summary-deposit');
-    if (depositEl) depositEl.textContent = depositText;
-    var balanceEl = document.getElementById('summary-balance');
-    if (balanceEl) balanceEl.textContent = 'GHS ' + balanceGHS.toLocaleString();
-    var pctEl = document.getElementById('terms-deposit-pct');
-    if (pctEl) pctEl.textContent = Math.round(depositPct * 100) + '%';
-
-    // Update pay button amount — shows what's actually charged today (the deposit)
-    var btnAmt = document.getElementById('pay-btn-amount');
-    if (btnAmt) btnAmt.textContent = depositText + ' Now';
+    updatePaymentAmounts();
 
     // Product
     var productParts = [];
@@ -453,7 +507,7 @@ function handlePayment() {
   ORDER.ref         = ref;
   ORDER.email       = email;
   ORDER.biz         = bizName;
-  ORDER.paymentType = 'deposit';
+  ORDER.paymentType = (depositPct >= 1) ? 'full' : 'deposit';
   ORDER.depositPaid = depositGHS;
   ORDER.balanceDue  = Math.round((totalGHS - depositGHS) * 100) / 100;
   try { localStorage.setItem('kraapht_order', JSON.stringify(ORDER)); } catch(e) {}
