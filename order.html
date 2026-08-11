@@ -964,9 +964,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
         </div>
         <div id="custom-dims" class="hidden grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-outline-variant">
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label><input type="number" id="custom-width-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 20"/></div>
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label><input type="number" id="custom-depth-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 10"/></div>
-          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label><input type="number" id="custom-height-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 25"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Width (cm)</label><input type="number" id="custom-width-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 20" oninput="updateCustomSizeTier()"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Depth (cm)</label><input type="number" id="custom-depth-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 10" oninput="updateCustomSizeTier()"/></div>
+          <div><label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-2 block">Height (cm)</label><input type="number" id="custom-height-val" class="w-full border-b-2 border-outline bg-transparent px-0 py-2 focus:border-primary outline-none font-body-md" placeholder="e.g. 25" oninput="updateCustomSizeTier()"/></div>
+          <p id="custom-size-tier-note" class="col-span-3 text-xs text-on-surface-variant"></p>
         </div>
       </div>
 
@@ -1399,9 +1400,16 @@ document.querySelectorAll('#size-options label').forEach(label => {
   label.addEventListener('click', function() {
     document.querySelectorAll('#size-options label').forEach(l => { l.classList.remove('selected','border-primary'); l.classList.add('border-outline-variant'); });
     this.classList.add('selected','border-primary'); this.classList.remove('border-outline-variant');
-    document.getElementById('custom-dims').classList.toggle('hidden', this.dataset.size !== 'custom');
-    state.bagsPerSheet = parseInt(this.dataset.bps) || 1;
-    calcPrice();
+    const isCustom = this.dataset.size === 'custom';
+    document.getElementById('custom-dims').classList.toggle('hidden', !isCustom);
+    if (isCustom) {
+      updateCustomSizeTier();
+    } else {
+      state.bagsPerSheet = parseInt(this.dataset.bps) || 1;
+      const note = document.getElementById('custom-size-tier-note');
+      if (note) note.textContent = '';
+      calcPrice();
+    }
   });
 });
 
@@ -1457,6 +1465,40 @@ document.getElementById('save-design').addEventListener('change', function() {
 });
 
 // ===== PRICING CALCULATOR — reads from config.js =====
+// Custom bag size — paper usage still follows whichever standard envelope
+// the entered dimensions fit inside (no point charging A3-level paper for a
+// bag that only needs A5-level paper), but a custom order ALWAYS needs its
+// own physical die cut to its exact shape — a standard A5 die can't be
+// reused just because the custom bag happens to fit inside it. So custom
+// orders get the matching tier's paper rate PLUS an additional one-time
+// custom die-cut fee on top (see calcPrice()'s customDieFee).
+const SIZE_TIERS = [
+  { name: 'A5 / Small',  w: 15, d: 8,  h: 21, bps: 4 },
+  { name: 'A4 / Medium', w: 24, d: 12, h: 30, bps: 2 },
+  { name: 'A3 / Large',  w: 32, d: 16, h: 40, bps: 1 },
+];
+
+function updateCustomSizeTier() {
+  const w = parseFloat(document.getElementById('custom-width-val').value) || 0;
+  const d = parseFloat(document.getElementById('custom-depth-val').value) || 0;
+  const h = parseFloat(document.getElementById('custom-height-val').value) || 0;
+  const note = document.getElementById('custom-size-tier-note');
+
+  if (!w && !d && !h) {
+    state.bagsPerSheet = 1;
+    if (note) note.textContent = "Enter your dimensions — we'll match the closest standard paper rate, plus a one-time custom die-cut fee for your exact size.";
+  } else {
+    const fit = SIZE_TIERS.find(t => w <= t.w && d <= t.d && h <= t.h);
+    state.bagsPerSheet = fit ? fit.bps : 1;
+    if (note) {
+      note.textContent = fit
+        ? `Paper priced at the ${fit.name} rate, plus a one-time custom die-cut fee for your exact size.`
+        : 'Exceeds our A3 / Large size — full custom paper rate, plus the one-time custom die-cut fee.';
+    }
+  }
+  calcPrice();
+}
+
 function calcPrice() {
   var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
 
@@ -1539,8 +1581,15 @@ function calcPrice() {
   const plateCost    = plateCosts[state.printColors] || 0;
   const labour       = qty * labourPerBag;
   const extraDesigner = state.hasDesigner ? designerFee : 0;
-  const saving       = state.printColors > 0 ? plateCost + dieCutBoard : 0;
-  const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner;
+  // Custom sizes need a brand-new physical die cut to their exact shape —
+  // even when the paper usage matches a standard tier — so they carry this
+  // extra one-time fee on top of the normal production cost, waived only on
+  // repeat orders of the same custom size (same "isRecurring" checkbox).
+  const sizeKey       = document.querySelector('[name="size"]:checked')?.value || 'a5';
+  const isCustomSize  = sizeKey === 'custom';
+  const customDieFee  = isCustomSize ? dieCutBoard : 0;
+  const saving       = (state.printColors > 0 ? plateCost + dieCutBoard : 0) + customDieFee;
+  const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner + customDieFee;
   const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
   const bulkSaving   = qty >= bulkQty ? (afterRecurring - delivery) * bulkRate : 0;
   const total        = afterRecurring - bulkSaving;
