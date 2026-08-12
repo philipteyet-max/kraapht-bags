@@ -204,8 +204,15 @@ function renderBowlAddonFiles() {
 function removeBowlAddonFile(i) { bowlAddonFiles.splice(i,1); renderBowlAddonFiles(); }
 window.getBowlAddonFiles = function() { return bowlAddonFiles; };
 
-// Show/hide bowl addon upload section based on addon state + print choice
-function updateBowlAddonUpload() {
+// Show/hide bowl addon upload section based on addon state + print choice.
+// Attached to `window` (like getBowlAddonFiles above) because this whole
+// block lives inside a DOMContentLoaded closure, but toggleAddBowl() — which
+// calls this — is a top-level global function defined earlier in the file.
+// Without this, every click on "+ Add Paper Bowls to this order" threw
+// "updateBowlAddonUpload is not defined" and silently aborted before ever
+// reaching calcPrice(), so the price panel never picked up the added bowl
+// until some unrelated later change happened to trigger a recalculation.
+window.updateBowlAddonUpload = function updateBowlAddonUpload() {
   var addonOpen   = !document.getElementById('bowl-addon')?.classList.contains('hidden');
   var addonPrint  = document.querySelector('[name="addon_bowl_print"]:checked')?.value;
   var uploadSec   = document.getElementById('bowl-addon-upload-section');
@@ -213,7 +220,7 @@ function updateBowlAddonUpload() {
   var hasPrint    = addonOpen && addonPrint === 'print';
   if (uploadSec) uploadSec.classList.toggle('hidden', !hasPrint);
   if (bagLabel)  bagLabel.classList.toggle('hidden', !hasPrint);
-}
+};
 
 
 });
@@ -1198,7 +1205,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="flex items-center gap-3 mb-3">
           <input type="checkbox" id="is-recurring" class="w-5 h-5 accent-primary" onchange="calcPrice()"/>
           <label for="is-recurring" class="font-body-md font-semibold cursor-pointer">Yes — same design, repeat order</label>
-          <p class="text-xs text-on-surface-variant mt-1 ml-8">Plate making &amp; die-cut setup costs are waived on repeat orders with the same design — saving you up to GHS 340.</p>
+          <p class="text-xs text-on-surface-variant mt-1 ml-8">Plate making &amp; die-cut setup costs are waived on repeat orders with the same design — saving you up to GHS 440 on a full-colour custom-size order.</p>
         </div>
         <p id="recurring-savings" class="font-label-sm text-label-sm text-primary uppercase tracking-widest hidden"></p>
       </div>
@@ -1504,9 +1511,9 @@ function calcPrice() {
 
   var printCosts   = C ? {0:0,1:C.printing.one_colour,2:C.printing.two_colour,3:C.printing.three_colour,4:C.printing.full_colour} : {0:0,1:50,2:100,3:150,4:200};
   var plateCosts   = C ? {0:0,1:C.plate_making.one_colour,2:C.plate_making.two_colour,3:C.plate_making.three_colour,4:C.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
-  var dieCutBoard  = C ? C.order.die_cut_board  : 300;
+  var dieCutBoard  = C ? C.order.die_cut_board  : 100;
   var dieCutRun    = C ? C.order.die_cut_run    : 60;
-  var labourPerBag = C ? C.order.labour_per_bag : 1;
+  var labourPerBag = C ? C.order.labour_per_bag : 0.50;
   var delivery     = C ? C.order.delivery_cost  : 30;
   var designerFee  = C ? C.order.designer_fee   : 100;
   var minQty       = C ? C.order.minimum_qty    : 200;
@@ -1530,8 +1537,7 @@ function calcPrice() {
     // Bowl paper price — from state (set when user picks paper)
     const bowlPaperPrice = state.bowlPaper === 'brown_card_250' ? (C ? C.paper_prices.brown_card_250 : 550) : (C ? C.paper_prices.chromo_coat : 525);
     const sheetsNeeded   = Math.ceil(qty / BOWLS_PER_SHEET);
-    const reamsNeeded    = Math.ceil(sheetsNeeded / SHEETS_PER_REAM);
-    const paperCost      = reamsNeeded * bowlPaperPrice;
+    const paperCost      = (sheetsNeeded / SHEETS_PER_REAM) * bowlPaperPrice;
     const labour         = qty * LABOUR_PER_BOWL;
 
     // Print costs (only if custom print selected)
@@ -1539,10 +1545,18 @@ function calcPrice() {
     const printCost  = printCosts[bowlColors] || 0;
     const plateCost  = plateCosts[bowlColors] || 0;
 
+    // Bowls have no die-cut board/run (no die-cutting step), so the only
+    // waivable one-time cost on a repeat order is the plate-making fee.
+    const saving      = plateCost;
     const baseTotal   = paperCost + printCost + plateCost + labour + delivery;
-    const bulkSaving  = qty >= bulkQty ? (baseTotal - delivery) * bulkRate : 0;
-    const total       = baseTotal - bulkSaving;
+    const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+    // Bulk discount scoped to paper + print + labour only — plate-making is
+    // a one-time setup fee and shouldn't scale with quantity.
+    const bulkBase    = paperCost + printCost + labour;
+    const bulkSaving  = qty >= bulkQty ? bulkBase * bulkRate : 0;
+    const total       = afterRecurring - bulkSaving;
     const perUnit = (total / qty).toFixed(2);
+    const savingPct  = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
 
     // Update price panel — hide the flat-bottom bag section, show the Paper Bowls section
     document.getElementById('estimate-bag-section').classList.add('hidden');
@@ -1568,8 +1582,20 @@ function calcPrice() {
     document.getElementById('diecut-row').style.display     = 'none';
     document.getElementById('diecut-run-row').style.display = 'none';
     document.getElementById('plate-row').style.display      = bowlColors > 0 ? '' : 'none';
-    document.getElementById('discount-row')?.classList.add('hidden');
-    document.getElementById('recurring-savings')?.classList.add('hidden');
+
+    const bowlDiscRow  = document.getElementById('discount-row');
+    const bowlSavLabel = document.getElementById('recurring-savings');
+    if (isRecurring && saving > 0) {
+      bowlDiscRow?.classList.remove('hidden');
+      document.getElementById('sb-discount').textContent = `- GHS ${saving.toLocaleString()}`;
+      if (bowlSavLabel) {
+        bowlSavLabel.textContent = `✓ Saving GHS ${saving.toLocaleString()} (${savingPct}%) — repeat order discount applied`;
+        bowlSavLabel.classList.remove('hidden');
+      }
+    } else {
+      bowlDiscRow?.classList.add('hidden');
+      bowlSavLabel?.classList.add('hidden');
+    }
     return;
   }
 
@@ -1588,10 +1614,20 @@ function calcPrice() {
   const sizeKey       = document.querySelector('[name="size"]:checked')?.value || 'a5';
   const isCustomSize  = sizeKey === 'custom';
   const customDieFee  = isCustomSize ? dieCutBoard : 0;
-  const saving       = (state.printColors > 0 ? plateCost + dieCutBoard : 0) + customDieFee;
+  // The "Returning Customer" copy promises plate-making AND die-cut board
+  // costs waived unconditionally on any repeat order — not just print orders.
+  // plateCost is already 0 when printColors===0, so no extra gating needed;
+  // gating dieCutBoard behind printColors>0 (as before) silently denied the
+  // promised discount to plain (no-print) repeat orders.
+  const saving       = plateCost + dieCutBoard + customDieFee;
   const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner + customDieFee;
   const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
-  const bulkSaving   = qty >= bulkQty ? (afterRecurring - delivery) * bulkRate : 0;
+  // Bulk discount is scoped to paper + print + labour only (per config.js's
+  // own comment) — one-time setup fees (plate-making, die-cut board/run,
+  // designer fee) don't scale with quantity, so they shouldn't get discounted
+  // just because the order is large.
+  const bulkBase     = paperCost + printCost + labour;
+  const bulkSaving   = qty >= bulkQty ? bulkBase * bulkRate : 0;
   const total        = afterRecurring - bulkSaving;
   const perBag       = (total / qty).toFixed(2);
   const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
@@ -1608,18 +1644,6 @@ function calcPrice() {
   document.getElementById('sb-qty-display').textContent = qty.toLocaleString() + ' bags';
   document.getElementById('per-unit-label').textContent = 'Per bag';
 
-  const discRow  = document.getElementById('discount-row');
-  const savLabel = document.getElementById('recurring-savings');
-  if (isRecurring && saving > 0) {
-    discRow?.classList.remove('hidden');
-    document.getElementById('sb-discount').textContent = `- GHS ${saving.toLocaleString()}`;
-    savLabel.textContent = `✓ Saving GHS ${saving.toLocaleString()} (${savingPct}%) — repeat order discount applied`;
-    savLabel?.classList.remove('hidden');
-  } else {
-    discRow?.classList.add('hidden');
-    savLabel?.classList.add('hidden');
-  }
-
   const bagBulkRow = document.getElementById('bag-bulk-discount-row');
   if (bulkSaving > 0) {
     bagBulkRow?.classList.remove('hidden');
@@ -1635,6 +1659,7 @@ function calcPrice() {
   const bowlAddonEl = document.getElementById('bowl-addon');
   const bowlEstEl   = document.getElementById('estimate-bowl-section');
   let bowlTotal = 0;
+  let addonSaving = 0;
   if (bowlAddonEl && !bowlAddonEl.classList.contains('hidden')) {
     const addonQtyEl = document.querySelector('[name="addon_bowl_qty"]:checked');
     let addonQty = addonQtyEl?.value === 'custom_addon'
@@ -1644,15 +1669,20 @@ function calcPrice() {
     const addonPaperPrice= addonPaperKey === 'brown_card'
       ? (C2?.paper_prices?.brown_card_250||550) : (C2?.paper_prices?.chromo_coat||525);
     const addonSheets    = Math.ceil(addonQty / 2);
-    const addonReams     = Math.ceil(addonSheets / 100);
-    const addonPaperCost = addonReams * addonPaperPrice;
+    const addonPaperCost = (addonSheets / 100) * addonPaperPrice;
     const addonLabour    = addonQty * 0.50;
     const addonColors    = state.addonBowlPrintColors || 0;
     const addonPrintCost = pCosts2[addonColors]||0;
     const addonPlateCost = plateCosts2[addonColors]||0;
-    const addonBaseTotal  = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
-    const addonBulkSaving = addonQty >= bulkQty ? addonBaseTotal * bulkRate : 0;
-    bowlTotal = addonBaseTotal - addonBulkSaving;
+    // Same waivable-on-repeat-order treatment as the standalone bowl branch —
+    // plate-making is the only one-time addon-bowl fee (no die-cutting step).
+    addonSaving = isRecurring ? addonPlateCost : 0;
+    const addonBaseTotal     = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
+    const addonAfterRecurring = addonBaseTotal - addonSaving;
+    // Bulk discount scoped to paper + print + labour only, same as bags/bowls.
+    const addonBulkBase   = addonPaperCost + addonPrintCost + addonLabour;
+    const addonBulkSaving = addonQty >= bulkQty ? addonBulkBase * bulkRate : 0;
+    bowlTotal = addonAfterRecurring - addonBulkSaving;
     const perBowl = (bowlTotal / addonQty).toFixed(2);
     if (bowlEstEl) {
       bowlEstEl.classList.remove('hidden');
@@ -1677,6 +1707,24 @@ function calcPrice() {
   const grandTotal = total + bowlTotal;
   document.getElementById('sb-total').textContent = `GHS ${grandTotal.toLocaleString()}`;
   document.getElementById('mobile-sticky-total-amount').textContent = `GHS ${grandTotal.toLocaleString()}`;
+
+  // Combined repeat-order discount — one "Returning Customer" checkbox
+  // covers the whole order, so if both a bag and an addon bowl are present
+  // their individual waivers (computed above) are shown as a single total.
+  const totalSaving = saving + addonSaving;
+  const discRow  = document.getElementById('discount-row');
+  const savLabel = document.getElementById('recurring-savings');
+  if (isRecurring && totalSaving > 0) {
+    discRow?.classList.remove('hidden');
+    document.getElementById('sb-discount').textContent = `- GHS ${totalSaving.toLocaleString()}`;
+    if (savLabel) {
+      savLabel.textContent = `✓ Saving GHS ${totalSaving.toLocaleString()} — repeat order discount applied`;
+      savLabel.classList.remove('hidden');
+    }
+  } else {
+    discRow?.classList.add('hidden');
+    savLabel?.classList.add('hidden');
+  }
 }
 
 // ── PRODUCT TYPE SWITCHER ──────────────────────────────────────────

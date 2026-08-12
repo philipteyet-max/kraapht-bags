@@ -182,22 +182,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Today's Revenue</p>
         <span class="material-symbols-outlined text-primary" style="font-size:20px;">payments</span>
       </div>
-      <p class="text-3xl font-bold">GHS 3,840</p>
-      <p class="text-xs font-bold tracking-widest uppercase text-green-600 mt-2">↑ +18% vs yesterday</p>
-      <svg class="w-full h-8 mt-3" viewBox="0 0 100 20">
-        <path class="sparkline" d="M0 16 Q15 8,25 12 T50 6 T75 10 T100 4" fill="none" stroke="#C8A96B" stroke-width="2"/>
-      </svg>
+      <p class="text-3xl font-bold" id="kpi-today-revenue">GHS —</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2" id="kpi-today-revenue-trend">—</p>
     </div>
     <div class="bg-surface border border-outline-variant p-6">
       <div class="flex items-start justify-between mb-3">
         <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Active Orders</p>
         <span class="material-symbols-outlined text-primary" style="font-size:20px;">inbox</span>
       </div>
-      <p class="text-3xl font-bold">7</p>
-      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2">3 producing · 4 pending</p>
+      <p class="text-3xl font-bold" id="kpi-active-orders">—</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2" id="kpi-active-orders-sub">—</p>
       <div class="flex gap-1 mt-3">
-        <div class="h-2 bg-primary" style="width:43%"></div>
-        <div class="h-2 bg-primary/20" style="width:57%"></div>
+        <div class="h-2 bg-primary" id="kpi-active-orders-bar1" style="width:0%"></div>
+        <div class="h-2 bg-primary/20" id="kpi-active-orders-bar2" style="width:0%"></div>
       </div>
     </div>
     <div class="bg-surface border border-outline-variant p-6">
@@ -205,19 +202,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Bags This Month</p>
         <span class="material-symbols-outlined text-primary" style="font-size:20px;">shopping_bag</span>
       </div>
-      <p class="text-3xl font-bold">6,240</p>
-      <p class="text-xs font-bold tracking-widest uppercase text-green-600 mt-2">↑ +34% vs last month</p>
-      <div class="h-1.5 bg-surface-container-high mt-4"><div class="h-full bg-primary" style="width:62%"></div></div>
+      <p class="text-3xl font-bold" id="kpi-bags-month">—</p>
+      <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mt-2" id="kpi-bags-month-trend">—</p>
+      <div class="h-1.5 bg-surface-container-high mt-4"><div class="h-full bg-primary" id="kpi-bags-month-bar" style="width:0%"></div></div>
     </div>
     <div class="bg-primary text-white p-6">
       <div class="flex items-start justify-between mb-3">
         <p class="text-xs font-bold tracking-widest uppercase opacity-70">Monthly Revenue</p>
         <span class="material-symbols-outlined text-accent" style="font-size:20px;">trending_up</span>
       </div>
-      <p class="text-3xl font-bold">GHS 24,180</p>
-      <p class="text-xs font-bold tracking-widest uppercase mt-2 opacity-70">Target: GHS 35,000</p>
-      <div class="h-1.5 bg-white/20 mt-3"><div class="h-full bg-accent" style="width:69%"></div></div>
-      <p class="text-xs font-bold tracking-widest uppercase mt-1 opacity-50">69% of target</p>
+      <p class="text-3xl font-bold" id="kpi-month-revenue">GHS —</p>
+      <p class="text-xs font-bold tracking-widest uppercase mt-2 opacity-70" id="kpi-month-target">Target: —</p>
+      <div class="h-1.5 bg-white/20 mt-3"><div class="h-full bg-accent" id="kpi-month-target-bar" style="width:0%"></div></div>
+      <p class="text-xs font-bold tracking-widest uppercase mt-1 opacity-50" id="kpi-month-target-pct">— of target</p>
     </div>
   </div>
 
@@ -270,15 +267,15 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <div class="bg-charcoal text-white p-6">
         <h2 class="text-xl font-bold mb-5">Revenue · <span id="current-month-label">June 2026</span></h2>
         <div class="space-y-3 text-sm mb-4 pb-4 border-b border-white/20">
-          <div class="flex justify-between"><span class="opacity-60">Received</span><span class="font-semibold">GHS 24,180</span></div>
-          <div class="flex justify-between"><span class="opacity-60">In production</span><span class="font-semibold">GHS 9,028</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Materials cost</span><span class="font-semibold text-red-400">GHS 9,682</span></div>
-          <div class="flex justify-between"><span class="opacity-60">Labour cost</span><span class="font-semibold text-red-400">GHS 3,422</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Received</span><span class="font-semibold" id="kpi-sum-received">GHS —</span></div>
+          <div class="flex justify-between"><span class="opacity-60">In production</span><span class="font-semibold" id="kpi-sum-inprod">GHS —</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Materials cost</span><span class="font-semibold text-red-400" id="kpi-sum-material">GHS —</span></div>
+          <div class="flex justify-between"><span class="opacity-60">Labour cost</span><span class="font-semibold text-red-400" id="kpi-sum-labour">GHS —</span></div>
         </div>
         <div class="flex justify-between text-xl font-bold">
-          <span>Net Profit</span><span class="text-accent">GHS 11,076</span>
+          <span>Net Profit</span><span class="text-accent" id="kpi-sum-profit">GHS —</span>
         </div>
-        <p class="text-xs font-bold tracking-widest uppercase opacity-40 mt-1">45.8% margin</p>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-40 mt-1" id="kpi-sum-margin">— margin</p>
         <button onclick="showTab('finance')" class="mt-4 text-xs font-bold tracking-widest uppercase text-accent/70 hover:text-accent transition-colors">Finance Detail →</button>
       </div>
 
@@ -783,13 +780,24 @@ const SUPABASE_URL  = 'https://irehhfetxofmhcepluuz.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWhoZmV0eG9mbWhjZXBsdXV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODM4MjIsImV4cCI6MjA5Njk1OTgyMn0.0qryf15jWiUpZ4fsupKstHR4cUjlvrCzlVtyuu0n9Y8';
 
 // ── Supabase REST helper (no SDK needed — plain fetch) ──
+// RLS requires the actual admin's session JWT (so auth.uid()/is_admin() can
+// evaluate), not the static anon key — the anon key carries no user identity,
+// so requests sent with it are treated as anonymous and get zero rows back
+// under the admin-only orders policy. apikey stays the anon/public key
+// (that's just the project identifier); Authorization must be the session.
+async function authToken() {
+  const { data: { session } } = await sbAuth.auth.getSession();
+  return session?.access_token || SUPABASE_ANON;
+}
+
 async function sbQuery(table, params = {}) {
   const url = new URL(`${SUPABASE_URL}/rest/v1/${table}`);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const token = await authToken();
   const res = await fetch(url, {
     headers: {
       'apikey': SUPABASE_ANON,
-      'Authorization': `Bearer ${SUPABASE_ANON}`,
+      'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',
     }
   });
@@ -799,11 +807,12 @@ async function sbQuery(table, params = {}) {
 
 async function sbPatch(table, matchCol, matchVal, updates) {
   const url = `${SUPABASE_URL}/rest/v1/${table}?${matchCol}=eq.${encodeURIComponent(matchVal)}`;
+  const token = await authToken();
   const res = await fetch(url, {
     method: 'PATCH',
     headers: {
       'apikey': SUPABASE_ANON,
-      'Authorization': `Bearer ${SUPABASE_ANON}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
       'Prefer': 'return=representation',
     },
@@ -1002,7 +1011,86 @@ function showTab(tab){
 // ═══════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════
+// KPI cards — computed live from `orders`, never hardcoded. `orderDate` is a
+// UTC "YYYY-MM-DD" slice of the DB's order_date column, so today/yesterday/
+// month-prefix comparisons below use UTC boundaries consistently.
+function renderKPICards(){
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0,10);
+  const yesterday = new Date(now); yesterday.setUTCDate(yesterday.getUTCDate()-1);
+  const yesterdayStr = yesterday.toISOString().slice(0,10);
+  const monthPrefix = `${now.getUTCFullYear()}-${String(now.getUTCMonth()+1).padStart(2,'0')}`;
+  const lastMonthDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth()-1, 1));
+  const lastMonthPrefix = `${lastMonthDate.getUTCFullYear()}-${String(lastMonthDate.getUTCMonth()+1).padStart(2,'0')}`;
+  const monthLabel = now.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+
+  function pctChange(curr, prev){
+    if (prev <= 0) return null; // nothing real to compare against — don't fabricate a %
+    return Math.round(((curr - prev) / prev) * 100);
+  }
+  function trendClass(change){
+    return 'text-xs font-bold tracking-widest uppercase mt-2 ' +
+      (change > 0 ? 'text-green-600' : change < 0 ? 'text-error' : 'text-on-surface-variant');
+  }
+
+  // Today's Revenue
+  const todayRevenue     = orders.filter(o=>o.orderDate===todayStr).reduce((s,o)=>s+o.amountPaid,0);
+  const yesterdayRevenue = orders.filter(o=>o.orderDate===yesterdayStr).reduce((s,o)=>s+o.amountPaid,0);
+  const revChange = pctChange(todayRevenue, yesterdayRevenue);
+  document.getElementById('kpi-today-revenue').textContent = ghs(todayRevenue);
+  document.getElementById('kpi-today-revenue-trend').textContent =
+    revChange===null ? 'No revenue yesterday to compare' : `${revChange>=0?'↑':'↓'} ${Math.abs(revChange)}% vs yesterday`;
+  document.getElementById('kpi-today-revenue-trend').className = trendClass(revChange);
+
+  // Active Orders
+  const activeOrders = orders.filter(o=>!['Delivered','Cancelled'].includes(o.stage));
+  const producing = activeOrders.filter(o=>PROD_STAGES.includes(o.stage)).length;
+  const pending   = activeOrders.length - producing;
+  document.getElementById('kpi-active-orders').textContent = activeOrders.length;
+  document.getElementById('kpi-active-orders-sub').textContent = `${producing} producing · ${pending} pending`;
+  const prodPct = activeOrders.length>0 ? Math.round((producing/activeOrders.length)*100) : 0;
+  document.getElementById('kpi-active-orders-bar1').style.width = prodPct+'%';
+  document.getElementById('kpi-active-orders-bar2').style.width = (100-prodPct)+'%';
+
+  // Bags This Month
+  const monthOrders     = orders.filter(o=>o.orderDate && o.orderDate.startsWith(monthPrefix));
+  const lastMonthOrders = orders.filter(o=>o.orderDate && o.orderDate.startsWith(lastMonthPrefix));
+  const bagsMonth     = monthOrders.reduce((s,o)=>s+(o.qty||0),0);
+  const bagsLastMonth = lastMonthOrders.reduce((s,o)=>s+(o.qty||0),0);
+  const bagsChange = pctChange(bagsMonth, bagsLastMonth);
+  document.getElementById('kpi-bags-month').textContent = bagsMonth.toLocaleString();
+  document.getElementById('kpi-bags-month-trend').textContent =
+    bagsChange===null ? 'No orders last month to compare' : `${bagsChange>=0?'↑':'↓'} ${Math.abs(bagsChange)}% vs last month`;
+  document.getElementById('kpi-bags-month-trend').className = trendClass(bagsChange);
+  document.getElementById('kpi-bags-month-bar').style.width =
+    Math.min(Math.round((bagsMonth/Math.max(bagsLastMonth,1))*100),100)+'%';
+
+  // Monthly Revenue + target (target figures are the business's own manually-set
+  // goals in `monthlyTargets`, not derived/fake data)
+  const monthRevenue = monthOrders.reduce((s,o)=>s+o.amountPaid,0);
+  const target = (monthlyTargets[monthLabel]||{}).target || 35000;
+  const targetPct = Math.min(Math.round((monthRevenue/target)*100),100);
+  document.getElementById('kpi-month-revenue').textContent = ghs(monthRevenue);
+  document.getElementById('kpi-month-target').textContent = `Target: GHS ${target.toLocaleString()}`;
+  document.getElementById('kpi-month-target-bar').style.width = targetPct+'%';
+  document.getElementById('kpi-month-target-pct').textContent = `${targetPct}% of target`;
+
+  // Revenue Summary panel — same formula as the Finance tab (renderFinance())
+  const matCost = monthOrders.reduce((s,o)=>s+(o.materialCost||0),0);
+  const labCost = monthOrders.reduce((s,o)=>s+(o.labourCost||0),0);
+  const inProd  = orders.filter(o=>PROD_STAGES.includes(o.stage)).reduce((s,o)=>s+o.amount,0);
+  const profit  = monthRevenue - matCost - labCost;
+  const margin  = monthRevenue>0 ? Math.round((profit/monthRevenue)*100) : 0;
+  document.getElementById('kpi-sum-received').textContent = ghs(monthRevenue);
+  document.getElementById('kpi-sum-inprod').textContent   = ghs(inProd);
+  document.getElementById('kpi-sum-material').textContent = ghs(matCost);
+  document.getElementById('kpi-sum-labour').textContent   = ghs(labCost);
+  document.getElementById('kpi-sum-profit').textContent   = ghs(profit);
+  document.getElementById('kpi-sum-margin').textContent   = `${margin}% margin`;
+}
+
 function renderDashboard(){
+  renderKPICards();
   // clock
   function updateClock(){
     const now=new Date();
