@@ -251,7 +251,7 @@ const KRAAPHT_CONFIG = {
     brown_card_paper:     "paper_brown_card_v2.png",  // Brown Card 250gsm
     brown_paper_80_paper: "paper_brown_80_v2.png",    // Brown Paper 80gsm
     duplex_board_paper:   "paper_duplex_v2.png",      // Duplex Board
-    matt_card_paper:      "matt_card_paper_v2.png",     // Matt Paper 150gsm
+    matt_card_paper:      "matt_card_paper_v3.png",     // Matt Paper 150gsm
 
     // ── ABOUT PAGE (about.html) ───────────────────────────────────────
     //  Upload each file to GitHub with the exact filename below. Until you
