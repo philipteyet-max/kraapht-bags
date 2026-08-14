@@ -852,7 +852,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="paper-options">
 
           <!-- Chromo Coat -->
-          <label class="paper-card selected rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="chromo_coat" data-price="525" data-handle="true">
+          <label class="paper-card selected rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="chromo_coat" data-price="750" data-handle="true">
             <input type="radio" name="paper_type" value="chromo_coat" class="sr-only" checked/>
             <span class="check-badge" style="display:flex;">✓</span>
             <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
@@ -860,7 +860,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             </div>
             <div class="p-4">
               <div class="flex items-center justify-between mb-1">
-                <p class="font-body-md font-semibold">White / Chromo Coat</p>
+                <p class="font-body-md font-semibold">White / Chromo Coat 350gsm</p>
                 <span class="px-2 py-0.5 bg-primary text-white text-xs font-label-sm uppercase tracking-widest">Popular</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Glossy white. Best for full-colour logo printing. Sharp &amp; premium.</p>
@@ -868,7 +868,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
 
           <!-- Brown Card 250gsm -->
-          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_card_250" data-price="550" data-handle="true">
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_card_250" data-price="420" data-handle="true">
             <input type="radio" name="paper_type" value="brown_card_250" class="sr-only"/>
             <span class="check-badge">✓</span>
             <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
@@ -881,7 +881,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
 
           <!-- Brown Paper 80gsm -->
-          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_paper_80" data-price="420" data-handle="false">
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="brown_paper_80" data-price="340" data-handle="false">
             <input type="radio" name="paper_type" value="brown_paper_80" class="sr-only"/>
             <span class="check-badge">✓</span>
             <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
@@ -896,13 +896,13 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             </div>
           </label>
 
-          <!-- Matt Paper 150gsm -->
-          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="matt_150" data-price="695" data-handle="true">
+          <!-- Matt Card 250gsm -->
+          <label class="paper-card rounded-none p-0 flex flex-col relative overflow-hidden" data-paper="matt_150" data-price="350" data-handle="true">
             <input type="radio" name="paper_type" value="matt_150" class="sr-only"/>
             <span class="check-badge">✓</span>
             <div class="bg-charcoal h-36 flex items-center justify-center overflow-hidden">
               <img src="matt_card_paper.png" data-img="matt_card_paper"
-                   alt="Matt Paper 150gsm bag"
+                   alt="Matt Card 250gsm bag"
                    class="h-full w-full object-contain p-2 hover:scale-105 transition-transform duration-300"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
               <div class="text-center text-white/40 hidden w-full h-full items-center justify-center flex-col">
@@ -912,7 +912,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             </div>
             <div class="p-4">
               <div class="flex items-center justify-between mb-1">
-                <p class="font-body-md font-semibold">Matt Paper 150gsm</p>
+                <p class="font-body-md font-semibold">Matt Card 250gsm</p>
                 <span class="px-2 py-0.5 bg-accent/20 text-accent text-xs font-label-sm uppercase tracking-widest">Premium</span>
               </div>
               <p class="text-sm text-on-surface-variant mb-2">Smooth matte finish. Non-glare. Perfect for luxury brands and corporate gifting.</p>
@@ -920,7 +920,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           </label>
 
           <!-- Duplex Board — full width -->
-          <label class="paper-card rounded-none p-0 flex flex-row relative overflow-hidden md:col-span-2" data-paper="duplex_300" data-price="300" data-handle="true">
+          <label class="paper-card rounded-none p-0 flex flex-row relative overflow-hidden md:col-span-2" data-paper="duplex_300" data-price="180" data-handle="true">
             <input type="radio" name="paper_type" value="duplex_300" class="sr-only"/>
             <span class="check-badge">✓</span>
             <div class="bg-charcoal w-40 flex-shrink-0 flex items-center justify-center overflow-hidden">
@@ -928,10 +928,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             </div>
             <div class="p-5 flex-1">
               <div class="flex items-center justify-between mb-2">
-                <p class="font-body-md font-semibold">Duplex Board</p>
+                <p class="font-body-md font-semibold">Duplex Board 220gsm</p>
                 <span class="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-label-sm uppercase tracking-widest">Most Affordable</span>
               </div>
-              <p class="text-sm text-on-surface-variant mb-3">Two-layer grey-back board. Stiff and durable. Best unit rate for large volume orders with printed designs.</p>
+              <p class="text-sm text-on-surface-variant mb-3">Two-layer grey-back board, white or brown. Stiff and durable. Best unit rate for large volume orders with printed designs.</p>
             </div>
           </label>
 
@@ -1351,6 +1351,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 <script>
 let state = {
   paperPrice: 525,
+  hasHandle: true,
   bagsPerSheet: 4,
   qty: 200,
   printColors: 0,
@@ -1382,6 +1383,7 @@ document.querySelectorAll('#paper-options label').forEach(label => {
     if(cb) cb.style.display='flex';
     state.paperPrice = parseInt(this.dataset.price);
     const hasHandle = this.dataset.handle === 'true';
+    state.hasHandle = hasHandle;
     document.getElementById('no-handle-msg').classList.toggle('hidden', hasHandle);
     document.getElementById('handle-options').classList.toggle('disabled-section', !hasHandle);
     calcPrice();
@@ -1509,16 +1511,28 @@ function updateCustomSizeTier() {
 function calcPrice() {
   var C = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
 
+  // Printing (GHS per 1000 sheets) and plate-making (GHS flat one-time per
+  // design — does NOT scale with sheet count) rate tables.
   var printCosts   = C ? {0:0,1:C.printing.one_colour,2:C.printing.two_colour,3:C.printing.three_colour,4:C.printing.full_colour} : {0:0,1:50,2:100,3:150,4:200};
-  var plateCosts   = C ? {0:0,1:C.plate_making.one_colour,2:C.plate_making.two_colour,3:C.plate_making.three_colour,4:C.plate_making.full_colour} : {0:0,1:60,2:120,3:180,4:240};
-  var dieCutBoard  = C ? C.order.die_cut_board  : 100;
-  var dieCutRun    = C ? C.order.die_cut_run    : 60;
-  var labourPerBag = C ? C.order.labour_per_bag : 0.50;
+  var plateCosts   = C ? {0:0,1:C.plate_making.one_colour,2:C.plate_making.two_colour,3:C.plate_making.three_colour,4:C.plate_making.full_colour} : {0:0,1:40,2:80,3:120,4:160};
+  var dieCutBoard      = C ? C.order.die_cut_board      : 100;
+  var customDieCutFee  = C ? C.order.custom_die_cut_fee : 400;
+  var bowlDieCutFee    = C ? C.order.bowl_die_cut_fee   : 100;
+  var dieCutRun        = C ? C.order.die_cut_run        : 60;   // GHS per 1000 sheets
+  var labourHandledLow  = C ? C.order.labour_per_bag_handled_low  : 1.5;  // qty 200–500
+  var labourHandledHigh = C ? C.order.labour_per_bag_handled_high : 1.0; // qty above 500
+  var labourNoHandle    = C ? C.order.labour_per_bag_no_handle    : 0.50; // Brown Paper 80gsm (no handle)
+  var labourPerBowl     = C ? C.order.labour_per_bowl              : 0.50;
   var delivery     = C ? C.order.delivery_cost  : 30;
   var designerFee  = C ? C.order.designer_fee   : 100;
   var minQty       = C ? C.order.minimum_qty    : 200;
   var bulkQty      = C ? C.order.bulk_discount_qty  : 1000;
   var bulkRate     = C ? C.order.bulk_discount_rate : 0.05;
+  var paperSpecs   = C ? C.paper_prices : {
+    chromo_coat:{price:750,sheets_per_ream:100}, brown_card_250:{price:420,sheets_per_ream:150},
+    brown_paper_80:{price:340,sheets_per_ream:250}, matt_150:{price:350,sheets_per_ream:100},
+    duplex_300:{price:180,sheets_per_ream:150},
+  };
 
   const qtyInput = document.getElementById('qty-custom-val');
   const qty = qtyInput && !qtyInput.closest('#custom-qty-input').classList.contains('hidden')
@@ -1531,27 +1545,29 @@ function calcPrice() {
   // ── FOOD BOWL pricing ──────────────────────────────────────────────
   if (isBowl) {
     const BOWLS_PER_SHEET = 2;
-    const SHEETS_PER_REAM = 100;
-    const LABOUR_PER_BOWL = 0.50;
 
-    // Bowl paper price — from state (set when user picks paper)
-    const bowlPaperPrice = state.bowlPaper === 'brown_card_250' ? (C ? C.paper_prices.brown_card_250 : 550) : (C ? C.paper_prices.chromo_coat : 525);
+    // Bowl paper price + ream size — from state (set when user picks paper)
+    const bowlPaperKey   = state.bowlPaper === 'brown_card_250' ? 'brown_card_250' : 'chromo_coat';
+    const bowlPaperSpec  = paperSpecs[bowlPaperKey] || {price:525, sheets_per_ream:100};
+    const bowlPaperPrice = bowlPaperSpec.price;
     const sheetsNeeded   = Math.ceil(qty / BOWLS_PER_SHEET);
-    const paperCost      = (sheetsNeeded / SHEETS_PER_REAM) * bowlPaperPrice;
-    const labour         = qty * LABOUR_PER_BOWL;
+    const paperCost      = (sheetsNeeded / bowlPaperSpec.sheets_per_ream) * bowlPaperPrice;
+    const labour         = qty * labourPerBowl;
 
-    // Print costs (only if custom print selected)
+    // Print costs (only if custom print selected) — printing scales per
+    // 1000 sheets; plate-making is a flat one-time fee.
     const bowlColors = state.bowlPrint === 'print' ? (state.bowlPrintColors || 1) : 0;
-    const printCost  = printCosts[bowlColors] || 0;
+    const printCost  = (printCosts[bowlColors] || 0) * (sheetsNeeded / 1000);
     const plateCost  = plateCosts[bowlColors] || 0;
 
-    // Bowls have no die-cut board/run (no die-cutting step), so the only
-    // waivable one-time cost on a repeat order is the plate-making fee.
-    const saving      = plateCost;
-    const baseTotal   = paperCost + printCost + plateCost + labour + delivery;
+    // Bowls carry a flat one-time die-cut fee (no continuous die-cutting
+    // run like bags, just this setup cost) — waivable, same as plate-making,
+    // on a repeat order of the same bowl design.
+    const saving      = plateCost + bowlDieCutFee;
+    const baseTotal   = paperCost + printCost + plateCost + bowlDieCutFee + labour + delivery;
     const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
-    // Bulk discount scoped to paper + print + labour only — plate-making is
-    // a one-time setup fee and shouldn't scale with quantity.
+    // Bulk discount scoped to paper + print + labour only — plate-making and
+    // the die-cut fee are one-time setup costs and shouldn't scale with qty.
     const bulkBase    = paperCost + printCost + labour;
     const bulkSaving  = qty >= bulkQty ? bulkBase * bulkRate : 0;
     const total       = afterRecurring - bulkSaving;
@@ -1578,7 +1594,8 @@ function calcPrice() {
     document.getElementById('sb-total').textContent    = `GHS ${total.toLocaleString()}`;
     document.getElementById('mobile-sticky-total-amount').textContent = `GHS ${total.toLocaleString()}`;
 
-    // Hide die-cut rows (bowls don't need die-cut board/run)
+    // Hide these bag-specific die-cut rows for bowls — bowls use their own
+    // flat bowlDieCutFee (folded into the total above), not a board+run pair.
     document.getElementById('diecut-row').style.display     = 'none';
     document.getElementById('diecut-run-row').style.display = 'none';
     document.getElementById('plate-row').style.display      = bowlColors > 0 ? '' : 'none';
@@ -1601,11 +1618,21 @@ function calcPrice() {
 
   // ── FLAT BOTTOM BAG pricing (existing logic) ────────────────────────
   document.getElementById('estimate-bag-section').classList.remove('hidden');
-  const sheetsNeeded = Math.ceil(qty / state.bagsPerSheet);
-  const paperCost    = (sheetsNeeded / 100) * state.paperPrice;
-  const printCost    = printCosts[state.printColors] || 0;
-  const plateCost    = plateCosts[state.printColors] || 0;
-  const labour       = qty * labourPerBag;
+  const paperKey      = document.querySelector('[name="paper_type"]:checked')?.value || 'chromo_coat';
+  const paperSpec     = paperSpecs[paperKey] || {price: state.paperPrice, sheets_per_ream: 100};
+  const sheetsNeeded  = Math.ceil(qty / state.bagsPerSheet);
+  const paperCost     = (sheetsNeeded / paperSpec.sheets_per_ream) * state.paperPrice;
+  // Printing and die-cutting-run rates are GHS per 1000 sheets — scale with
+  // the actual sheets needed. Plate-making stays a flat one-time fee.
+  const sheetsBasis   = sheetsNeeded / 1000;
+  const printCost     = (printCosts[state.printColors] || 0) * sheetsBasis;
+  const plateCost     = plateCosts[state.printColors] || 0;
+  const dieCutRunCost = dieCutRun * sheetsBasis;
+  // Labour: Brown Paper 80gsm bags have no handle (folded top), so they get
+  // a flat lower rate; every other paper uses a handle (Twisted Rope or PP
+  // Rope), tiered by quantity.
+  const labourRate = !state.hasHandle ? labourNoHandle : (qty <= 500 ? labourHandledLow : labourHandledHigh);
+  const labour      = qty * labourRate;
   const extraDesigner = state.hasDesigner ? designerFee : 0;
   // Custom sizes need a brand-new physical die cut to their exact shape —
   // even when the paper usage matches a standard tier — so they carry this
@@ -1613,14 +1640,14 @@ function calcPrice() {
   // repeat orders of the same custom size (same "isRecurring" checkbox).
   const sizeKey       = document.querySelector('[name="size"]:checked')?.value || 'a5';
   const isCustomSize  = sizeKey === 'custom';
-  const customDieFee  = isCustomSize ? dieCutBoard : 0;
+  const customDieFee  = isCustomSize ? customDieCutFee : 0;
   // The "Returning Customer" copy promises plate-making AND die-cut board
   // costs waived unconditionally on any repeat order — not just print orders.
   // plateCost is already 0 when printColors===0, so no extra gating needed;
   // gating dieCutBoard behind printColors>0 (as before) silently denied the
   // promised discount to plain (no-print) repeat orders.
   const saving       = plateCost + dieCutBoard + customDieFee;
-  const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRun + labour + delivery + extraDesigner + customDieFee;
+  const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRunCost + labour + delivery + extraDesigner + customDieFee;
   const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
   // Bulk discount is scoped to paper + print + labour only (per config.js's
   // own comment) — one-time setup fees (plate-making, die-cut board/run,
@@ -1632,8 +1659,7 @@ function calcPrice() {
   const perBag       = (total / qty).toFixed(2);
   const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
 
-  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Paper 150gsm', duplex_300:'Duplex Board'};
-  const paperKey    = document.querySelector('[name="paper_type"]:checked')?.value || 'chromo_coat';
+  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Card 250gsm', duplex_300:'Duplex Board'};
   document.getElementById('sb-paper').textContent       = paperNames[paperKey] || 'White / Chromo Coat';
   document.getElementById('sb-printing').textContent    = state.printColors > 0 ? `${state.printColors} colour` : 'None';
   document.getElementById('sb-plate').textContent       = `GHS ${plateCost}`;
@@ -1655,7 +1681,7 @@ function calcPrice() {
   // ── Bowl add-on pricing ──────────────────────────────────────────
   const C2 = (typeof KRAAPHT_CONFIG !== 'undefined') ? KRAAPHT_CONFIG : null;
   const pCosts2    = {0:0,1:C2?.printing?.one_colour||50,2:C2?.printing?.two_colour||100,3:C2?.printing?.three_colour||150,4:C2?.printing?.full_colour||200};
-  const plateCosts2= {0:0,1:C2?.plate_making?.one_colour||60,2:C2?.plate_making?.two_colour||120,3:C2?.plate_making?.three_colour||180,4:C2?.plate_making?.full_colour||240};
+  const plateCosts2= {0:0,1:C2?.plate_making?.one_colour||40,2:C2?.plate_making?.two_colour||80,3:C2?.plate_making?.three_colour||120,4:C2?.plate_making?.full_colour||160};
   const bowlAddonEl = document.getElementById('bowl-addon');
   const bowlEstEl   = document.getElementById('estimate-bowl-section');
   let bowlTotal = 0;
@@ -1666,18 +1692,21 @@ function calcPrice() {
       ? parseInt(document.getElementById('addon-qty-val')?.value)||200
       : parseInt(addonQtyEl?.value)||200;
     const addonPaperKey  = document.querySelector('[name="addon_bowl_paper"]:checked')?.value || 'chromo_coat';
-    const addonPaperPrice= addonPaperKey === 'brown_card'
-      ? (C2?.paper_prices?.brown_card_250||550) : (C2?.paper_prices?.chromo_coat||525);
+    const addonPaperSpec = addonPaperKey === 'brown_card'
+      ? (paperSpecs.brown_card_250 || {price:420, sheets_per_ream:150})
+      : (paperSpecs.chromo_coat    || {price:750, sheets_per_ream:100});
     const addonSheets    = Math.ceil(addonQty / 2);
-    const addonPaperCost = (addonSheets / 100) * addonPaperPrice;
-    const addonLabour    = addonQty * 0.50;
+    const addonPaperCost = (addonSheets / addonPaperSpec.sheets_per_ream) * addonPaperSpec.price;
+    const addonLabour    = addonQty * labourPerBowl;
     const addonColors    = state.addonBowlPrintColors || 0;
-    const addonPrintCost = pCosts2[addonColors]||0;
+    // Printing scales per 1000 sheets, same as the standalone bowl branch.
+    const addonPrintCost = (pCosts2[addonColors]||0) * (addonSheets / 1000);
     const addonPlateCost = plateCosts2[addonColors]||0;
     // Same waivable-on-repeat-order treatment as the standalone bowl branch —
-    // plate-making is the only one-time addon-bowl fee (no die-cutting step).
-    addonSaving = isRecurring ? addonPlateCost : 0;
-    const addonBaseTotal     = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost;
+    // plate-making and the flat bowl die-cut fee are both waived on a repeat
+    // order of the same bowl design.
+    addonSaving = isRecurring ? (addonPlateCost + bowlDieCutFee) : 0;
+    const addonBaseTotal     = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost + bowlDieCutFee;
     const addonAfterRecurring = addonBaseTotal - addonSaving;
     // Bulk discount scoped to paper + print + labour only, same as bags/bowls.
     const addonBulkBase   = addonPaperCost + addonPrintCost + addonLabour;
@@ -1866,7 +1895,7 @@ function collectOrderData() {
   }
   if (warn) warn.classList.add('hidden');
 
-  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Paper 150gsm', duplex_300:'Duplex Board'};
+  const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Card 250gsm', duplex_300:'Duplex Board'};
   const sizeNames  = {a5:'A5 / Small', a4:'A4 / Medium', a3:'A3 / Large', custom:'Custom Size'};
 
   const bowlAddonEl = document.getElementById('bowl-addon');

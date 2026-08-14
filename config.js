@@ -52,9 +52,31 @@ const KRAAPHT_CONFIG = {
     minimum_qty:        200,
     delivery_cost:      30,
     designer_fee:       100,
+    // Die-cutting run — the per-production-run die-cutting cost, priced per
+    // 1000 sheets and scaled to the actual order size.
     die_cut_run:        60,
+    // Die-cut board (mold) — flat one-time fee charged on every bag order
+    // (standard sizes reuse an existing mold). Waived on repeat orders of
+    // the same design.
     die_cut_board:      100,
-    labour_per_bag:     0.50,
+    // Extra mold-cutting fee ON TOP of die_cut_board, only for Custom size —
+    // a genuinely custom shape needs its own new physical die regardless of
+    // how its paper usage compares to standard sizes. Also waived on repeat
+    // orders of the same custom size.
+    custom_die_cut_fee: 400,
+    // Paper Food Bowls — flat one-time die-cut fee (bowls don't go through
+    // the same die-cutting run as bags, just this one setup cost). Waived
+    // on repeat orders of the same bowl design.
+    bowl_die_cut_fee:   100,
+    // Labour (folding, rope handle attachment, gluing, packaging) — tiered
+    // by quantity for bags with a handle (Twisted Rope or PP Rope).
+    labour_per_bag_handled_low:  1.5,   // qty 200–500
+    labour_per_bag_handled_high: 1.0,   // qty above 500
+    // Brown Paper 80gsm bags use a folded top with no handle, so there's no
+    // rope-attachment step — flat lower labour rate regardless of quantity.
+    labour_per_bag_no_handle:    0.50,
+    // Paper Food Bowls keep their own separate flat labour rate.
+    labour_per_bowl:             0.50,
     bulk_discount_qty:  1000,   // orders at/above this quantity get the bulk discount
     bulk_discount_rate: 0.05,   // 5% off production cost (paper, print, labour — not delivery)
     quote_validity_days: 14,    // how many days a downloaded quote/proforma invoice stays valid
@@ -62,19 +84,21 @@ const KRAAPHT_CONFIG = {
   },
 
   // ----------------------------------------------------------
-  // PAPER PRICES (GHS per ream — 100 sheets per ream)
-  // Change these when material costs change in the market
+  // PAPER PRICES — each paper has its own price per ream AND its own
+  // sheets-per-ream (these are NOT all the same — different papers come
+  // packaged differently from the supplier). Change sheets_per_ream here
+  // whenever your supplier's ream size changes.
   // ----------------------------------------------------------
   paper_prices: {
-    chromo_coat:    525,
-    brown_card_250: 550,
-    brown_paper_80: 420,
-    matt_150:       695,
-    duplex_300:     300,
+    chromo_coat:    { price: 750, sheets_per_ream: 100, gsm: 350 },
+    brown_card_250: { price: 420, sheets_per_ream: 150, gsm: 250 },
+    brown_paper_80: { price: 340, sheets_per_ream: 250, gsm: 80  },
+    matt_150:       { price: 350, sheets_per_ream: 100, gsm: 250 },
+    duplex_300:     { price: 180, sheets_per_ream: 150, gsm: 220 },
   },
 
   // ----------------------------------------------------------
-  // PRINTING COSTS (GHS per print run)
+  // PRINTING COSTS (GHS per 1000 sheets — scales with order size)
   // ----------------------------------------------------------
   printing: {
     one_colour:   50,
@@ -84,18 +108,22 @@ const KRAAPHT_CONFIG = {
   },
 
   // ----------------------------------------------------------
-  // PLATE MAKING COSTS (GHS — one-time per design)
+  // PLATE MAKING COSTS (GHS — flat one-time fee per design, does NOT
+  // scale with order size)
   // Waived for returning customers with the same design
   // ----------------------------------------------------------
   plate_making: {
-    one_colour:   60,
-    two_colour:   120,
-    three_colour: 180,
-    full_colour:  240,
+    one_colour:   40,
+    two_colour:   80,
+    three_colour: 120,
+    full_colour:  160,
   },
 
   // ----------------------------------------------------------
   // BAGS PER SHEET
+  // (unused by the live calculator — see order.html's SIZE_TIERS /
+  // data-bps attributes on the size options instead. Left here only in
+  // case a future refactor consolidates this back into config.)
   // ----------------------------------------------------------
   bags_per_sheet: {
     a5_small:  3,
@@ -251,7 +279,7 @@ const KRAAPHT_CONFIG = {
     brown_card_paper:     "paper_brown_card_v2.png",  // Brown Card 250gsm
     brown_paper_80_paper: "paper_brown_80_v2.png",    // Brown Paper 80gsm
     duplex_board_paper:   "paper_duplex_v2.png",      // Duplex Board
-    matt_card_paper:      "matt_card_paper_v3.png",     // Matt Paper 150gsm
+    matt_card_paper:      "matt_card_paper_v3.png",     // Matt Card 250gsm
 
     // ── ABOUT PAGE (about.html) ───────────────────────────────────────
     //  Upload each file to GitHub with the exact filename below. Until you
@@ -398,11 +426,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // 4. Paper price display update on order page
   var paperPrices = C.paper_prices;
   var paperMap = {
-    "chromo_coat":    paperPrices.chromo_coat,
-    "brown_card_250": paperPrices.brown_card_250,
-    "brown_paper_80": paperPrices.brown_paper_80,
-    "matt_150":       paperPrices.matt_150,
-    "duplex_300":     paperPrices.duplex_300,
+    "chromo_coat":    paperPrices.chromo_coat.price,
+    "brown_card_250": paperPrices.brown_card_250.price,
+    "brown_paper_80": paperPrices.brown_paper_80.price,
+    "matt_150":       paperPrices.matt_150.price,
+    "duplex_300":     paperPrices.duplex_300.price,
   };
   document.querySelectorAll("#paper-options label[data-paper]").forEach(function(label) {
     var key = label.dataset.paper;
