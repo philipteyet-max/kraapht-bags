@@ -337,9 +337,16 @@ window.addEventListener('DOMContentLoaded', async function() {
   }
 
   // ── Do we have real evidence of a completed order? ──
-  // Either a confirmed Supabase row, or the order this browser just paid for
-  // (saved by order.html right before redirecting to Paystack).
-  const hasLocalOrder = !!(ORDER && (ORDER.total || ORDER.bagTotal || ORDER.bowlTotal));
+  // Either a confirmed Supabase row, or (as a fallback for when the webhook
+  // hasn't caught up yet) the order this browser just paid for. Requiring
+  // paystackRef here — not just order amounts — matters: order.html saves
+  // ORDER.total the moment "Place Order" is clicked, well before any actual
+  // payment happens on payment.html. Without the paystackRef check, anyone
+  // who configures an order and navigates to this page directly (without
+  // ever paying) would see a fabricated "confirmed / paid" summary.
+  // paystackRef only exists after a real Paystack redirect (?reference=) or
+  // a successful in-page payment callback (ORDER.txn_ref).
+  const hasLocalOrder = !!(paystackRef && ORDER && (ORDER.total || ORDER.bagTotal || ORDER.bowlTotal));
   if (!supaOrder && !hasLocalOrder) {
     document.getElementById('no-order-panel').classList.remove('hidden');
     return; // don't fabricate a confirmed order for a visitor with nothing to confirm
