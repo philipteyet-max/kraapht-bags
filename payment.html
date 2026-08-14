@@ -467,7 +467,7 @@ function handlePayment() {
         { display_name: 'Custom Print',   variable_name: 'custom_print',  value: orderMeta.custom_print },
       ]
     },
-    channels: ['mobile_money', 'bank'],
+    channels: ['mobile_money', 'bank_transfer'],
     callback: function(response) {
       // Payment successful — save transaction ID and go to confirmation
       ORDER.txn_ref = response.reference;
