@@ -26,7 +26,7 @@ const KRAAPHT_CONFIG = {
   // Also update PAYSTACK_SECRET_KEY in Vercel environment variables.
   // ----------------------------------------------------------
   paystack: {
-    public_key: "pk_test_335b7466d67dd7d8b8360c338983a6f1fb7193c8",
+    public_key: "pk_live_7af22d5d839d3221c6b64867d1ddffd9c128d4d9",
   },
 
   // ----------------------------------------------------------
