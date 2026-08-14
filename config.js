@@ -290,6 +290,11 @@ const KRAAPHT_CONFIG = {
     duplex_board_paper:   "paper_duplex_v2.png",      // Duplex Board
     matt_card_paper:      "matt_card_paper_v3.png",     // Matt Card 250gsm
 
+    // ── ORDER PAGE — BOWL TYPE SELECTORS ──────────────────────────────
+    //  Shown inside the bowl type cards on the order form (Food Bowl step)
+    bowl_standard:    "bowl_standard.png",     // Standard Tray Bowl
+    bowl_trapezoidal: "bowl_trapezoidal.png",  // Trapezoidal Bowl
+
     // ── ABOUT PAGE (about.html) ───────────────────────────────────────
     //  Upload each file to GitHub with the exact filename below. Until you
     //  do, the page shows a neat placeholder box instead of a broken image.
