@@ -443,11 +443,19 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <label class="option-card selected border-2 border-primary p-3 cursor-pointer" id="addon-bowl-standard-lbl" onclick="setAddonBowlType('standard')">
                 <input type="radio" name="addon_bowl_type" value="standard" class="sr-only" checked/>
+                <div class="bg-charcoal h-24 flex items-center justify-center mb-2 overflow-hidden">
+                  <img data-img="bowl_standard" src="bowl_standard.png" alt="Standard Tray Bowl" class="h-full object-contain p-2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                  <div class="hidden w-full h-full flex-col items-center justify-center text-white/30"><span class="material-symbols-outlined text-3xl mb-1">soup_kitchen</span><p class="text-xs uppercase tracking-widest">Standard Tray</p></div>
+                </div>
                 <p class="font-semibold text-sm">Standard Tray</p>
                 <p class="text-xs text-on-surface-variant">150×100×50mm · 2 per A4 sheet</p>
               </label>
               <label class="option-card border-2 border-outline-variant p-3 cursor-pointer" id="addon-bowl-trap-lbl" onclick="setAddonBowlType('trap')">
                 <input type="radio" name="addon_bowl_type" value="trapezoidal" class="sr-only"/>
+                <div class="bg-charcoal h-24 flex items-center justify-center mb-2 overflow-hidden">
+                  <img data-img="bowl_trapezoidal" src="bowl_trapezoidal.png" alt="Trapezoidal Bowl" class="h-full object-contain p-2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                  <div class="hidden w-full h-full flex-col items-center justify-center text-white/30"><span class="material-symbols-outlined text-3xl mb-1">takeout_dining</span><p class="text-xs uppercase tracking-widest">Trapezoidal</p></div>
+                </div>
                 <p class="font-semibold text-sm">Trapezoidal</p>
                 <p class="text-xs text-on-surface-variant">160×90×55mm · 2 per A4 sheet</p>
               </label>
