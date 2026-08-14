@@ -100,7 +100,7 @@ const KRAAPHT_CONFIG = {
   // ----------------------------------------------------------
   paper_prices: {
     chromo_coat:    { price: 900, sheets_per_ream: 100, gsm: 230 },
-    brown_card_180: { price: 480, sheets_per_ream: 250, gsm: 180 },
+    brown_card_250: { price: 480, sheets_per_ream: 250, gsm: 180 }, // key kept as brown_card_250 for compatibility with order.html's existing radio values/lookups — gsm below reflects the real current spec (180gsm)
     brown_paper_80: { price: 340, sheets_per_ream: 250, gsm: 80  },
     matt_150:       { price: 350, sheets_per_ream: 100, gsm: 250 },
     duplex_300:     { price: 180, sheets_per_ream: 100, gsm: 220 },
