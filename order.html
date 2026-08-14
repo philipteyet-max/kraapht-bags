@@ -530,7 +530,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3 block">Paper Type</label>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="bowl-paper-options">
               <label class="paper-card selected rounded-none p-4 flex items-center gap-3 relative" data-bowl-paper="chromo_coat" data-price="525">
-                <input type="radio" name="bowl_paper" value="chromo_coat" class="accent-primary" checked onchange="state.paperPrice=525;state.bowlPaper='chromo_coat';calcPrice()"/>
+                <input type="radio" name="bowl_paper" value="chromo_coat" class="accent-primary" checked onchange="state.bowlPaper='chromo_coat';calcPrice()"/>
                 <div>
                   <p class="font-semibold text-sm">White / Chromo Coat</p>
                   <p class="text-xs text-on-surface-variant">Glossy white · Best for printed bowls</p>
@@ -538,7 +538,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
                 <span class="check-badge" style="display:flex;">✓</span>
               </label>
               <label class="paper-card rounded-none p-4 flex items-center gap-3 relative" data-bowl-paper="brown_card_250" data-price="550">
-                <input type="radio" name="bowl_paper" value="brown_card_250" class="accent-primary" onchange="state.paperPrice=550;state.bowlPaper='brown_card_250';calcPrice()"/>
+                <input type="radio" name="bowl_paper" value="brown_card_250" class="accent-primary" onchange="state.bowlPaper='brown_card_250';calcPrice()"/>
                 <div>
                   <p class="font-semibold text-sm">Brown Card 250gsm</p>
                   <p class="text-xs text-on-surface-variant">Natural kraft · Plain bowls</p>
@@ -1366,7 +1366,7 @@ let state = {
 // Initialise state from config.js values
 (function initFromConfig() {
   if (typeof KRAAPHT_CONFIG !== 'undefined') {
-    state.paperPrice = KRAAPHT_CONFIG.paper_prices.chromo_coat; // default selected paper
+    state.paperPrice = KRAAPHT_CONFIG.paper_prices.chromo_coat.price; // default selected paper
   }
 })();
 
@@ -1528,6 +1528,12 @@ function calcPrice() {
   var minQty       = C ? C.order.minimum_qty    : 200;
   var bulkQty      = C ? C.order.bulk_discount_qty  : 1000;
   var bulkRate     = C ? C.order.bulk_discount_rate : 0.05;
+  // Markup (profit as a % of cost) applied to real production cost before
+  // the two discounts. The discounts still come off the SAME real-cost
+  // amounts as before (unchanged formulas) — what changes is that they now
+  // reduce the markup cushion instead of eating into cost recovery, so an
+  // order can be discounted without falling back to break-even.
+  var markupRate   = C ? C.order.markup_rate : 0.15;
   var paperSpecs   = C ? C.paper_prices : {
     chromo_coat:{price:750,sheets_per_ream:100}, brown_card_250:{price:420,sheets_per_ream:150},
     brown_paper_80:{price:340,sheets_per_ream:250}, matt_150:{price:350,sheets_per_ream:100},
@@ -1554,10 +1560,11 @@ function calcPrice() {
     const paperCost      = (sheetsNeeded / bowlPaperSpec.sheets_per_ream) * bowlPaperPrice;
     const labour         = qty * labourPerBowl;
 
-    // Print costs (only if custom print selected) — printing scales per
-    // 1000 sheets; plate-making is a flat one-time fee.
+    // Print costs (only if custom print selected) — printing is charged per
+    // FULL started batch of 1000 sheets (same full-batch rule as bags), not
+    // proportionally; plate-making is a flat one-time fee.
     const bowlColors = state.bowlPrint === 'print' ? (state.bowlPrintColors || 1) : 0;
-    const printCost  = (printCosts[bowlColors] || 0) * (sheetsNeeded / 1000);
+    const printCost  = (printCosts[bowlColors] || 0) * Math.ceil(sheetsNeeded / 1000);
     const plateCost  = plateCosts[bowlColors] || 0;
 
     // Bowls carry a flat one-time die-cut fee (no continuous die-cutting
@@ -1565,14 +1572,16 @@ function calcPrice() {
     // on a repeat order of the same bowl design.
     const saving      = plateCost + bowlDieCutFee;
     const baseTotal   = paperCost + printCost + plateCost + bowlDieCutFee + labour + delivery;
-    const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+    // Markup on real cost before discounts — same mechanism as bags.
+    const markedUpTotal  = baseTotal * (1 + markupRate);
+    const afterRecurring = (isRecurring && saving > 0) ? markedUpTotal - saving : markedUpTotal;
     // Bulk discount scoped to paper + print + labour only — plate-making and
     // the die-cut fee are one-time setup costs and shouldn't scale with qty.
     const bulkBase    = paperCost + printCost + labour;
     const bulkSaving  = qty >= bulkQty ? bulkBase * bulkRate : 0;
     const total       = afterRecurring - bulkSaving;
     const perUnit = (total / qty).toFixed(2);
-    const savingPct  = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
+    const savingPct  = markedUpTotal > 0 ? ((saving / markedUpTotal) * 100).toFixed(0) : 0;
 
     // Update price panel — hide the flat-bottom bag section, show the Paper Bowls section
     document.getElementById('estimate-bag-section').classList.add('hidden');
@@ -1622,9 +1631,11 @@ function calcPrice() {
   const paperSpec     = paperSpecs[paperKey] || {price: state.paperPrice, sheets_per_ream: 100};
   const sheetsNeeded  = Math.ceil(qty / state.bagsPerSheet);
   const paperCost     = (sheetsNeeded / paperSpec.sheets_per_ream) * state.paperPrice;
-  // Printing and die-cutting-run rates are GHS per 1000 sheets — scale with
-  // the actual sheets needed. Plate-making stays a flat one-time fee.
-  const sheetsBasis   = sheetsNeeded / 1000;
+  // Printing and die-cutting-run rates are GHS per 1000 sheets, charged per
+  // FULL started batch (not proportionally) — 500 sheets still costs a whole
+  // batch, 1,200 sheets costs 2 batches, 2,000 sheets costs exactly 2 batches.
+  // Plate-making stays a flat one-time fee (never scales with sheet count).
+  const sheetsBasis   = Math.ceil(sheetsNeeded / 1000);
   const printCost     = (printCosts[state.printColors] || 0) * sheetsBasis;
   const plateCost     = plateCosts[state.printColors] || 0;
   const dieCutRunCost = dieCutRun * sheetsBasis;
@@ -1648,7 +1659,13 @@ function calcPrice() {
   // promised discount to plain (no-print) repeat orders.
   const saving       = plateCost + dieCutBoard + customDieFee;
   const baseTotal    = paperCost + printCost + plateCost + dieCutBoard + dieCutRunCost + labour + delivery + extraDesigner + customDieFee;
-  const afterRecurring = (isRecurring && saving > 0) ? baseTotal - saving : baseTotal;
+  // Markup applied to real cost BEFORE discounts — this is what actually
+  // earns a profit. Discounts below are still sized off the same real-cost
+  // components as always (unchanged formulas), but now come out of the
+  // marked-up total instead of raw cost, so they reduce the profit cushion
+  // rather than eating into cost recovery.
+  const markedUpTotal  = baseTotal * (1 + markupRate);
+  const afterRecurring = (isRecurring && saving > 0) ? markedUpTotal - saving : markedUpTotal;
   // Bulk discount is scoped to paper + print + labour only (per config.js's
   // own comment) — one-time setup fees (plate-making, die-cut board/run,
   // designer fee) don't scale with quantity, so they shouldn't get discounted
@@ -1657,7 +1674,7 @@ function calcPrice() {
   const bulkSaving   = qty >= bulkQty ? bulkBase * bulkRate : 0;
   const total        = afterRecurring - bulkSaving;
   const perBag       = (total / qty).toFixed(2);
-  const savingPct    = baseTotal > 0 ? ((saving / baseTotal) * 100).toFixed(0) : 0;
+  const savingPct    = markedUpTotal > 0 ? ((saving / markedUpTotal) * 100).toFixed(0) : 0;
 
   const paperNames = {chromo_coat:'White / Chromo Coat', brown_card_250:'Brown Card 250gsm', brown_paper_80:'Brown Paper 80gsm', matt_150:'Matt Card 250gsm', duplex_300:'Duplex Board'};
   document.getElementById('sb-paper').textContent       = paperNames[paperKey] || 'White / Chromo Coat';
@@ -1700,14 +1717,16 @@ function calcPrice() {
     const addonLabour    = addonQty * labourPerBowl;
     const addonColors    = state.addonBowlPrintColors || 0;
     // Printing scales per 1000 sheets, same as the standalone bowl branch.
-    const addonPrintCost = (pCosts2[addonColors]||0) * (addonSheets / 1000);
+    const addonPrintCost = (pCosts2[addonColors]||0) * Math.ceil(addonSheets / 1000);
     const addonPlateCost = plateCosts2[addonColors]||0;
     // Same waivable-on-repeat-order treatment as the standalone bowl branch —
     // plate-making and the flat bowl die-cut fee are both waived on a repeat
     // order of the same bowl design.
+    const addonBaseTotal      = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost + bowlDieCutFee;
+    // Markup on real cost before discounts — same mechanism as bags/bowls.
+    const addonMarkedUpTotal  = addonBaseTotal * (1 + markupRate);
     addonSaving = isRecurring ? (addonPlateCost + bowlDieCutFee) : 0;
-    const addonBaseTotal     = addonPaperCost + addonLabour + addonPrintCost + addonPlateCost + bowlDieCutFee;
-    const addonAfterRecurring = addonBaseTotal - addonSaving;
+    const addonAfterRecurring = addonMarkedUpTotal - addonSaving;
     // Bulk discount scoped to paper + print + labour only, same as bags/bowls.
     const addonBulkBase   = addonPaperCost + addonPrintCost + addonLabour;
     const addonBulkSaving = addonQty >= bulkQty ? addonBulkBase * bulkRate : 0;
@@ -1784,7 +1803,10 @@ function switchProduct(type) {
 
   if (isBowl) {
     state.bowlPaper = 'chromo_coat';
-    state.paperPrice = 525;
+    // Not touching state.paperPrice here — the bowl branch derives its own
+    // paper price independently from paperSpecs, and leaving this untouched
+    // means the bag's own paperPrice survives correctly if the customer
+    // switches back to Flat Bottom Bag without reselecting a paper.
     state.bowlPrint = 'none';
     state.bowlPrintColors = 0;
   }
@@ -1835,11 +1857,11 @@ calcPrice();
   if (typeof KRAAPHT_CONFIG === 'undefined') return;
   const p = KRAAPHT_CONFIG.paper_prices;
   const priceMap = {
-    'chromo_coat':    p.chromo_coat,
-    'brown_card_250': p.brown_card_250,
-    'brown_paper_80': p.brown_paper_80,
-    'matt_150':       p.matt_150,
-    'duplex_300':     p.duplex_300,
+    'chromo_coat':    p.chromo_coat.price,
+    'brown_card_250': p.brown_card_250.price,
+    'brown_paper_80': p.brown_paper_80.price,
+    'matt_150':       p.matt_150.price,
+    'duplex_300':     p.duplex_300.price,
   };
   // Update data-price attributes so click handlers read fresh values
   document.querySelectorAll('#paper-options label[data-paper]').forEach(label => {
@@ -1852,7 +1874,7 @@ calcPrice();
     }
   });
   // Set initial state.paperPrice to config value for default selected paper
-  state.paperPrice = p.chromo_coat;
+  state.paperPrice = p.chromo_coat.price;
   calcPrice();
 
   // Payment policy deposit % — dynamic, matches payment.html

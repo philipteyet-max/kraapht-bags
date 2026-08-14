@@ -52,6 +52,15 @@ const KRAAPHT_CONFIG = {
     minimum_qty:        200,
     delivery_cost:      30,
     designer_fee:       100,
+    // Markup applied to real production cost BEFORE the bulk and
+    // returning-customer discounts are calculated — this is what actually
+    // earns a profit. Without this, the price charged equals the real cost
+    // exactly (break-even on every order), and the two discounts below
+    // become pure cost pass-throughs instead of real discounts. 0.15 = 15%
+    // markup on cost (not the same as a 15% margin — markup is profit as a
+    // % of cost, margin is profit as a % of the selling price; a 15%
+    // markup works out to roughly an 8–9% margin after the bulk discount).
+    markup_rate:         0.15,
     // Die-cutting run — the per-production-run die-cutting cost, priced per
     // 1000 sheets and scaled to the actual order size.
     die_cut_run:        60,
