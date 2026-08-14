@@ -99,11 +99,11 @@ const KRAAPHT_CONFIG = {
   // whenever your supplier's ream size changes.
   // ----------------------------------------------------------
   paper_prices: {
-    chromo_coat:    { price: 750, sheets_per_ream: 100, gsm: 350 },
-    brown_card_250: { price: 420, sheets_per_ream: 150, gsm: 250 },
+    chromo_coat:    { price: 900, sheets_per_ream: 100, gsm: 230 },
+    brown_card_180: { price: 480, sheets_per_ream: 250, gsm: 180 },
     brown_paper_80: { price: 340, sheets_per_ream: 250, gsm: 80  },
     matt_150:       { price: 350, sheets_per_ream: 100, gsm: 250 },
-    duplex_300:     { price: 180, sheets_per_ream: 150, gsm: 220 },
+    duplex_300:     { price: 180, sheets_per_ream: 100, gsm: 220 },
   },
 
   // ----------------------------------------------------------
