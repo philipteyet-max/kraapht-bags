@@ -311,6 +311,14 @@ const KRAAPHT_CONFIG = {
 //  APPLY CONFIG TO PAGE — DO NOT EDIT BELOW THIS LINE
 // ============================================================
 
+// This file is loaded two ways: as a plain <script> in the browser (where
+// it drives the block below), and via require()/import from serverless
+// functions that need the real prices/rates as the single source of truth
+// (see pricing-floor.js) instead of a second, easily-drifting copy of the
+// same numbers. `document` doesn't exist in that second context, so the
+// whole DOM-driven block is guarded.
+if (typeof document !== "undefined") {
+
 // =================================================================
 //  IMAGE UPDATER — runs on every page load
 //  Finds elements with data-img="key" and sets their src from config
@@ -456,3 +464,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+} // end `typeof document !== "undefined"` guard
+
+// Node-side export — lets api/webhook.js import the exact same pricing
+// rules used on the order form, instead of a duplicate that can drift out
+// of sync (see pricing-floor.js).
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = KRAAPHT_CONFIG;
+}

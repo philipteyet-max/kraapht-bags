@@ -822,6 +822,28 @@ async function sbPatch(table, matchCol, matchVal, updates) {
   return res.json();
 }
 
+// ── XSS-safe interpolation helpers ──────────────────────────────────────
+// Order/client fields (business name, notes, paper/product labels, etc.)
+// are typed by customers into the public order form and stored verbatim by
+// api/webhook.js — nothing sanitizes them before they land here. Every
+// place below that puts one of these fields into innerHTML or an href must
+// go through esc() (plain text/attribute content) or escAttrJs() (a value
+// embedded inside a single-quoted JS string in an onclick="" attribute —
+// needs both JS-string escaping AND HTML escaping, since the browser
+// HTML-decodes the attribute before the JS engine parses the onclick body).
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escAttrJs(s) {
+  return esc(String(s ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, '\\n'));
+}
+// Phone/WhatsApp numbers only ever need digits and a leading + for tel:/
+// wa.me links — stripping everything else also blocks a javascript: (or
+// other) URL scheme hidden in a phone field from ever reaching an href.
+function telSafe(s) {
+  return String(s ?? '').replace(/[^0-9+]/g, '');
+}
+
 // ── Live data state ──
 let orders = [];
 let isLoading = false;
@@ -1113,8 +1135,8 @@ function renderDashboard(){
     const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="py-3 pr-4 font-semibold text-xs">${o.id}</td>
-      <td class="py-3 pr-4 text-sm">${biz}</td>
-      <td class="py-3 pr-4 text-xs text-on-surface-variant">${o.paper||o.paper_type||'—'} · ${o.product||o.product_type||'—'}</td>
+      <td class="py-3 pr-4 text-sm">${esc(biz)}</td>
+      <td class="py-3 pr-4 text-xs text-on-surface-variant">${esc(o.paper||o.paper_type||'—')} · ${esc(o.product||o.product_type||'—')}</td>
       <td class="py-3 pr-4 text-sm">${o.qty.toLocaleString()}</td>
       <td class="py-3 pr-4 font-semibold text-sm">${ghs(o.amount)}</td>
       <td class="py-3 pr-4">${stageBadge(o.stage)}</td>
@@ -1134,7 +1156,7 @@ function renderDashboard(){
     return `<div class="cursor-pointer" onclick="openOrderModal('${o.id}')">
       <div class="flex justify-between mb-2">
         <div>
-          <p class="font-semibold text-sm">${o.id} · ${biz}</p>
+          <p class="font-semibold text-sm">${o.id} · ${esc(biz)}</p>
           <p class="text-xs text-on-surface-variant uppercase tracking-wide font-bold">${o.qty.toLocaleString()} ${prod==='Food Bowl'?'bowls':'bags'} · ${o.stage}</p>
         </div>
         <span class="text-xl font-bold ${prog>=80?'text-amber-600':'text-primary'}">${prog}%</span>
@@ -1156,9 +1178,9 @@ function renderDashboard(){
 
   const rankBadge=['bg-primary text-white','bg-accent/20 text-accent','bg-accent/20 text-accent','bg-accent/20 text-accent'];
   document.getElementById('top-clients-grid').innerHTML=clientRevenue.map((c,i)=>`
-    <div class="p-5 border border-outline-variant hover:border-primary transition-colors cursor-pointer client-card" onclick="openClientModal('${c.business.replace(/'/g,"\\'")}')">
+    <div class="p-5 border border-outline-variant hover:border-primary transition-colors cursor-pointer client-card" onclick="openClientModal('${escAttrJs(c.business)}')">
       <div class="flex justify-between items-start mb-3">
-        <p class="font-semibold">${c.business}</p>
+        <p class="font-semibold">${esc(c.business)}</p>
         <span class="px-2 py-0.5 ${rankBadge[i]} text-xs font-bold tracking-widest uppercase">#${i+1}</span>
       </div>
       <p class="text-2xl font-bold text-primary">${ghs(c.revenue)}</p>
@@ -1211,8 +1233,8 @@ function renderOrders(){
     const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="p-4 font-semibold text-xs">${o.id}</td>
-      <td class="p-4 text-sm">${biz}</td>
-      <td class="p-4 text-xs text-on-surface-variant">${paper} · ${prod}</td>
+      <td class="p-4 text-sm">${esc(biz)}</td>
+      <td class="p-4 text-xs text-on-surface-variant">${esc(paper)} · ${esc(prod)}</td>
       <td class="p-4 text-xs">${o.lamination?'<span class="stage-pill bg-primary/10 text-primary border border-primary/20">Yes</span>':'<span class="stage-pill bg-surface-container text-on-surface-variant border border-outline-variant">No</span>'}</td>
       <td class="p-4 text-sm">${o.qty.toLocaleString()}</td>
       <td class="p-4 font-semibold text-sm">${ghs(o.amount)}</td>
@@ -1280,8 +1302,8 @@ function renderProductionCard(o){
           <span class="font-bold text-sm">${o.id}</span>
           ${od?'<span class="stage-pill bg-red-100 text-red-700">Overdue</span>':''}
         </div>
-        <p class="text-base font-bold">${c.business||'—'}</p>
-        <p class="text-xs text-on-surface-variant mt-0.5">${o.qty.toLocaleString()} × ${o.product} · ${o.paper}${o.lamination?' · Laminated':''}</p>
+        <p class="text-base font-bold">${esc(c.business||'—')}</p>
+        <p class="text-xs text-on-surface-variant mt-0.5">${o.qty.toLocaleString()} × ${esc(o.product)} · ${esc(o.paper)}${o.lamination?' · Laminated':''}</p>
       </div>
       <div class="text-right">
         <p class="text-lg font-bold text-primary">${ghs(o.amount)}</p>
@@ -1378,12 +1400,12 @@ function renderClients(){
 
   document.getElementById('clients-grid').innerHTML=enriched.map(c=>{
     const avgVal=c.orders.length?Math.round(c.revenue/c.orders.length):0;
-    const safeKey=c.business.replace(/'/g,"\\'");
+    const safeKey=escAttrJs(c.business);
     return `<div class="bg-surface border border-outline-variant p-5 cursor-pointer client-card transition-colors" onclick="openClientModal('${safeKey}')">
       <div class="flex justify-between items-start mb-3">
         <div>
-          <p class="font-bold text-base">${c.business}</p>
-          <p class="text-xs text-on-surface-variant">${c.name||''}</p>
+          <p class="font-bold text-base">${esc(c.business)}</p>
+          <p class="text-xs text-on-surface-variant">${esc(c.name||'')}</p>
         </div>
         <span class="text-xs font-bold tracking-widest uppercase px-2 py-1 ${c.activeThisMonth?'bg-green-100 text-green-700':'bg-surface-container text-on-surface-variant'}">${c.activeThisMonth?'Active':'Inactive'}</span>
       </div>
@@ -1402,12 +1424,12 @@ function renderClients(){
         </div>
       </div>
       <div class="flex justify-between items-center text-xs text-on-surface-variant">
-        <span>${c.industry||'—'}</span>
-        <span>${c.location?(c.location.split(',')[0]):'—'}</span>
+        <span>${esc(c.industry||'—')}</span>
+        <span>${esc(c.location?(c.location.split(',')[0]):'—')}</span>
       </div>
       <div class="flex gap-2 mt-3">
-        <a href="https://wa.me/${c.whatsapp||c.phone||''}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition-colors">WhatsApp</a>
-        <a href="tel:${c.phone||''}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 border border-outline-variant text-xs font-bold hover:bg-surface-container transition-colors">Call</a>
+        <a href="https://wa.me/${telSafe(c.whatsapp||c.phone||'')}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition-colors">WhatsApp</a>
+        <a href="tel:${telSafe(c.phone||'')}" onclick="event.stopPropagation()" class="flex-1 text-center py-1.5 border border-outline-variant text-xs font-bold hover:bg-surface-container transition-colors">Call</a>
       </div>
     </div>`;
   }).join('');
@@ -1486,7 +1508,7 @@ function renderFinance(){
     totR+=o.amount; totM+=o.materialCost; totL+=o.labourCost; totP+=p;
     return `<tr class="hover:bg-surface-container transition-colors cursor-pointer" onclick="openOrderModal('${o.id}')">
       <td class="p-3 font-semibold text-xs">${o.id}</td>
-      <td class="p-3 text-sm">${biz}</td>
+      <td class="p-3 text-sm">${esc(biz)}</td>
       <td class="p-3 text-sm">${o.qty.toLocaleString()}</td>
       <td class="p-3 text-right font-semibold text-sm">${ghs(o.amount)}</td>
       <td class="p-3 text-right text-xs text-error">${ghs(o.materialCost)}</td>
@@ -1523,8 +1545,8 @@ function openOrderModal(orderId){
   document.getElementById('modal-profit').textContent=ghs(profit);
   document.getElementById('modal-margin').textContent=margin+' margin';
   document.getElementById('modal-notes').textContent=o.notes||'—';
-  document.getElementById('modal-whatsapp').href=`https://wa.me/${o.whatsapp||o.phone||''}`;
-  document.getElementById('modal-phone').href=`tel:${o.phone||''}`;
+  document.getElementById('modal-whatsapp').href=`https://wa.me/${telSafe(o.whatsapp||o.phone||'')}`;
+  document.getElementById('modal-phone').href=`tel:${telSafe(o.phone||'')}`;
 
   // info grid
   const orderDate=o.orderDate?new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
@@ -1545,8 +1567,8 @@ function openOrderModal(orderId){
     ['Due Date',dueDate],
     ['Status',o.stage],
   ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
-    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
-    <p class="font-semibold text-sm">${v}</p>
+    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${esc(k)}</p>
+    <p class="font-semibold text-sm">${esc(v)}</p>
   </div>`).join('');
 
   // Stage track
@@ -1613,16 +1635,16 @@ function openClientModal(clientId){
   document.getElementById('cmodal-total').textContent=ghs(rev);
   document.getElementById('cmodal-orders-count').textContent=ords.length;
   document.getElementById('cmodal-avg').textContent=ords.length?ghs(Math.round(rev/ords.length)):'—';
-  document.getElementById('cmodal-whatsapp').href=`https://wa.me/${c.whatsapp}`;
-  document.getElementById('cmodal-phone').href=`tel:${c.phone}`;
+  document.getElementById('cmodal-whatsapp').href=`https://wa.me/${telSafe(c.whatsapp)}`;
+  document.getElementById('cmodal-phone').href=`tel:${telSafe(c.phone)}`;
 
   document.getElementById('cmodal-info').innerHTML=[
     ['Full Name',c.name||'—'],['Business',c.business],
     ['Industry',c.industry||'—'],['Location',c.location||'—'],
     ['Phone',c.phone||'—'],['Email',c.email||'—'],
   ].map(([k,v])=>`<div class="bg-surface-container-low p-3">
-    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${k}</p>
-    <p class="font-semibold text-sm">${v}</p>
+    <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${esc(k)}</p>
+    <p class="font-semibold text-sm">${esc(v)}</p>
   </div>`).join('');
 
   document.getElementById('cmodal-orders').innerHTML=ords.length===0
@@ -1633,7 +1655,7 @@ function openClientModal(clientId){
         return `<div class="flex justify-between items-center p-3 border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('client-modal').classList.add('hidden');openOrderModal('${o.id}')">
           <div>
             <p class="font-semibold text-xs">${o.id}</p>
-            <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${prod} · ${date}</p>
+            <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${esc(prod)} · ${date}</p>
           </div>
           <div class="text-right">
             <p class="font-bold text-sm text-primary">${ghs(o.amount)}</p>
