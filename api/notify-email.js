@@ -84,6 +84,22 @@ async function sendTemplate(eventKey, order) {
   });
 }
 
+// api/webhook.js sets payment_status = 'flagged_review' when the amount
+// actually charged looks too low for the order described (see
+// pricing-floor.js) — instead of the normal customer-facing "production is
+// starting" email, alert Kraapht directly so a human checks it before any
+// work begins.
+async function sendFlaggedAlert(order) {
+  await resend.emails.send({
+    from:    'Kraapht Bags Ltd <orders@kraaphtbags.com>',
+    to:      'kraaphtbags@gmail.com',
+    subject: `⚠ Review needed — order ${order.ref} charged less than expected`,
+    html: `<p>Order <strong>${order.ref}</strong> (${order.business_name || 'unknown business'}) came in with a payment that looks too low for what was ordered — possibly a tampered checkout amount.</p>
+      <p>Charged: <strong>GHS ${order.amount_paid}</strong> · Declared order total: <strong>GHS ${order.amount_ghs}</strong> · Qty: ${order.quantity} · Paper: ${order.paper_type}</p>
+      <p>No confirmation email was sent to the customer and production has not started. Check the order in admin.html before proceeding.</p>`,
+  });
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -98,9 +114,13 @@ export default async function handler(req, res) {
 
   try {
     if (type === 'INSERT' && record) {
-      // A brand-new order is always either fully paid (deposit_percentage
-      // configured at 100%, or a small order) or deposit-paid.
-      await sendTemplate(record.payment_status === 'paid' ? 'confirmed' : 'deposit_confirmed', record);
+      if (record.payment_status === 'flagged_review') {
+        await sendFlaggedAlert(record);
+      } else {
+        // A brand-new order is always either fully paid (deposit_percentage
+        // configured at 100%, or a small order) or deposit-paid.
+        await sendTemplate(record.payment_status === 'paid' ? 'confirmed' : 'deposit_confirmed', record);
+      }
     }
 
     if (type === 'UPDATE' && record && old_record) {
