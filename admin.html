@@ -599,6 +599,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
+    <div id="modal-payment-flag" class="hidden bg-red-50 border-b border-red-200 text-red-700 text-sm font-semibold px-5 py-3 flex items-center gap-2">
+      <span class="material-symbols-outlined" style="font-size:18px;">warning</span>
+      <span>Charged amount looks too low for this order — flagged for manual review. Don't advance production until this is resolved.</span>
+    </div>
     <div class="p-5 space-y-5">
       <!-- Order info grid -->
       <div class="grid grid-cols-2 gap-3" id="modal-info-grid"></div>
@@ -843,6 +847,21 @@ function escAttrJs(s) {
 function telSafe(s) {
   return String(s ?? '').replace(/[^0-9+]/g, '');
 }
+// api/webhook.js marks an order payment_status: 'flagged_review' when the
+// Paystack amount actually charged looked too low for the order described
+// (see pricing-floor.js) — surface that everywhere an order can be reviewed
+// so it doesn't get advanced through production unnoticed.
+function paymentFlagBadge(o) {
+  return isFlagged(o)
+    ? '<span class="stage-pill bg-red-100 text-red-700 border border-red-300 ml-2" title="Charged amount looks too low for this order — needs manual review">⚠ Review Payment</span>'
+    : '';
+}
+// A flagged order's payment hasn't actually been confirmed as legitimate —
+// keep it visible everywhere (via paymentFlagBadge above) but leave its
+// money out of every revenue/cost total until an admin resolves it.
+function isFlagged(o) {
+  return o.paymentStatus === 'flagged_review';
+}
 
 // ── Live data state ──
 let orders = [];
@@ -1055,9 +1074,9 @@ function renderKPICards(){
       (change > 0 ? 'text-green-600' : change < 0 ? 'text-error' : 'text-on-surface-variant');
   }
 
-  // Today's Revenue
-  const todayRevenue     = orders.filter(o=>o.orderDate===todayStr).reduce((s,o)=>s+o.amountPaid,0);
-  const yesterdayRevenue = orders.filter(o=>o.orderDate===yesterdayStr).reduce((s,o)=>s+o.amountPaid,0);
+  // Today's Revenue — excludes flagged_review orders (payment not yet confirmed)
+  const todayRevenue     = orders.filter(o=>o.orderDate===todayStr && !isFlagged(o)).reduce((s,o)=>s+o.amountPaid,0);
+  const yesterdayRevenue = orders.filter(o=>o.orderDate===yesterdayStr && !isFlagged(o)).reduce((s,o)=>s+o.amountPaid,0);
   const revChange = pctChange(todayRevenue, yesterdayRevenue);
   document.getElementById('kpi-today-revenue').textContent = ghs(todayRevenue);
   document.getElementById('kpi-today-revenue-trend').textContent =
@@ -1088,8 +1107,11 @@ function renderKPICards(){
     Math.min(Math.round((bagsMonth/Math.max(bagsLastMonth,1))*100),100)+'%';
 
   // Monthly Revenue + target (target figures are the business's own manually-set
-  // goals in `monthlyTargets`, not derived/fake data)
-  const monthRevenue = monthOrders.reduce((s,o)=>s+o.amountPaid,0);
+  // goals in `monthlyTargets`, not derived/fake data). Excludes flagged_review
+  // orders — bagsMonth above intentionally still counts them (real bags were
+  // ordered), only the money figures exclude unconfirmed payments.
+  const confirmedMonthOrders = monthOrders.filter(o=>!isFlagged(o));
+  const monthRevenue = confirmedMonthOrders.reduce((s,o)=>s+o.amountPaid,0);
   const target = (monthlyTargets[monthLabel]||{}).target || 35000;
   const targetPct = Math.min(Math.round((monthRevenue/target)*100),100);
   document.getElementById('kpi-month-revenue').textContent = ghs(monthRevenue);
@@ -1098,9 +1120,9 @@ function renderKPICards(){
   document.getElementById('kpi-month-target-pct').textContent = `${targetPct}% of target`;
 
   // Revenue Summary panel — same formula as the Finance tab (renderFinance())
-  const matCost = monthOrders.reduce((s,o)=>s+(o.materialCost||0),0);
-  const labCost = monthOrders.reduce((s,o)=>s+(o.labourCost||0),0);
-  const inProd  = orders.filter(o=>PROD_STAGES.includes(o.stage)).reduce((s,o)=>s+o.amount,0);
+  const matCost = confirmedMonthOrders.reduce((s,o)=>s+(o.materialCost||0),0);
+  const labCost = confirmedMonthOrders.reduce((s,o)=>s+(o.labourCost||0),0);
+  const inProd  = orders.filter(o=>PROD_STAGES.includes(o.stage) && !isFlagged(o)).reduce((s,o)=>s+o.amount,0);
   const profit  = monthRevenue - matCost - labCost;
   const margin  = monthRevenue>0 ? Math.round((profit/monthRevenue)*100) : 0;
   document.getElementById('kpi-sum-received').textContent = ghs(monthRevenue);
@@ -1135,7 +1157,7 @@ function renderDashboard(){
     const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="py-3 pr-4 font-semibold text-xs">${o.id}</td>
-      <td class="py-3 pr-4 text-sm">${esc(biz)}</td>
+      <td class="py-3 pr-4 text-sm">${esc(biz)}${paymentFlagBadge(o)}</td>
       <td class="py-3 pr-4 text-xs text-on-surface-variant">${esc(o.paper||o.paper_type||'—')} · ${esc(o.product||o.product_type||'—')}</td>
       <td class="py-3 pr-4 text-sm">${o.qty.toLocaleString()}</td>
       <td class="py-3 pr-4 font-semibold text-sm">${ghs(o.amount)}</td>
@@ -1156,7 +1178,7 @@ function renderDashboard(){
     return `<div class="cursor-pointer" onclick="openOrderModal('${o.id}')">
       <div class="flex justify-between mb-2">
         <div>
-          <p class="font-semibold text-sm">${o.id} · ${esc(biz)}</p>
+          <p class="font-semibold text-sm">${o.id} · ${esc(biz)}${paymentFlagBadge(o)}</p>
           <p class="text-xs text-on-surface-variant uppercase tracking-wide font-bold">${o.qty.toLocaleString()} ${prod==='Food Bowl'?'bowls':'bags'} · ${o.stage}</p>
         </div>
         <span class="text-xl font-bold ${prog>=80?'text-amber-600':'text-primary'}">${prog}%</span>
@@ -1170,7 +1192,7 @@ function renderDashboard(){
   // top clients
   const clientRevenue=getClients().map(c=>{
     const ords=ordersForClient(c.business);
-    const rev=ords.reduce((sum,o)=>sum+o.amount,0);
+    const rev=ords.filter(o=>!isFlagged(o)).reduce((sum,o)=>sum+o.amount,0);
     const cnt=ords.length;
     const bags=ords.reduce((sum,o)=>sum+o.qty,0);
     return {...c,revenue:rev,orderCount:cnt,totalBags:bags};
@@ -1233,7 +1255,7 @@ function renderOrders(){
     const due=o.dueDate?new Date(o.dueDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
     return `<tr class="clickable hover:bg-surface-container transition-colors" onclick="openOrderModal('${o.id}')">
       <td class="p-4 font-semibold text-xs">${o.id}</td>
-      <td class="p-4 text-sm">${esc(biz)}</td>
+      <td class="p-4 text-sm">${esc(biz)}${paymentFlagBadge(o)}</td>
       <td class="p-4 text-xs text-on-surface-variant">${esc(paper)} · ${esc(prod)}</td>
       <td class="p-4 text-xs">${o.lamination?'<span class="stage-pill bg-primary/10 text-primary border border-primary/20">Yes</span>':'<span class="stage-pill bg-surface-container text-on-surface-variant border border-outline-variant">No</span>'}</td>
       <td class="p-4 text-sm">${o.qty.toLocaleString()}</td>
@@ -1302,7 +1324,7 @@ function renderProductionCard(o){
           <span class="font-bold text-sm">${o.id}</span>
           ${od?'<span class="stage-pill bg-red-100 text-red-700">Overdue</span>':''}
         </div>
-        <p class="text-base font-bold">${esc(c.business||'—')}</p>
+        <p class="text-base font-bold">${esc(c.business||'—')}${paymentFlagBadge(o)}</p>
         <p class="text-xs text-on-surface-variant mt-0.5">${o.qty.toLocaleString()} × ${esc(o.product)} · ${esc(o.paper)}${o.lamination?' · Laminated':''}</p>
       </div>
       <div class="text-right">
@@ -1372,9 +1394,10 @@ function renderClients(){
 
   let enriched=getClients().map(c=>{
     const ords=ordersForClient(c.business);
-    const rev=ords.reduce((s,o)=>s+o.amount,0);
+    const confirmedCount=ords.filter(o=>!isFlagged(o)).length;
+    const rev=ords.filter(o=>!isFlagged(o)).reduce((s,o)=>s+o.amount,0);
     const lastOrder=ords.length?new Date(Math.max(...ords.map(o=>new Date(o.orderDate)))):null;
-    return {...c,orders:ords,revenue:rev,lastOrder};
+    return {...c,orders:ords,confirmedCount,revenue:rev,lastOrder};
   });
 
   enriched=enriched.filter(c=>{
@@ -1388,10 +1411,11 @@ function renderClients(){
   else if(sortBy==='name') enriched.sort((a,b)=>a.business.localeCompare(b.business));
   else if(sortBy==='recent') enriched.sort((a,b)=>(b.lastOrder||0)-(a.lastOrder||0));
 
-  // stats — derive from live orders
+  // stats — derive from live orders (revenue figures exclude flagged_review orders)
   const allClients=getClients();
-  const totalRev=orders.reduce((s,o)=>s+o.amount,0);
-  const totalOrds=orders.length;
+  const confirmedOrders=orders.filter(o=>!isFlagged(o));
+  const totalRev=confirmedOrders.reduce((s,o)=>s+o.amount,0);
+  const totalOrds=confirmedOrders.length;
   const activeCount=allClients.filter(c=>c.activeThisMonth).length;
   document.getElementById('clients-total').textContent=allClients.length;
   document.getElementById('clients-active').textContent=activeCount;
@@ -1399,7 +1423,7 @@ function renderClients(){
   document.getElementById('clients-avg').textContent=totalOrds>0?ghs(Math.round(totalRev/totalOrds)):'—';
 
   document.getElementById('clients-grid').innerHTML=enriched.map(c=>{
-    const avgVal=c.orders.length?Math.round(c.revenue/c.orders.length):0;
+    const avgVal=c.confirmedCount?Math.round(c.revenue/c.confirmedCount):0;
     const safeKey=escAttrJs(c.business);
     return `<div class="bg-surface border border-outline-variant p-5 cursor-pointer client-card transition-colors" onclick="openClientModal('${safeKey}')">
       <div class="flex justify-between items-start mb-3">
@@ -1444,11 +1468,15 @@ function renderFinance(){
   const d=new Date(monthLabel+' 1');
   const prefix=isNaN(d)?'2026-06':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 
+  // monthOrders stays inclusive of flagged_review orders — the per-order table
+  // below still lists them (with their badge) for visibility — but every
+  // summed total here excludes them until an admin resolves the flag.
   const monthOrders=orders.filter(o=>o.orderDate&&o.orderDate.startsWith(prefix));
-  const revenue=monthOrders.reduce((s,o)=>s+o.amountPaid,0); // cash actually collected, not full order value
-  const matCost=monthOrders.reduce((s,o)=>s+o.materialCost,0);
-  const labCost=monthOrders.reduce((s,o)=>s+o.labourCost,0);
-  const inProd=orders.filter(o=>PROD_STAGES.includes(o.stage)).reduce((s,o)=>s+o.amount,0);
+  const confirmedMonthOrders=monthOrders.filter(o=>!isFlagged(o));
+  const revenue=confirmedMonthOrders.reduce((s,o)=>s+o.amountPaid,0); // cash actually collected, not full order value
+  const matCost=confirmedMonthOrders.reduce((s,o)=>s+o.materialCost,0);
+  const labCost=confirmedMonthOrders.reduce((s,o)=>s+o.labourCost,0);
+  const inProd=orders.filter(o=>PROD_STAGES.includes(o.stage) && !isFlagged(o)).reduce((s,o)=>s+o.amount,0);
   const totalCost=matCost+labCost;
   const profit=revenue-totalCost;
   const margin=revenue>0?Math.round(profit/revenue*100):0;
@@ -1505,10 +1533,12 @@ function renderFinance(){
     const biz=o.business||o.business_name||'—';
     const p=o.amount-o.materialCost-o.labourCost;
     const mg=pct(p,o.amount);
-    totR+=o.amount; totM+=o.materialCost; totL+=o.labourCost; totP+=p;
+    // Row stays listed (with its badge) even when flagged, but its numbers
+    // are left out of the Total footer row below.
+    if(!isFlagged(o)){ totR+=o.amount; totM+=o.materialCost; totL+=o.labourCost; totP+=p; }
     return `<tr class="hover:bg-surface-container transition-colors cursor-pointer" onclick="openOrderModal('${o.id}')">
       <td class="p-3 font-semibold text-xs">${o.id}</td>
-      <td class="p-3 text-sm">${esc(biz)}</td>
+      <td class="p-3 text-sm">${esc(biz)}${paymentFlagBadge(o)}</td>
       <td class="p-3 text-sm">${o.qty.toLocaleString()}</td>
       <td class="p-3 text-right font-semibold text-sm">${ghs(o.amount)}</td>
       <td class="p-3 text-right text-xs text-error">${ghs(o.materialCost)}</td>
@@ -1539,6 +1569,7 @@ function openOrderModal(orderId){
 
   document.getElementById('modal-ref').textContent=o.id;
   document.getElementById('modal-client-name').textContent=biz+(cname?' · '+cname:'');
+  document.getElementById('modal-payment-flag').classList.toggle('hidden', o.paymentStatus!=='flagged_review');
   document.getElementById('modal-revenue').textContent=ghs(o.amount);
   document.getElementById('modal-materials').textContent=ghs(o.materialCost);
   document.getElementById('modal-labour').textContent=ghs(o.labourCost);
@@ -1619,7 +1650,8 @@ function openClientModal(clientId){
   const ords=ordersForClient(clientId);
   if(!ords.length) return;
   const sample=ords[0];
-  const rev=ords.reduce((s,o)=>s+o.amount,0);
+  const confirmedOrds=ords.filter(o=>!isFlagged(o));
+  const rev=confirmedOrds.reduce((s,o)=>s+o.amount,0);
   const c={
     business: sample.business||sample.business_name||clientId,
     name:     sample.name||sample.full_name||'',
@@ -1634,7 +1666,7 @@ function openClientModal(clientId){
   document.getElementById('cmodal-name').textContent=c.name+(c.industry?' · '+c.industry:'');
   document.getElementById('cmodal-total').textContent=ghs(rev);
   document.getElementById('cmodal-orders-count').textContent=ords.length;
-  document.getElementById('cmodal-avg').textContent=ords.length?ghs(Math.round(rev/ords.length)):'—';
+  document.getElementById('cmodal-avg').textContent=confirmedOrds.length?ghs(Math.round(rev/confirmedOrds.length)):'—';
   document.getElementById('cmodal-whatsapp').href=`https://wa.me/${telSafe(c.whatsapp)}`;
   document.getElementById('cmodal-phone').href=`tel:${telSafe(c.phone)}`;
 
@@ -1654,7 +1686,7 @@ function openClientModal(clientId){
         const date=o.orderDate?new Date(o.orderDate).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
         return `<div class="flex justify-between items-center p-3 border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="document.getElementById('client-modal').classList.add('hidden');openOrderModal('${o.id}')">
           <div>
-            <p class="font-semibold text-xs">${o.id}</p>
+            <p class="font-semibold text-xs">${o.id}${paymentFlagBadge(o)}</p>
             <p class="text-xs text-on-surface-variant">${o.qty.toLocaleString()} × ${esc(prod)} · ${date}</p>
           </div>
           <div class="text-right">
@@ -1690,10 +1722,14 @@ function exportMonthlyReport(){
   const month=document.getElementById('finance-month-filter')?.value||'June 2026';
   const monthOrders=orders.filter(o=>o.orderDate.startsWith('2026-06'));
   const rows=[
-    ['Ref','Client','Product','Paper','Qty','Revenue (GHS)','Materials (GHS)','Labour (GHS)','Profit (GHS)','Margin','Stage','Due Date'],
+    ['Ref','Client','Product','Paper','Qty','Revenue (GHS)','Materials (GHS)','Labour (GHS)','Profit (GHS)','Margin','Stage','Due Date','Payment Status'],
+    // Flagged orders stay in the export (nothing hidden from the record) but
+    // are labelled — the dashboard totals above already exclude them from
+    // revenue until an admin resolves the flag, and this column makes that
+    // visible to anyone reading the CSV too.
     ...monthOrders.map(o=>{
       const p=o.amount-o.materialCost-o.labourCost;
-      return [o.id,o.business||o.business_name||'—',o.product||o.product_type,o.paper||o.paper_type,o.qty,o.amount,o.materialCost,o.labourCost,p,pct(p,o.amount),o.stage,o.dueDate];
+      return [o.id,o.business||o.business_name||'—',o.product||o.product_type,o.paper||o.paper_type,o.qty,o.amount,o.materialCost,o.labourCost,p,pct(p,o.amount),o.stage,o.dueDate,isFlagged(o)?'FLAGGED — needs review':(o.paymentStatus||'')];
     })
   ];
   const csv=rows.map(r=>r.join(',')).join('\n');
