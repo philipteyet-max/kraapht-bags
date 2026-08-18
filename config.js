@@ -33,13 +33,13 @@ const KRAAPHT_CONFIG = {
   // CONTACT DETAILS
   // ----------------------------------------------------------
   contact: {
-    whatsapp_number:  "233558619224",
-    whatsapp_display: "+233 558 619 224",
+    whatsapp_number:  "233598950833",
+    whatsapp_display: "+233 598 950 833",
     // Direct call-in number shown next to WhatsApp for buyers who prefer to call.
     // Defaults to the same mobile line as WhatsApp — change this if you want a
     // separate landline/office number to ring instead.
-    phone_number:     "233558619224",
-    phone_display:    "+233 558 619 224",
+    phone_number:     "233598950833",
+    phone_display:    "+233 598 950 833",
     email:            "kraaphtbags@gmail.com",
     website:          "https://kraaphtbags.com",
     location:         "Accra, Ghana",
