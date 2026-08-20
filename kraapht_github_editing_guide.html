@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kraapht Bags — How to Edit Your Website</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --green:#1F4D3A;--green-50:#EAF3DE;--green-100:#C0DD97;--green-600:#1F4D3A;
+    --gold:#C8A96B;--gold-50:#FAF5EC;--gold-light:#D8C3A5;
+    --charcoal:#2B2B2B;
+    --amber-50:#FAEEDA;--amber-100:#FAC775;--amber-600:#854F0B;
+    --bg:#F7F4EF;--surface:#FFFFFF;--surface-2:#F0EDE6;
+    --text:#2B2B2B;--text-muted:#5A5248;--text-hint:#8C8278;
+    --border:rgba(43,43,43,0.10);--radius:6px;--radius-lg:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.7;}
+  .page{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+  .hero{background:linear-gradient(135deg,var(--green) 0%,var(--charcoal) 100%);border-radius:var(--radius-lg);padding:2rem;margin-bottom:2rem;color:white;}
+  .hero-tag{font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .hero-title{font-size:22px;font-weight:700;color:white;margin-bottom:8px;line-height:1.2;}
+  .hero-sub{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.6;}
+
+  h2{font-size:16px;font-weight:700;color:var(--green);margin:2rem 0 0.85rem;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  p{margin-bottom:0.7rem;font-size:14px;color:var(--text-muted);}
+  strong{color:var(--text);}
+
+  .steps{margin:1rem 0;}
+  .step{display:flex;gap:14px;margin-bottom:0;background:var(--surface);border:0.5px solid var(--border);border-bottom:none;padding:1rem 1.2rem;align-items:flex-start;}
+  .step:first-child{border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+  .step:last-child{border-bottom:0.5px solid var(--border);border-radius:0 0 var(--radius-lg) var(--radius-lg);}
+  .step:only-child{border-radius:var(--radius-lg);border-bottom:0.5px solid var(--border);}
+  .step-num{width:28px;height:28px;border-radius:50%;background:var(--green);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px;}
+  .step-content{flex:1;}
+  .step-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .step-desc{font-size:13px;color:var(--text-muted);line-height:1.55;}
+  .step-img{margin-top:8px;background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-size:12px;color:var(--text-hint);font-style:italic;}
+
+  .code-block{background:var(--charcoal);color:#E2D9C8;border-radius:var(--radius);padding:1rem 1.2rem;font-family:'Courier New',monospace;font-size:13px;line-height:1.7;margin:0.75rem 0;overflow-x:auto;}
+  .code-block .comment{color:#6B8F6B;}
+  .code-block .key{color:#C8A96B;}
+  .code-block .val{color:#9FE1CB;}
+  .code-block .val-str{color:#F5C4B3;}
+  .code-block .changed{background:rgba(200,169,107,0.15);border-left:2px solid var(--gold);padding-left:6px;margin-left:-6px;display:block;}
+
+  .scenario{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.2rem 1.3rem;margin:1rem 0;}
+  .scenario-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:0.75rem;display:flex;align-items:center;gap:7px;}
+  .scenario-title i{color:var(--gold);}
+
+  .quick-ref{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin:1rem 0;}
+  .qr-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface-2);border-bottom:0.5px solid var(--border);}
+  .qr-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:0.5px solid var(--border);}
+  .qr-row:last-child{border-bottom:none;}
+  .qrc{font-size:12px;padding:0.6rem 0.85rem;color:var(--text-muted);}
+  .qrc.head{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text-hint);}
+  .qrc.item{color:var(--text);font-weight:500;}
+  .qrc.key{font-family:monospace;font-size:11px;color:var(--green);background:var(--green-50);padding:2px 6px;border-radius:3px;display:inline-block;margin:2px 0;}
+
+  .alert{border-radius:var(--radius-lg);padding:1rem 1.2rem;margin:1rem 0;font-size:13px;display:flex;gap:10px;align-items:flex-start;}
+  .alert.green{background:var(--green-50);border:1px solid var(--green-100);}
+  .alert.amber{background:var(--amber-50);border:1px solid var(--amber-100);}
+  .alert i{font-size:17px;flex-shrink:0;margin-top:1px;}
+  .alert.green i,.alert.green strong{color:var(--green);}
+  .alert.amber i,.alert.amber strong{color:var(--amber-600);}
+  .alert-body{color:var(--text-muted);line-height:1.6;}
+
+  .footer{font-size:12px;color:var(--text-hint);text-align:center;margin-top:3rem;padding-top:1rem;border-top:0.5px solid var(--border);}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-tag"><i class="ti ti-brand-github"></i> &nbsp;Website Editing Guide</div>
+    <div class="hero-title">How to Edit Kraapht Bags Website<br>Without Touching HTML</div>
+    <div class="hero-sub">One file. One change. Live in 60 seconds. This guide shows you exactly how to update prices, contact details, and text using GitHub — no developer needed.</div>
+  </div>
+
+
+  <!-- HOW IT WORKS -->
+  <h2><i class="ti ti-circle-check"></i> How it works in 3 steps</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">You open config.js on GitHub and make a change</div>
+        <div class="step-desc">All prices, minimum quantities, contact details, and key text live in one file called <strong>config.js</strong>. It is plain text — you can read and edit it like a shopping list.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">You click "Commit changes" on GitHub</div>
+        <div class="step-desc">That is the save button. One click. GitHub saves your change and automatically tells Vercel that the file has been updated.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Vercel rebuilds and your live site updates in ~60 seconds</div>
+        <div class="step-desc">Every customer who visits the website after that sees the new price or text. No downloading, no uploading, no FTP. Just GitHub.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- EDIT PRICES -->
+  <h2><i class="ti ti-cash"></i> How to update a paper price</h2>
+  <p>Kraft paper prices change with the market. Here is exactly what to do when they do.</p>
+
+  <div class="scenario">
+    <div class="scenario-title"><i class="ti ti-alert-circle"></i> Scenario: Chromo Coat goes from GHS 525 to GHS 580</div>
+    <div class="steps">
+      <div class="step" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Go to github.com and open your Kraapht repository</div>
+          <div class="step-desc">Sign in → click your repository name (e.g. kraapht-bags)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Click on the file <strong>config.js</strong></div>
+          <div class="step-desc">It is in your main file list. Click the filename to open it.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Click the pencil icon <i class="ti ti-pencil" style="font-size:13px;"></i> (top right of the file)</div>
+          <div class="step-desc">This opens the GitHub text editor. You can now edit the file directly in your browser.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Find the line for Chromo Coat and change the number</div>
+          <div class="step-desc">Use Ctrl+F (or Cmd+F on Mac) to search for <strong>chromo_coat</strong>. Find this section:</div>
+          <div class="code-block">
+<span class="comment">// BEFORE (old price)</span>
+paper_prices: {
+  <span class="key">chromo_coat</span>:     <span class="val">525</span>,   <span class="comment">// White / Chromo Coat</span>
+  brown_card_250:  550,
+  ...
+}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin:6px 0;">Change <strong>525</strong> to <strong>580</strong>:</div>
+          <div class="code-block">
+<span class="comment">// AFTER (new price)</span>
+paper_prices: {
+  <span class="changed"><span class="key">chromo_coat</span>:     <span class="val">580</span>,   <span class="comment">// White / Chromo Coat ← updated</span></span>
+  brown_card_250:  550,
+  ...
+}</div>
+        </div>
+      </div>
+      <div class="step" style="border-radius:0 0 var(--radius-lg) var(--radius-lg);border-bottom:0.5px solid var(--border);">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Scroll down and click "Commit changes"</div>
+          <div class="step-desc">A dialog appears. You can leave the message as-is or type "Updated Chromo Coat price to GHS 580". Click the green <strong>Commit changes</strong> button. Done. Vercel deploys in ~60 seconds.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- EDIT CONTACT DETAILS -->
+  <h2><i class="ti ti-phone"></i> How to update contact details</h2>
+
+  <div class="scenario">
+    <div class="scenario-title"><i class="ti ti-device-mobile"></i> Scenario: Phone number changes</div>
+    <p style="margin-bottom:0.75rem;">Open config.js → pencil icon → find the <strong>contact</strong> section → change the number → commit.</p>
+    <div class="code-block">
+contact: {
+  <span class="changed"><span class="key">whatsapp_number</span>:  <span class="val-str">"233558619224"</span>,   <span class="comment">// No + or spaces</span></span>
+  <span class="changed"><span class="key">whatsapp_display</span>: <span class="val-str">"+233 558 619 224"</span>,  <span class="comment">// How it shows on screen</span></span>
+  <span class="key">email</span>:            <span class="val-str">"kraaphtbags@gmail.com"</span>,
+},</div>
+    <div class="alert amber" style="margin-top:0.75rem;">
+      <i class="ti ti-alert-triangle"></i>
+      <div class="alert-body"><strong>Important:</strong> <code>whatsapp_number</code> must have no spaces, no +, no dashes — just digits. <code>whatsapp_display</code> is what customers see written on screen and can be formatted however you like.</div>
+    </div>
+  </div>
+
+
+  <!-- EDIT MINIMUM ORDER -->
+  <h2><i class="ti ti-package"></i> How to change minimum order quantity</h2>
+  <p>If you want to increase or decrease the minimum order from 200 to a different number:</p>
+  <div class="code-block">
+order: {
+  <span class="changed"><span class="key">minimum_qty</span>: <span class="val">200</span>,    <span class="comment">// ← change this number only</span></span>
+  delivery_cost: 30,
+  ...
+},</div>
+  <p>The order page, all text showing "minimum 200 bags", and the price calculator minimum all update automatically.</p>
+
+
+  <!-- QUICK REFERENCE TABLE -->
+  <h2><i class="ti ti-table"></i> Quick reference — what to edit and where</h2>
+  <div class="quick-ref">
+    <div class="qr-head">
+      <div class="qrc head">What you want to change</div>
+      <div class="qrc head">Key to find in config.js</div>
+      <div class="qrc head">Section</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Chromo Coat paper price</div>
+      <div class="qrc"><span class="qrc key">chromo_coat</span></div>
+      <div class="qrc">paper_prices</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Brown Card 250gsm price</div>
+      <div class="qrc"><span class="qrc key">brown_card_250</span></div>
+      <div class="qrc">paper_prices</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Brown Paper 80gsm price</div>
+      <div class="qrc"><span class="qrc key">brown_paper_80</span></div>
+      <div class="qrc">paper_prices</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Matt Paper 150gsm price</div>
+      <div class="qrc"><span class="qrc key">matt_150</span></div>
+      <div class="qrc">paper_prices</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Duplex Board price</div>
+      <div class="qrc"><span class="qrc key">duplex_300</span></div>
+      <div class="qrc">paper_prices</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">1-colour printing cost</div>
+      <div class="qrc"><span class="qrc key">one_colour</span></div>
+      <div class="qrc">printing</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Full colour printing cost</div>
+      <div class="qrc"><span class="qrc key">full_colour</span></div>
+      <div class="qrc">printing</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Plate making cost per colour</div>
+      <div class="qrc"><span class="qrc key">one_colour</span></div>
+      <div class="qrc">plate_making</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Delivery within Accra cost</div>
+      <div class="qrc"><span class="qrc key">delivery_cost</span></div>
+      <div class="qrc">order</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Minimum order quantity</div>
+      <div class="qrc"><span class="qrc key">minimum_qty</span></div>
+      <div class="qrc">order</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Designer fee</div>
+      <div class="qrc"><span class="qrc key">designer_fee</span></div>
+      <div class="qrc">order</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Die cut board cost</div>
+      <div class="qrc"><span class="qrc key">die_cut_board</span></div>
+      <div class="qrc">order</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Folding labour per bag</div>
+      <div class="qrc"><span class="qrc key">labour_per_bag</span></div>
+      <div class="qrc">order</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">WhatsApp number</div>
+      <div class="qrc"><span class="qrc key">whatsapp_number</span></div>
+      <div class="qrc">contact</div>
+    </div>
+    <div class="qr-row">
+      <div class="qrc item">Email address</div>
+      <div class="qrc"><span class="qrc key">email</span></div>
+      <div class="qrc">contact</div>
+    </div>
+  </div>
+
+
+  <!-- HOW TO CHANGE AN IMAGE -->
+  <h2><i class="ti ti-photo"></i> How to change an image on the website</h2>
+  <div class="steps">
+    <div class="step" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Prepare your new image</div>
+        <div class="step-desc">Name it exactly the same as the image you are replacing. For example, if you want to replace the AL Lounge photo, name your new file <strong>lifestyle_alounge.png</strong></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Go to your GitHub repository</div>
+        <div class="step-desc">Open the repository → click <strong>Add file</strong> → click <strong>Upload files</strong></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Drag your new image into the upload area</div>
+        <div class="step-desc">GitHub will ask if you want to replace the existing file. Confirm yes.</div>
+      </div>
+    </div>
+    <div class="step" style="border-radius:0 0 var(--radius-lg) var(--radius-lg);border-bottom:0.5px solid var(--border);">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Click "Commit changes" — done</div>
+        <div class="step-desc">Vercel redeploys and your new image is live in ~60 seconds. Same filename = no HTML changes needed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert green">
+    <i class="ti ti-photo"></i>
+    <div class="alert-body">
+      <strong>Image filenames in your repository:</strong><br>
+      <code>bag_lady.png</code> — homepage hero ad photo<br>
+      <code>bag_luxury.png</code> — homepage carousel slide 2<br>
+      <code>bag_restaurant.png</code> — homepage carousel slide 1<br>
+      <code>lifestyle_abachs.png</code> — Abachs cocktail bar lifestyle photo<br>
+      <code>lifestyle_alounge.png</code> — AL Lounge street market photo<br>
+      <code>lifestyle_congress.png</code> — YAWC Congress event photo<br>
+      <code>paper_brown_card.png</code> — Brown Card paper type selector<br>
+      <code>paper_brown_80.png</code> — Brown Paper 80gsm selector<br>
+      <code>paper_chromo.png</code> — Chromo Coat paper type selector<br>
+      <code>paper_duplex.png</code> — Duplex Board paper type selector<br>
+      <code>logo.png</code> — Kraapht Bags logo (top of every page)<br>
+      <code>hero_video.mp4</code> — Homepage hero background video
+    </div>
+  </div>
+
+
+  <!-- RULES TO NEVER BREAK -->
+  <h2><i class="ti ti-lock"></i> 3 rules — never break these</h2>
+  <div class="steps">
+    <div class="step" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+      <div class="step-num">!</div>
+      <div class="step-content">
+        <div class="step-title" style="color:#993C1D;">Only change values — never change key names</div>
+        <div class="step-desc">In <code>chromo_coat: 525</code> — you can change <strong>525</strong>. Never change <strong>chromo_coat</strong>. The website reads the key names exactly as written.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">!</div>
+      <div class="step-content">
+        <div class="step-title" style="color:#993C1D;">Keep commas where they are</div>
+        <div class="step-desc">Every line in config.js ends with a comma. If you accidentally delete a comma, the calculator may stop working. If something breaks, come back here and I will fix it in minutes.</div>
+      </div>
+    </div>
+    <div class="step" style="border-radius:0 0 var(--radius-lg) var(--radius-lg);border-bottom:0.5px solid var(--border);">
+      <div class="step-num">!</div>
+      <div class="step-content">
+        <div class="step-title" style="color:#993C1D;">Text values need "quotes" — numbers do not</div>
+        <div class="step-desc"><code>minimum_qty: 200</code> — no quotes needed for numbers.<br><code>email: "kraaphtbags@gmail.com"</code> — quotes required for text. Keep them exactly as they are.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert amber">
+    <i class="ti ti-alert-triangle"></i>
+    <div class="alert-body"><strong>Something broke?</strong> Don't panic. GitHub keeps the full history of every change you have ever made. You can click on any previous version and restore it with one click. And you can always share the error here and I will fix it immediately.</div>
+  </div>
+
+  <div class="footer">
+    Kraapht Bags Ltd — Website Editing Guide v1.0 &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; Built by Claude (Anthropic)
+  </div>
+
+</div>
+</body>
+</html>

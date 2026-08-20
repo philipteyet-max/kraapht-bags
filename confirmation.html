@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1060118506434788');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1060118506434788&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Order Confirmed | Kraapht Bags Ltd</title>
@@ -397,6 +414,23 @@ window.addEventListener('DOMContentLoaded', async function() {
   document.querySelectorAll('#order-ref, #ref-inline, #invoice-ref').forEach(function(el) {
     el.textContent = displayRef;
   });
+
+  // ── Meta Pixel: Purchase ──
+  // paystackRef is guaranteed truthy here (both supaOrder and hasLocalOrder
+  // require it — see the evidence gate above), so this only ever fires for a
+  // genuinely paid order. Deduped per paystackRef so refreshing or revisiting
+  // this page doesn't inflate reported conversions.
+  if (typeof fbq === 'function') {
+    var pixelKey = 'fbq_purchase_' + paystackRef;
+    if (!localStorage.getItem(pixelKey)) {
+      fbq('track', 'Purchase', {
+        value: Number(String(amount).replace(/[^0-9.]/g, '')) || 0,
+        currency: 'GHS',
+        content_name: product,
+      });
+      try { localStorage.setItem(pixelKey, '1'); } catch(e) {}
+    }
+  }
 
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(a) {
     if (a.href.includes('order+ref') || a.href.includes('order_ref') || a.href.includes('KBL')) {

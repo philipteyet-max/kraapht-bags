@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1060118506434788');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1060118506434788&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <script src="config.js?v=4"></script>
 <script>
 // ── BOWL TYPE SWITCHER ───────────────────────────────────────────
@@ -2003,6 +2020,14 @@ function goToPayment() {
   try {
     localStorage.setItem('kraapht_order', JSON.stringify(orderData));
   } catch(e) {}
+  if (typeof fbq === 'function') {
+    fbq('track', 'InitiateCheckout', {
+      value: Number(String(orderData.total).replace(/[^0-9.]/g, '')) || 0,
+      currency: 'GHS',
+      content_name: orderData.hasBag ? 'Flat Bottom Bags' : 'Paper Food Bowls',
+      num_items: orderData.qty,
+    });
+  }
   window.location.href = 'payment.html';
 }
 
