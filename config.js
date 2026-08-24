@@ -33,13 +33,13 @@ const KRAAPHT_CONFIG = {
   // CONTACT DETAILS
   // ----------------------------------------------------------
   contact: {
-    whatsapp_number:  "233598950833",
-    whatsapp_display: "+233 598 950 833",
+    whatsapp_number:  "233558619224",
+    whatsapp_display: "+233 558 619 224",
     // Direct call-in number shown next to WhatsApp for buyers who prefer to call.
     // Defaults to the same mobile line as WhatsApp — change this if you want a
     // separate landline/office number to ring instead.
-    phone_number:     "233598950833",
-    phone_display:    "+233 598 950 833",
+    phone_number:     "233558619224",
+    phone_display:    "+233 558 619 224",
     email:            "kraaphtbags@gmail.com",
     website:          "https://kraaphtbags.com",
     location:         "Accra, Ghana",
@@ -301,7 +301,7 @@ const KRAAPHT_CONFIG = {
     about_founder_1:     "about_founder_1.png",     // Founder 1 photo
     about_founder_2:     "about_founder_2.png",     // Founder 2 photo (if used)
     about_factory:       "about_factory_v2.png",       // Factory / production floor photo
-    about_certificate:   "about_certificate_v3.png", // Company registration certificate scan/photo
+    about_certificate:   "about_certificate_v2.png", // Company registration certificate scan/photo
 
   },
 
@@ -407,18 +407,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // 3. Channay card (client_bag_4) — swap CSS bag for real image if uploaded
-  var channayCard = document.getElementById("channay-card");
-  if (channayCard && imgs.client_bag_4) {
+  //    Appears twice in the DOM (desktop grid + mobile carousel), so update
+  //    every instance found via the shared data-channay-card attribute.
+  var channayCards = document.querySelectorAll("[data-channay-card]");
+  if (channayCards.length && imgs.client_bag_4) {
     var p4 = C.portfolio.card_4;
-    channayCard.innerHTML =
-      '<img src="' + imgs.client_bag_4 + '" data-img="client_bag_4"' +
-      ' alt="' + p4.name + '" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>' +
-      '<div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>' +
-      '<div class="absolute bottom-0 left-0 right-0 p-6">' +
-      '<span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">' + p4.label + '</span>' +
-      '<p class="font-body-lg font-semibold text-white">' + p4.name + '</p>' +
-      (p4.detail ? '<p class="font-body-md text-white/70 text-sm">' + p4.detail + '</p>' : '') +
-      '</div>';
+    channayCards.forEach(function(channayCard) {
+      channayCard.innerHTML =
+        '<img src="' + imgs.client_bag_4 + '" data-img="client_bag_4"' +
+        ' alt="' + p4.name + '" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>' +
+        '<div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>' +
+        '<div class="absolute bottom-0 left-0 right-0 p-6">' +
+        '<span class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1 block">' + p4.label + '</span>' +
+        '<p class="font-body-lg font-semibold text-white">' + p4.name + '</p>' +
+        (p4.detail ? '<p class="font-body-md text-white/70 text-sm">' + p4.detail + '</p>' : '') +
+        '</div>';
+    });
   }
 
   // ── PORTFOLIO LABEL UPDATER ─────────────────────────────────────
@@ -438,11 +442,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Apply to all 15 cards by data-card attribute
+  // Apply to all 15 cards by data-card attribute. Some cards (index.html's
+  // 1–8) now appear twice in the DOM — once in the desktop grid, once in the
+  // mobile carousel — so update every matching instance, not just the first.
   for (var i = 1; i <= 15; i++) {
-    var cardEl  = document.querySelector("[data-card='" + i + "']");
     var cardCfg = P["card_" + i];
-    applyCardLabel(cardEl, cardCfg);
+    document.querySelectorAll("[data-card='" + i + "']").forEach(function(cardEl) {
+      applyCardLabel(cardEl, cardCfg);
+    });
   }
 
   // 4. Paper price display update on order page
