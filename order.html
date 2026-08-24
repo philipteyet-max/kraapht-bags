@@ -323,7 +323,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </nav>
 
 <!-- ===== MOBILE STICKY PRICE BAR ===== -->
-<div id="mobile-sticky-total" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-charcoal text-white border-t border-white/10 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
+<div id="mobile-sticky-total" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-charcoal text-white border-t border-white/10 shadow-[0_-8px_24px_rgba(0,0,0,0.25)] transform translate-y-full transition-transform duration-300">
   <button type="button" onclick="document.getElementById('price-summary-panel').scrollIntoView({behavior:'smooth',block:'start'})" class="w-full flex items-center justify-between px-5 py-4">
     <span class="text-left">
       <span class="block font-label-sm text-label-sm uppercase tracking-widest opacity-60 text-xs">Grand Total</span>
@@ -346,6 +346,98 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       </div>
       <p class="font-body-md text-on-surface-variant hidden md:block">Hover for details</p>
     </div>
+    <!-- ===== MOBILE: single swipeable carousel of all 7 bags ===== -->
+    <div class="md:hidden -mx-6 px-4">
+      <div class="relative">
+        <div id="portfolio-carousel" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 px-2 pb-2" style="scrollbar-width:none;-ms-overflow-style:none;">
+          <style>#portfolio-carousel::-webkit-scrollbar{display:none;}</style>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72 bg-charcoal" data-card="9">
+            <img data-img="client_bag_9" src="paper_brown_card.png" alt="Brown Card bag — Freedom Taste" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Brown Card 180gsm</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">Freedom Taste</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72 bg-charcoal" data-card="10">
+            <img data-img="client_bag_10" src="paper_brown_80.png" alt="Brown Paper 80gsm — The Abachs" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Brown Paper 80gsm</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">The Abachs</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72 bg-charcoal" data-card="11">
+            <img data-img="client_bag_11" src="paper_chromo.png" alt="Chromo Coat white bag" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">White / Chromo Coat</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">Clean Canvas</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72 bg-charcoal" data-card="12">
+            <img data-img="client_bag_12" src="paper_duplex.png" alt="Duplex Board — AL Lounge" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Duplex Board</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">AL Lounge</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72" data-card="13">
+            <img data-img="client_bag_13" src="lifestyle_abachs.png" alt="The Abachs in-context bag" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Brown Paper 80gsm · Lifestyle</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">The Abachs Cocktail Bar</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72" data-card="14">
+            <img data-img="client_bag_14" src="lifestyle_alounge.png" alt="AL Lounge street food market" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Duplex Board · Street Market</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">AL Lounge Bar &amp; Restaurant</p>
+            </div>
+          </div>
+
+          <div class="portfolio-slide flex-shrink-0 w-[80%] snap-center relative overflow-hidden h-72" data-card="15">
+            <img data-img="client_bag_15" src="lifestyle_congress.png" alt="Young African Women Congress event bag" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5">
+              <p data-card-label class="font-label-sm text-label-sm text-accent uppercase tracking-widest text-xs mb-1">Chromo Coat · Event</p>
+              <p data-card-name class="font-body-lg font-semibold text-white">Young African Women Congress</p>
+            </div>
+          </div>
+
+        </div>
+
+        <button onclick="scrollPortfolio(-1)" aria-label="Previous bag" class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-charcoal/70 text-white flex items-center justify-center backdrop-blur-sm active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-xl">chevron_left</span>
+        </button>
+        <button onclick="scrollPortfolio(1)" aria-label="Next bag" class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-charcoal/70 text-white flex items-center justify-center backdrop-blur-sm active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-xl">chevron_right</span>
+        </button>
+      </div>
+
+      <div class="flex justify-center gap-2 mt-4" id="portfolio-dots">
+        <button data-dot onclick="scrollToPortfolioSlide(0)" aria-label="Go to slide 1" class="w-2 h-2 rounded-full bg-primary transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(1)" aria-label="Go to slide 2" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(2)" aria-label="Go to slide 3" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(3)" aria-label="Go to slide 4" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(4)" aria-label="Go to slide 5" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(5)" aria-label="Go to slide 6" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+        <button data-dot onclick="scrollToPortfolioSlide(6)" aria-label="Go to slide 7" class="w-2 h-2 rounded-full bg-outline-variant transition-colors"></button>
+      </div>
+    </div>
+
+    <!-- ===== DESKTOP / TABLET: existing two-grid layout, unchanged ===== -->
+    <div class="hidden md:block">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
       <div class="relative overflow-hidden h-56 bg-charcoal group" data-card="9">
         <img data-img="client_bag_9" src="paper_brown_card.png" alt="Brown Card bag — Freedom Taste" class="gallery-img w-full h-full object-contain p-3"/>
@@ -397,7 +489,45 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         </div>
       </div>
     </div>
+    </div>
   </section>
+
+  <script>
+  // ── PORTFOLIO CAROUSEL (mobile) ──────────────────────────────────
+  function scrollPortfolio(dir) {
+    var track = document.getElementById('portfolio-carousel');
+    if (!track) return;
+    var slide = track.querySelector('.portfolio-slide');
+    var step = slide ? slide.offsetWidth + 16 : track.offsetWidth;
+    track.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }
+  function scrollToPortfolioSlide(i) {
+    var track = document.getElementById('portfolio-carousel');
+    if (!track) return;
+    var slide = track.querySelector('.portfolio-slide');
+    var step = slide ? slide.offsetWidth + 16 : track.offsetWidth;
+    track.scrollTo({ left: i * step, behavior: 'smooth' });
+  }
+  (function() {
+    var track = document.getElementById('portfolio-carousel');
+    var dots  = document.querySelectorAll('#portfolio-dots [data-dot]');
+    if (!track || !dots.length) return;
+    function updateDots() {
+      var slide = track.querySelector('.portfolio-slide');
+      var step  = slide ? slide.offsetWidth + 16 : track.offsetWidth;
+      var idx   = Math.round(track.scrollLeft / step);
+      dots.forEach(function(d, i) {
+        d.classList.toggle('bg-primary', i === idx);
+        d.classList.toggle('bg-outline-variant', i !== idx);
+      });
+    }
+    var t;
+    track.addEventListener('scroll', function() {
+      clearTimeout(t);
+      t = setTimeout(updateDots, 80);
+    });
+  })();
+  </script>
 
   <!-- ===== PROGRESS STEPS ===== -->
   <div class="flex items-center gap-0 mb-12 overflow-x-auto pb-2">
@@ -1892,6 +2022,23 @@ document.querySelectorAll('[data-bowl-colors]').forEach(lbl => {
 });
 
 calcPrice();
+
+// ── Don't show a "live" total before the user has actually chosen anything ──
+// calcPrice() above runs immediately on load using whatever is pre-selected
+// by default (200 qty, Chromo Coat, A5, Twisted Rope) — showing that on the
+// sticky mobile bar right away looks like a real quote for choices nobody
+// made yet. Keep it slid off-screen until the first genuine form interaction.
+(function() {
+  var bar = document.getElementById('mobile-sticky-total');
+  if (!bar) return;
+  function reveal() {
+    bar.classList.remove('translate-y-full');
+    document.removeEventListener('change', reveal);
+    document.removeEventListener('input', reveal);
+  }
+  document.addEventListener('change', reveal);
+  document.addEventListener('input', reveal);
+})();
 
 // Update displayed paper prices from config.js on page load
 (function updatePriceDisplays() {
