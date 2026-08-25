@@ -113,6 +113,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
           <span class="material-symbols-outlined" style="font-size:16px;">person</span>
           <span class="text-xs font-bold tracking-[0.15em] uppercase hidden md:block" id="admin-email-label">Admin</span>
         </div>
+        <button onclick="openMfaModal()" title="Two-factor authentication" class="flex items-center gap-2 px-3 py-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">shield</span>
+        </button>
         <button onclick="handleAdminLogout()" title="Sign out" class="flex items-center gap-2 px-3 py-2 border border-outline-variant text-on-surface-variant hover:border-error hover:text-error transition-colors">
           <span class="material-symbols-outlined" style="font-size:16px;">logout</span>
         </button>
@@ -144,6 +147,28 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </div>
   <p class="text-center text-xs text-on-surface-variant mt-6">
     <a href="index.html" class="hover:text-primary transition-colors">← Back to public site</a>
+  </p>
+</div>
+
+<!-- ═══════════════════ MFA CHALLENGE — shown after password step, only when this account has 2FA enabled ═══════════════════ -->
+<div id="admin-mfa-panel" class="hidden max-w-md mx-auto pt-32 px-6">
+  <div class="bg-surface border border-outline-variant p-8">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-primary">shield_lock</span>
+      <h1 class="text-xl font-bold">Two-Factor Verification</h1>
+    </div>
+    <p class="text-sm text-on-surface-variant mb-6">Enter the 6-digit code from your authenticator app.</p>
+    <div id="admin-mfa-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"></div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Authentication Code</label>
+        <input id="admin-mfa-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors tracking-[0.3em] text-center text-lg" onkeydown="if(event.key==='Enter')handleAdminMfaVerify()"/>
+      </div>
+      <button onclick="handleAdminMfaVerify()" id="admin-mfa-btn" class="w-full bg-primary text-white py-3 font-bold text-sm uppercase tracking-widest hover:bg-primary-light transition-colors">Verify</button>
+    </div>
+  </div>
+  <p class="text-center text-xs text-on-surface-variant mt-6">
+    <a href="#" onclick="event.preventDefault();cancelAdminMfaChallenge()" class="hover:text-primary transition-colors">← Back to sign in</a>
   </p>
 </div>
 
@@ -607,6 +632,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       <!-- Order info grid -->
       <div class="grid grid-cols-2 gap-3" id="modal-info-grid"></div>
 
+      <!-- Manual payment (cash / mobile money paid outside the website) -->
+      <div id="modal-manual-payment-section" class="border border-outline-variant"></div>
+
       <!-- Stage track -->
       <div>
         <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-3">Production Stage</p>
@@ -690,6 +718,53 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </div>
 </div>
 
+<!-- ════════════════════ TWO-FACTOR AUTHENTICATION MODAL ════════════════════ -->
+<div id="mfa-modal" class="modal-backdrop hidden" onclick="closeMfaModalBackdrop(event)">
+  <div class="modal-box p-0">
+    <div class="bg-primary text-white p-5 flex justify-between items-start">
+      <div>
+        <p class="text-xs font-bold tracking-widest uppercase opacity-70 mb-1">Account Security</p>
+        <h2 class="text-xl font-bold">Two-Factor Authentication</h2>
+      </div>
+      <button onclick="document.getElementById('mfa-modal').classList.add('hidden')" class="text-white/70 hover:text-white mt-1">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-5 space-y-5">
+      <div id="mfa-error" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"></div>
+
+      <div id="mfa-state-loading" class="text-sm text-on-surface-variant">Checking your account…</div>
+
+      <div id="mfa-state-off" class="hidden space-y-4">
+        <p class="text-sm text-on-surface-variant">Two-factor authentication isn't set up on this account yet. Once enabled, signing in will require your password AND a 6-digit code from an authenticator app (Google Authenticator, Authy, etc.).</p>
+        <button onclick="startMfaEnrollment()" class="w-full bg-primary text-white py-3 font-bold text-sm uppercase tracking-widest hover:bg-primary-light transition-colors">Set Up Two-Factor Authentication</button>
+      </div>
+
+      <div id="mfa-state-enrolling" class="hidden space-y-4">
+        <p class="text-sm text-on-surface-variant">Scan this QR code with your authenticator app, then enter the 6-digit code it shows.</p>
+        <div id="mfa-qr-container" class="flex justify-center bg-white p-4 border border-outline-variant"></div>
+        <p class="text-xs text-on-surface-variant">Can't scan? Enter this code manually: <span id="mfa-secret" class="font-mono font-bold break-all"></span></p>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">6-Digit Code</label>
+          <input id="mfa-verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" class="w-full border border-outline-variant bg-surface px-4 py-3 text-sm outline-none focus:border-primary transition-colors tracking-[0.3em] text-center text-lg" onkeydown="if(event.key==='Enter')confirmMfaEnrollment()"/>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="confirmMfaEnrollment()" class="flex-1 bg-primary text-white py-3 font-bold text-sm uppercase tracking-widest hover:bg-primary-light transition-colors">Verify & Enable</button>
+          <button onclick="cancelMfaEnrollment()" class="px-4 py-3 border border-outline-variant text-sm font-bold hover:bg-surface-container transition-colors">Cancel</button>
+        </div>
+      </div>
+
+      <div id="mfa-state-on" class="hidden space-y-4">
+        <div class="flex items-center gap-2 text-green-700 text-sm font-semibold">
+          <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
+          Two-factor authentication is enabled on this account.
+        </div>
+        <button onclick="removeMfaFactor()" class="w-full border border-red-300 text-red-700 py-3 font-bold text-sm uppercase tracking-widest hover:bg-red-50 transition-colors">Remove Two-Factor Authentication</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Toast notification -->
 <div id="toast" class="hidden bg-primary text-white px-5 py-3 shadow-lg flex items-center gap-3 text-sm font-semibold">
   <span class="material-symbols-outlined" style="font-size:18px;">check_circle</span>
@@ -733,13 +808,97 @@ async function handleAdminLogin() {
     return showLoginError(error.message);
   }
 
-  const admitted = await verifyAdminAndEnter(data.user);
+  await proceedPastPasswordStep(data.user);
+  btn.disabled = false;
+  btn.textContent = 'Sign In';
+}
+
+// Called after a password sign-in succeeds, and again on page load when a
+// session already exists. A password-only session sits at assurance level
+// 'aal1' — if this account has a verified 2FA factor, Supabase's own
+// nextLevel check says 'aal2' is required, so the code prompt is shown
+// instead of going straight into the dashboard.
+async function proceedPastPasswordStep(user) {
+  const { data: levelData, error: levelError } = await sbAuth.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (!levelError && levelData.nextLevel === 'aal2' && levelData.currentLevel !== 'aal2') {
+    document.getElementById('admin-login-panel').classList.add('hidden');
+    document.getElementById('admin-mfa-panel').classList.remove('hidden');
+    return;
+  }
+  const admitted = await verifyAdminAndEnter(user);
   if (!admitted) {
     await sbAuth.auth.signOut();
-    btn.disabled = false;
-    btn.textContent = 'Sign In';
+    document.getElementById('admin-mfa-panel').classList.add('hidden');
+    document.getElementById('admin-login-panel').classList.remove('hidden');
     showLoginError('This account does not have admin access.');
   }
+}
+
+async function handleAdminMfaVerify() {
+  const code = document.getElementById('admin-mfa-code').value.trim();
+  const errEl = document.getElementById('admin-mfa-error');
+  errEl.classList.add('hidden');
+  if (!/^\d{6}$/.test(code)) {
+    errEl.textContent = 'Enter the 6-digit code from your authenticator app.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  const btn = document.getElementById('admin-mfa-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  const { data: factorsData, error: factorsError } = await sbAuth.auth.mfa.listFactors();
+  const factor = !factorsError && (factorsData.totp || []).find(f => f.status === 'verified');
+  if (!factor) {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+    errEl.textContent = 'No verified authenticator found on this account.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  const { data: challengeData, error: challengeError } = await sbAuth.auth.mfa.challenge({ factorId: factor.id });
+  if (challengeError) {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+    errEl.textContent = challengeError.message;
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  const { error: verifyError } = await sbAuth.auth.mfa.verify({
+    factorId: factor.id,
+    challengeId: challengeData.id,
+    code,
+  });
+  if (verifyError) {
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+    errEl.textContent = verifyError.message;
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('admin-mfa-panel').classList.add('hidden');
+  document.getElementById('admin-mfa-code').value = '';
+  btn.disabled = false;
+  btn.textContent = 'Verify';
+
+  const { data: { user } } = await sbAuth.auth.getUser();
+  const admitted = await verifyAdminAndEnter(user);
+  if (!admitted) {
+    await sbAuth.auth.signOut();
+    document.getElementById('admin-login-panel').classList.remove('hidden');
+    showLoginError('This account does not have admin access.');
+  }
+}
+
+async function cancelAdminMfaChallenge() {
+  await sbAuth.auth.signOut();
+  document.getElementById('admin-mfa-panel').classList.add('hidden');
+  document.getElementById('admin-mfa-code').value = '';
+  document.getElementById('admin-login-panel').classList.remove('hidden');
 }
 
 async function handleAdminLogout() {
@@ -747,7 +906,109 @@ async function handleAdminLogout() {
   document.getElementById('admin-content').classList.add('hidden');
   document.getElementById('admin-user-badge').classList.add('hidden');
   document.getElementById('admin-user-badge').classList.remove('flex');
+  document.getElementById('admin-mfa-panel').classList.add('hidden');
   document.getElementById('admin-login-panel').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════════════════════
+// TWO-FACTOR AUTHENTICATION — enrollment & management modal
+// (the login-time challenge above is separate — this is where an admin
+// turns 2FA on/off for their own account once already signed in)
+// ═══════════════════════════════════════════════════════
+let mfaEnrollFactorId = null;
+
+function setMfaModalState(state) {
+  ['loading','off','enrolling','on'].forEach(s => {
+    document.getElementById('mfa-state-'+s).classList.toggle('hidden', s !== state);
+  });
+}
+
+function showMfaError(msg) {
+  const el = document.getElementById('mfa-error');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+function openMfaModal() {
+  document.getElementById('mfa-modal').classList.remove('hidden');
+  document.getElementById('mfa-error').classList.add('hidden');
+  refreshMfaModalState();
+}
+
+function closeMfaModalBackdrop(e) {
+  if (e.target === document.getElementById('mfa-modal')) {
+    document.getElementById('mfa-modal').classList.add('hidden');
+  }
+}
+
+async function refreshMfaModalState() {
+  setMfaModalState('loading');
+  const { data, error } = await sbAuth.auth.mfa.listFactors();
+  if (error) { showMfaError(error.message); return; }
+  const hasVerifiedTotp = (data.totp || []).some(f => f.status === 'verified');
+  setMfaModalState(hasVerifiedTotp ? 'on' : 'off');
+}
+
+async function startMfaEnrollment() {
+  document.getElementById('mfa-error').classList.add('hidden');
+  const { data, error } = await sbAuth.auth.mfa.enroll({ factorType: 'totp' });
+  if (error) return showMfaError(error.message);
+
+  mfaEnrollFactorId = data.id;
+  // Rendered as an <img> with .src set programmatically (never innerHTML) —
+  // this content comes from Supabase's own enroll response, not user input,
+  // but there's no reason to relax that habit for a QR code either.
+  const qrContainer = document.getElementById('mfa-qr-container');
+  qrContainer.textContent = '';
+  const img = document.createElement('img');
+  img.src = data.totp.qr_code;
+  img.alt = 'Scan with your authenticator app';
+  img.width = 200;
+  img.height = 200;
+  qrContainer.appendChild(img);
+  document.getElementById('mfa-secret').textContent = data.totp.secret;
+  document.getElementById('mfa-verify-code').value = '';
+  setMfaModalState('enrolling');
+}
+
+async function confirmMfaEnrollment() {
+  const code = document.getElementById('mfa-verify-code').value.trim();
+  if (!/^\d{6}$/.test(code)) return showMfaError('Enter the 6-digit code from your app.');
+
+  const { data: challengeData, error: challengeError } = await sbAuth.auth.mfa.challenge({ factorId: mfaEnrollFactorId });
+  if (challengeError) return showMfaError(challengeError.message);
+
+  const { error: verifyError } = await sbAuth.auth.mfa.verify({
+    factorId: mfaEnrollFactorId,
+    challengeId: challengeData.id,
+    code,
+  });
+  if (verifyError) return showMfaError(verifyError.message);
+
+  mfaEnrollFactorId = null;
+  showToast('Two-factor authentication enabled');
+  await refreshMfaModalState();
+}
+
+async function cancelMfaEnrollment() {
+  if (mfaEnrollFactorId) {
+    await sbAuth.auth.mfa.unenroll({ factorId: mfaEnrollFactorId });
+    mfaEnrollFactorId = null;
+  }
+  setMfaModalState('off');
+}
+
+async function removeMfaFactor() {
+  const { data, error } = await sbAuth.auth.mfa.listFactors();
+  if (error) return showMfaError(error.message);
+  const factor = (data.totp || [])[0];
+  if (!factor) return;
+  if (!confirm('Remove two-factor authentication from this account? Signing in will only require your password afterward.')) return;
+
+  const { error: unenrollError } = await sbAuth.auth.mfa.unenroll({ factorId: factor.id });
+  if (unenrollError) return showMfaError(unenrollError.message);
+  showToast('Two-factor authentication removed');
+  await refreshMfaModalState();
 }
 
 // Checks the is_admin() RPC (defined in admin_security_fix.sql) and, if
@@ -772,8 +1033,7 @@ async function verifyAdminAndEnter(user) {
 (async () => {
   const { data: { session } } = await sbAuth.auth.getSession();
   if (session?.user) {
-    const ok = await verifyAdminAndEnter(session.user);
-    if (!ok) await sbAuth.auth.signOut();
+    await proceedPastPasswordStep(session.user);
   }
 })();
 
@@ -1382,6 +1642,56 @@ async function advanceStage(orderId, newStage){
   }
 }
 
+function toggleManualPaymentForm(){
+  const form=document.getElementById('manual-payment-form');
+  const chevron=document.getElementById('manual-payment-chevron');
+  if(!form) return;
+  form.classList.toggle('hidden');
+  if(chevron) chevron.textContent=form.classList.contains('hidden')?'expand_more':'expand_less';
+}
+
+// Records a payment the customer made outside Paystack (cash, or straight to
+// the business Mobile Money number) — e.g. checkout on the site didn't work
+// for them. This is the only path that can clear payment_status to 'paid'
+// without a real Paystack transaction, so it deliberately requires an admin
+// to be looking at this specific order and confirm the amount before it
+// writes anything — same balance-owing math advanceStage() already trusts.
+async function recordManualPayment(orderId){
+  const o=orders.find(x=>x.id===orderId);
+  if(!o) return;
+  const amountInput=document.getElementById('manual-payment-amount');
+  const methodSelect=document.getElementById('manual-payment-method');
+  const amount=parseFloat(amountInput.value);
+  if(!amount||amount<=0){ showToast('Enter a valid amount received'); return; }
+  const method=methodSelect.value;
+
+  const newAmountPaid=Math.min(o.amountPaid+amount, o.amount);
+  const newStatus=newAmountPaid>=o.amount?'paid':'deposit_paid';
+  const stamp=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const noteAddition=`[Manual payment] GHS ${amount.toLocaleString()} received via ${method} on ${stamp}, recorded by admin.`;
+  const newNotes=o.notes?`${o.notes}\n${noteAddition}`:noteAddition;
+
+  if(!confirm(`Record GHS ${amount.toLocaleString()} via ${method} for ${orderId}?\n\nThis marks the order as ${newStatus==='paid'?'fully paid':'partially paid'} and will let production/dispatch continue as if this came through Paystack.`)) return;
+
+  // Optimistic update
+  o.amountPaid=newAmountPaid;
+  o.paymentStatus=newStatus;
+  o.notes=newNotes;
+  showToast(`${orderId}: GHS ${amount.toLocaleString()} recorded via ${method}`);
+  closeModalAndRefresh();
+
+  try {
+    await sbPatch('orders','ref',orderId,{
+      amount_paid: newAmountPaid,
+      payment_status: newStatus,
+      notes: newNotes,
+    });
+  } catch(err){
+    console.error('Manual payment record failed:',err);
+    showToast('Payment saved locally — sync failed, retry connection');
+  }
+}
+
 // ═══════════════════════════════════════════════════════
 // CLIENTS
 // ═══════════════════════════════════════════════════════
@@ -1601,6 +1911,38 @@ function openOrderModal(orderId){
     <p class="text-xs font-bold tracking-widest uppercase text-on-surface-variant mb-1">${esc(k)}</p>
     <p class="font-semibold text-sm">${esc(v)}</p>
   </div>`).join('');
+
+  // Manual payment section — for orders where the customer paid outside
+  // Paystack (cash, or straight to the business Mobile Money number) because
+  // checkout on the site didn't work for them. Fully paid orders don't need
+  // this, so only render the control when a balance is actually owing.
+  const mpSection=document.getElementById('modal-manual-payment-section');
+  if(o.paymentStatus==='paid'){
+    mpSection.innerHTML='';
+  } else {
+    mpSection.innerHTML=`
+      <button type="button" onclick="toggleManualPaymentForm()" class="w-full flex items-center justify-between p-3 bg-surface-container-low text-left">
+        <span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Record Manual Payment (Cash / Mobile Money)</span>
+        <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px;" id="manual-payment-chevron">expand_more</span>
+      </button>
+      <div id="manual-payment-form" class="hidden p-3 space-y-3">
+        <p class="text-xs text-on-surface-variant">Only use this when the customer paid you directly — cash, or straight to the business Mobile Money number — instead of through Paystack on the site. This updates their balance and clears the same block that Paystack payments clear, so production/dispatch can continue.</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-1">Amount Received (GHS)</label>
+            <input id="manual-payment-amount" type="number" min="1" step="0.01" value="${balanceOwing||''}" class="w-full border border-outline-variant px-3 py-2 text-sm"/>
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-1">Method</label>
+            <select id="manual-payment-method" class="w-full border border-outline-variant px-3 py-2 text-sm">
+              <option value="Cash">Cash</option>
+              <option value="Mobile Money">Mobile Money</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="recordManualPayment('${o.id}')" class="w-full py-2 bg-primary text-white text-xs font-bold tracking-wide hover:bg-primary-light transition-colors">Confirm Payment Received</button>
+      </div>`;
+  }
 
   // Stage track
   document.getElementById('modal-stage-track').innerHTML=STAGES.map((s,i)=>{
