@@ -238,8 +238,7 @@ const KRAAPHT_CONFIG = {
     logo:           "logo.png",          // Site logo — top of every page
 
     // ── HOMEPAGE HERO ────────────────────────────────────────────────
-    hero_video:     "hero_video.mp4",    // Background video
-    hero_poster:    "bag_lady.png",      // Fallback image if video fails to play
+    hero_poster:    "bag_lady.png",      // Hero background image
     hero_ad_image:  "bag_lady_v2.png",      // "Path to Superior Packaging" left image
 
     // ── HOMEPAGE PORTFOLIO — 2×2 grid ────────────────────────────────
@@ -393,20 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 2. Hero video special handling — only set the poster/source here.
-  //    Whether to actually fetch and play the video (vs. staying on the poster
-  //    on a slow connection) is decided by index.html's own hero-video script,
-  //    which runs after this and needs the source already pointed correctly.
-  var heroVid = document.getElementById("hero-vid");
-  if (heroVid) {
-    if (imgs.hero_poster) heroVid.poster = imgs.hero_poster;
-    var heroSrc = heroVid.querySelector("source");
-    if (heroSrc && imgs.hero_video) {
-      heroSrc.src = imgs.hero_video;
-    }
-  }
-
-  // 3. Channay card (client_bag_4) — swap CSS bag for real image if uploaded
+  // 2. Channay card (client_bag_4) — swap CSS bag for real image if uploaded
   //    Appears twice in the DOM (desktop grid + mobile carousel), so update
   //    every instance found via the shared data-channay-card attribute.
   var channayCards = document.querySelectorAll("[data-channay-card]");

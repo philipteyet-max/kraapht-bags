@@ -89,43 +89,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </div>
 </nav>
 
-<!-- ===== HERO — VIDEO BACKGROUND ===== -->
+<!-- ===== HERO — BACKGROUND IMAGE ===== -->
 <section class="relative h-screen min-h-[600px] flex items-center overflow-hidden">
-  <video id="hero-vid" data-img="hero_video" muted loop playsinline preload="none"
-    class="absolute inset-0 w-full h-full object-cover"
-    poster="bag_lady.png">
-    <source src="hero_video.mp4" type="video/mp4"/>
-  </video>
-  <script>
-    // The poster image shows immediately either way. We only spend the (often
-    // several MB) video download on connections that can comfortably afford it —
-    // flagged by the restaurant-owner persona, who burned mobile data waiting on
-    // an autoplaying video before the page was even usable.
-    document.addEventListener('DOMContentLoaded', function(){
-      var v = document.getElementById('hero-vid');
-      if(!v) return;
-
-      function isSlowConnection(){
-        var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (!c) return false; // API unsupported — don't block playback, just can't detect
-        if (c.saveData) return true;
-        if (c.effectiveType && /(^|-)2g$/.test(c.effectiveType)) return true; // 'slow-2g' or '2g'
-        return false;
-      }
-
-      if (isSlowConnection()) return; // stay on the static poster — no video fetch at all
-
-      v.preload = 'auto';
-      v.addEventListener('canplay', function(){
-        v.play().catch(function(){ /* autoplay blocked — poster shows */ });
-      });
-      v.load();
-      // Retry after 800ms in case it became playable before the listener attached
-      setTimeout(function(){
-        if(v.paused) v.play().catch(function(){});
-      }, 800);
-    });
-  </script>
+  <img id="hero-bg" data-img="hero_poster" src="bag_lady.png" alt="Premium paper bag by Kraapht Bags Ltd" class="absolute inset-0 w-full h-full object-cover"/>
   <div class="hero-video-overlay absolute inset-0"></div>
   <div class="relative z-10 max-w-[1280px] mx-auto px-10 w-full">
     <div class="max-w-2xl">
