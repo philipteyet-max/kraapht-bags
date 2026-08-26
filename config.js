@@ -300,7 +300,7 @@ const KRAAPHT_CONFIG = {
     about_founder_1:     "about_founder_1.png",     // Founder 1 photo
     about_founder_2:     "about_founder_2.png",     // Founder 2 photo (if used)
     about_factory:       "about_factory_v2.png",       // Factory / production floor photo
-    about_certificate:   "about_certificate_v2.png", // Company registration certificate scan/photo
+    about_certificate:   "about_certificate_v3.png", // Company registration certificate scan/photo
 
   },
 
