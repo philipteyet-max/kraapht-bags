@@ -32,6 +32,9 @@ src="https://www.facebook.com/tr?id=1060118506434788&ev=PageView&noscript=1"
   .gold-border{border-image:linear-gradient(90deg,#C8A96B,#D8C3A5) 1;}
   .carousel-item{transition:opacity 0.8s ease-in-out;}
   input[type=radio]:checked + label, input[type=radio]:checked ~ .radio-card{border-color:#1F4D3A;}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none;}}
 </style>
 <script id="tailwind-config">
 tailwind.config={darkMode:"class",theme:{extend:{colors:{
@@ -83,8 +86,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </a>
   <div class="hidden md:flex items-center gap-8"><a class="font-body-md text-primary border-b-2 border-accent pb-1 font-semibold" href="index.html">Home</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="about.html">About</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="order.html">Products &amp; Order</a> <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a></div>
   <div class="flex items-center gap-2 md:gap-3">
-    <a href="customer.html" class="border border-primary text-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
-    <a href="order.html" class="bg-primary text-on-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+    <a href="customer.html" class="border border-primary text-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary active:scale-95 transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent active:scale-95 transition-all">Order Now</a>
   </div>
 </div>
 </nav>
@@ -104,7 +107,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
       </h1>
       <p class="font-body-lg text-white/80 mb-10 max-w-xl" id="hero-subtext">Custom-printed, eco-friendly paper bags and food bowls — crafted in Accra, delivered to your door, and built to make your brand impossible to ignore.</p>
       <div class="flex flex-wrap gap-4">
-        <a href="order.html" class="bg-accent text-white px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary transition-all duration-300 inline-flex items-center gap-2">
+        <a href="order.html" class="bg-accent text-white px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary active:scale-95 transition-all duration-300 inline-flex items-center gap-2">
           <span class="material-symbols-outlined text-lg">shopping_bag</span>Start Your Order
         </a>
         <a href="#clients" class="border border-white/40 text-white px-10 py-5 font-label-sm text-label-sm uppercase tracking-widest hover:border-accent hover:text-accent transition-all duration-300 inline-flex items-center gap-2">
@@ -132,7 +135,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </div>
 
 <!-- ===== ADVERTISEMENT — THE PATH TO SUPERIOR PACKAGING ===== -->
-<section class="py-20 bg-background">
+<section class="reveal py-20 bg-background">
   <div class="max-w-[1280px] mx-auto px-10">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="relative">
@@ -167,7 +170,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
             <div><p class="font-body-md font-semibold">A Free Account That Remembers Your Order</p><p class="font-body-md text-on-surface-variant text-sm">Full order history and saved designs mean reordering takes seconds, not a fresh brief every time — no other supplier here offers this.</p></div>
           </div>
         </div>
-        <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">
+        <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent active:scale-95 transition-all">
           Configure Your Order <span class="material-symbols-outlined">arrow_forward</span>
         </a>
       </div>
@@ -176,7 +179,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
 </section>
 
 <!-- ===== CLIENT PORTFOLIO ===== -->
-<section id="clients" class="py-20 bg-surface-container">
+<section id="clients" class="reveal py-20 bg-surface-container">
   <div class="max-w-[1280px] mx-auto px-10">
     <div class="text-center mb-14">
       <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">Real Client Bags</span>
@@ -425,7 +428,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     </div>
 
     <div class="text-center mt-10">
-      <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">
+      <a href="order.html" class="inline-flex items-center gap-2 bg-primary text-on-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent active:scale-95 transition-all">
         <span class="material-symbols-outlined">add_shopping_cart</span>Create Your Own
       </a>
     </div>
@@ -470,7 +473,7 @@ function scrollToPortfolioSlide(i) {
 </script>
 
 <!-- ===== PRODUCTS OVERVIEW ===== -->
-<section class="py-20 bg-background">
+<section class="reveal py-20 bg-background">
   <div class="max-w-[1280px] mx-auto px-10">
     <div class="text-center mb-14">
       <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">What We Make</span>
@@ -506,7 +509,7 @@ function scrollToPortfolioSlide(i) {
 </section>
 
 <!-- ===== HOW IT WORKS ===== -->
-<section class="py-20 bg-charcoal text-white">
+<section class="reveal py-20 bg-charcoal text-white">
   <div class="max-w-[1280px] mx-auto px-10">
     <div class="text-center mb-14">
       <span class="font-label-sm text-label-sm text-accent uppercase tracking-[0.3em] mb-3 block">How It Works</span>
@@ -537,7 +540,7 @@ function scrollToPortfolioSlide(i) {
 </section>
 
 <!-- ===== CONTACT ===== -->
-<section id="contact" class="py-20 bg-surface-container">
+<section id="contact" class="reveal py-20 bg-surface-container">
   <div class="max-w-[1280px] mx-auto px-10">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
       <div>
@@ -619,5 +622,29 @@ function scrollToPortfolioSlide(i) {
   </div>
 </div>
 </footer>
+
+<script>
+// ── SCROLL-TRIGGERED SECTION REVEALS ──────────────────────────────
+// Fades/slides each major homepage section up into place the first time it
+// enters the viewport. Unobserves after firing once — sections stay visible
+// once revealed, they don't re-hide on scroll-back.
+(function() {
+  var sections = document.querySelectorAll('.reveal');
+  if (!sections.length) return;
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  sections.forEach(function(el){ observer.observe(el); });
+})();
+</script>
 </body>
 </html>

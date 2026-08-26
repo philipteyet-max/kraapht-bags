@@ -29,6 +29,10 @@ src="https://www.facebook.com/tr?id=1060118506434788&ev=PageView&noscript=1"
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
   .glass-nav{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
   .industrial-shadow{box-shadow:0 20px 40px -20px rgba(31,77,58,0.12);}
+  .about-card{transition:border-color 0.3s ease,box-shadow 0.3s ease,transform 0.3s ease;}
+  .about-card:hover{border-color:#1F4D3A;box-shadow:0 20px 40px -20px rgba(31,77,58,0.18);transform:translateY(-3px);}
+  .about-photo{transition:transform 0.5s ease;}
+  .about-photo:hover{transform:scale(1.05);}
 </style>
 <script id="tailwind-config">
 tailwind.config={darkMode:"class",theme:{extend:{colors:{
@@ -79,8 +83,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="customer.html">My Account</a>
   </div>
   <div class="flex items-center gap-2 md:gap-3">
-    <a href="customer.html" class="border border-primary text-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all">Account</a>
-    <a href="order.html" class="bg-primary text-on-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent transition-colors">Order Now</a>
+    <a href="customer.html" class="border border-primary text-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary active:scale-95 transition-all">Account</a>
+    <a href="order.html" class="bg-primary text-on-primary px-3 md:px-6 py-2 md:py-2.5 font-label-sm text-label-sm uppercase tracking-widest hover:bg-accent active:scale-95 transition-all">Order Now</a>
   </div>
 </div>
 </nav>
@@ -95,7 +99,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </section>
 
   <!-- ===== FOUNDING STORY ===== -->
-  <section class="mb-20 bg-surface border border-outline-variant p-8 md:p-10">
+  <section class="about-card mb-20 bg-surface border border-outline-variant p-8 md:p-10">
     <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
       <span class="material-symbols-outlined text-primary">history_edu</span>How We Started
     </h2>
@@ -109,9 +113,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     </h2>
     <div id="founders-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      <div class="bg-surface border border-outline-variant p-6" id="founder-1-card">
+      <div class="about-card bg-surface border border-outline-variant p-6" id="founder-1-card">
         <div class="relative w-full aspect-square mb-5 bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
-          <img data-img="about_founder_1" src="about_founder_1.png" alt="Founder photo" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
+          <img data-img="about_founder_1" src="about_founder_1.png" alt="Founder photo" class="about-photo w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
           <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
             <span class="material-symbols-outlined text-4xl opacity-40">person</span>
             <p class="text-xs opacity-60">Upload a founder photo and set <code class="bg-surface-container-high px-1">images.about_founder_1</code> in config.js</p>
@@ -122,9 +126,9 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
         <div id="founder-1-bio" class="text-sm text-on-surface-variant leading-relaxed space-y-3"></div>
       </div>
 
-      <div class="bg-surface border border-outline-variant p-6" id="founder-2-card">
+      <div class="about-card bg-surface border border-outline-variant p-6" id="founder-2-card">
         <div class="relative w-full aspect-square mb-5 bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
-          <img data-img="about_founder_2" src="about_founder_2.png" alt="Founder photo" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
+          <img data-img="about_founder_2" src="about_founder_2.png" alt="Founder photo" class="about-photo w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
           <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
             <span class="material-symbols-outlined text-4xl opacity-40">person</span>
             <p class="text-xs opacity-60">Upload a founder photo and set <code class="bg-surface-container-high px-1">images.about_founder_2</code> in config.js</p>
@@ -141,7 +145,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   <!-- ===== FACTORY ===== -->
   <section class="mb-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
     <div class="relative w-full aspect-[4/3] bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden order-2 md:order-1">
-      <img data-img="about_factory" src="about_factory.png" alt="Kraapht Bags factory" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
+      <img data-img="about_factory" src="about_factory.png" alt="Kraapht Bags factory" class="about-photo w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
       <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
         <span class="material-symbols-outlined text-4xl opacity-40">factory</span>
         <p class="text-xs opacity-60">Upload a factory/production photo and set <code class="bg-surface-container-high px-1">images.about_factory</code> in config.js</p>
@@ -156,7 +160,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
   </section>
 
   <!-- ===== CERTIFICATIONS & REGISTRATION ===== -->
-  <section class="mb-20 bg-surface border border-outline-variant p-8 md:p-10">
+  <section class="about-card mb-20 bg-surface border border-outline-variant p-8 md:p-10">
     <h2 id="about-certifications-title" class="text-2xl font-bold mb-4 flex items-center gap-2">
       <span class="material-symbols-outlined text-primary">workspace_premium</span>Certifications &amp; Registration
     </h2>
@@ -165,7 +169,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <div>
       <p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-3">Company Registration Certificate</p>
       <div class="relative w-full max-w-md aspect-[3/4] bg-surface-container border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden">
-        <img data-img="about_certificate" src="about_certificate_1.png" alt="Kraapht Bags Ltd company registration certificate" class="w-full h-full object-contain p-4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
+        <img data-img="about_certificate" src="about_certificate_1.png" alt="Kraapht Bags Ltd company registration certificate" class="about-photo w-full h-full object-contain p-4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.style.display='';this.nextElementSibling.style.display='none'"/>
         <div class="hidden w-full h-full flex-col items-center justify-center text-on-surface-variant text-center p-6 gap-2">
           <span class="material-symbols-outlined text-4xl opacity-40">description</span>
           <p class="text-sm font-semibold">Company Registration Certificate</p>
@@ -180,8 +184,8 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{
     <h2 class="text-2xl md:text-3xl font-bold mb-3">Ready to work with us?</h2>
     <p class="text-white/70 mb-8 max-w-xl mx-auto font-body-md">Configure your bags, see your live price, and pay securely — or reach us on WhatsApp or by phone first if you'd like to talk it through.</p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="order.html" class="bg-accent text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white hover:text-primary transition-colors">Start Ordering →</a>
-      <a href="https://wa.me/233558619224" class="border border-white/40 text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-colors">Chat on WhatsApp</a>
+      <a href="order.html" class="bg-accent text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white hover:text-primary active:scale-95 transition-all">Start Ordering →</a>
+      <a href="https://wa.me/233558619224" class="border border-white/40 text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all">Chat on WhatsApp</a>
     </div>
   </section>
 
