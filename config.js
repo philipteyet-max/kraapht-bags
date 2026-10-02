@@ -238,8 +238,8 @@ const KRAAPHT_CONFIG = {
     logo:           "logo.png",          // Site logo — top of every page
 
     // ── HOMEPAGE HERO ────────────────────────────────────────────────
-    hero_poster:    "bag_lady.png",      // Hero background image
-    hero_ad_image:  "bag_lady_v2.png",      // "Path to Superior Packaging" left image
+    hero_poster:    "bag_lady_v1.png",      // Hero background image
+    hero_ad_image:  "bag_lady_v3.png",      // "Path to Superior Packaging" left image
 
     // ── HOMEPAGE PORTFOLIO — 2×2 grid ────────────────────────────────
     //  Reading order: top-left → top-right → bottom-left → bottom-right
